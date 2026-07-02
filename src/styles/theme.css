@@ -11,9 +11,36 @@
   --font-label: 'JetBrains Mono', ui-monospace, monospace;
 }
 .mqcp .mono { font-family: var(--font-label); }
+
+/* ===== App layout scale =====
+   Bump the root size so the rem-based type scale AND the rem-based
+   --space-* tokens open up together, and let pages fill the window
+   instead of capping at the design system's 1100px column. */
+html { font-size: 17px; }
+:root { --content-max: 100%; }
 .mqcp ::selection { background: var(--selection-bg); }
 .mqcp ::-webkit-scrollbar { width: 10px; height: 10px; }
 .mqcp ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 2px solid var(--paper); }
+
+/* ===== Nav link active/hover underline indicator (from design comp) ===== */
+.mq-navlink { position: relative; }
+.mq-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.16s ease;
+}
+.mq-navlink:hover::after,
+.mq-navlink[data-active="true"]::after { transform: scaleX(1); }
+
+/* ===== Blinking terminal cursor (from design comp) ===== */
+@keyframes mq-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
 /* ===== Dark INDIGO theme override (palette #191970 → neon accents) ===== */
 [data-theme="indigo"] {

@@ -14,20 +14,115 @@ const upcoming = (await getCollection('events'))
 <Base title="MQ Competitive Programming Club">
   <Header />
   <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-6) var(--space-6) var(--space-8);">
-    <section style="display:flex;flex-direction:column;gap:var(--space-5);">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-5);flex-wrap:wrap;">
       <span class="ps-pill ps-pill--accent"><span class="ps-pill__dot"></span>ACM-ICPC PREP · ALL LEVELS WELCOME</span>
-      <h1 style="font-family:var(--font-display);font-weight:500;font-size:clamp(34px,4.4vw,54px);line-height:1.04;color:var(--ink-strong);margin:0;">
-        Solve hard problems<br /><span style="color:var(--accent-text);">together.</span>
-      </h1>
-      <p style="font-size:var(--text-md);max-width:46ch;color:var(--ink);margin:0;">
-        A student-run club for ACM-ICPC and everyday practice. We hold weekly contests, work through a shared topic roadmap, and keep a team reference.
-      </p>
+      <div class="mq-hero-tabs">
+        <button type="button" class="mono mq-hero-tab" data-tab="terminal" data-tab-active="true">~/terminal</button>
+        <button type="button" class="mono mq-hero-tab" data-tab="editor">club.cpp</button>
+        <button type="button" class="mono mq-hero-tab" data-tab="graph">graph()</button>
+      </div>
+    </div>
+
+    <section class="mq-hero-split">
+      <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+        <h1 style="font-family:var(--font-display);font-weight:500;font-size:clamp(34px,4.4vw,54px);line-height:1.04;letter-spacing:-0.02em;color:var(--ink-strong);margin:0;">
+          Solve hard problems<br /><span style="color:var(--accent-text);">together.</span>
+        </h1>
+        <p style="font-size:var(--text-md);max-width:46ch;color:var(--ink);margin:0;line-height:var(--leading-normal);">
+          A student-run club for ACM-ICPC and everyday practice. We hold weekly contests, work through a shared topic roadmap, and keep a team reference.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);">
+          <button class="ps-btn ps-btn--primary" disabled title="Coming soon" style="min-height:42px;padding:0 var(--space-5);font-size:var(--text-base);">Sign in with GitHub</button>
+        </div>
+        <div class="mono" style="font-size:12px;color:var(--ink-muted);display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center;">
+          <span>127 members</span><span style="color:var(--line-strong);">·</span><span>all levels welcome</span><span style="color:var(--line-strong);">·</span><span style="color:var(--accent-text);">running since 2021</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="mq-hero-panel" data-panel="terminal">
+          <div style="display:flex;align-items:center;gap:7px;padding:11px 15px;background:var(--paper-sunk);border-bottom:1px solid var(--line);">
+            <span style="width:11px;height:11px;border-radius:999px;background:var(--danger);"></span>
+            <span style="width:11px;height:11px;border-radius:999px;background:var(--cat-3);"></span>
+            <span style="width:11px;height:11px;border-radius:999px;background:var(--success);"></span>
+            <span class="mono" style="margin-left:10px;font-size:12px;color:var(--ink-muted);">mq@macquarie: ~/cp-club</span>
+          </div>
+          <div class="mono" style="padding:16px 20px;font-size:13px;line-height:1.9;color:var(--ink);">
+            <div><span style="color:var(--success);">$</span> git clone macquarie/<span style="color:var(--accent-text);">cp-club</span>.git</div>
+            <div style="color:var(--ink-muted);">Cloning into 'your-rating'…</div>
+            <div><span style="color:var(--success);">✓</span> unlocked: <span style="color:var(--cat-6);">Graphs</span>, <span style="color:var(--cat-1);">DP</span>, <span style="color:var(--cat-3);">Number Theory</span> <span style="color:var(--ink-muted);">+9</span></div>
+            <div><span style="color:var(--success);">$</span> mq join <span style="color:var(--accent-text);">--as</span> beginner</div>
+            <div style="color:var(--ink-muted);">→ Welcome! Roadmap loaded · 0/79 solved</div>
+            <div><span style="color:var(--success);">$</span> mq next</div>
+            <div style="display:flex;justify-content:space-between;padding-left:14px;max-width:300px;"><span><span style="color:var(--cat-4);">◦</span> Two Pointers</span><span style="color:var(--cat-3);">★☆☆</span></div>
+            <div style="display:flex;justify-content:space-between;padding-left:14px;max-width:300px;"><span><span style="color:var(--cat-4);">◦</span> BFS shortest path</span><span style="color:var(--accent-text);">★★☆</span></div>
+            <div><span style="color:var(--success);">$</span> <span style="display:inline-block;width:9px;height:16px;background:var(--accent);vertical-align:-3px;animation:mq-blink 1.1s steps(1) infinite;"></span></div>
+          </div>
+        </div>
+
+        <div class="mq-hero-panel" data-panel="editor" hidden>
+          <div style="display:flex;align-items:center;gap:7px;padding:9px 15px;background:var(--paper-sunk);border-bottom:1px solid var(--line);">
+            <span style="width:11px;height:11px;border-radius:999px;background:var(--danger);"></span>
+            <span style="width:11px;height:11px;border-radius:999px;background:var(--cat-3);"></span>
+            <span style="width:11px;height:11px;border-radius:999px;background:var(--success);"></span>
+            <span class="mono" style="margin-left:10px;font-size:12px;color:var(--accent-text);">club.cpp</span>
+            <span class="mono" style="font-size:12px;color:var(--ink-muted);">— /reference</span>
+          </div>
+          <div class="mono" style="display:grid;grid-template-columns:auto 1fr;font-size:13px;line-height:1.85;">
+            <div style="text-align:right;padding:16px 12px 16px 16px;color:var(--ink-muted);user-select:none;background:color-mix(in srgb, var(--paper-sunk) 50%, transparent);white-space:pre;">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</div>
+            <div style="padding:16px 18px;color:var(--ink);overflow-x:auto;">
+              <div><span style="color:var(--cat-1);">struct</span> <span style="color:var(--cat-6);">Club</span> {'{'}</div>
+              <div style="padding-left:18px;"><span style="color:var(--cat-6);">string</span> name = <span style="color:var(--success);">"Macquarie CP Club"</span>;</div>
+              <div style="padding-left:18px;"><span style="color:var(--cat-6);">bool</span> beginner_friendly = <span style="color:var(--accent-text);">true</span>;</div>
+              <div>&nbsp;</div>
+              <div style="padding-left:18px;"><span style="color:var(--cat-1);">void</span> <span style="color:var(--cat-3);">join</span>(<span style="color:var(--cat-6);">Student</span>&amp; you) {'{'}</div>
+              <div style="padding-left:36px;">you.rating++; <span style="color:var(--ink-muted);">// every single week</span></div>
+              <div style="padding-left:36px;">roadmap.<span style="color:var(--cat-3);">guide</span>(you); <span style="color:var(--ink-muted);">// 12 ordered topics</span></div>
+              <div style="padding-left:36px;">gist.<span style="color:var(--cat-3);">save</span>(you.progress); <span style="color:var(--ink-muted);">// private · yours</span></div>
+              <div style="padding-left:18px;">{'}'}</div>
+              <div>{'};'}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mq-hero-panel mq-hero-graph" data-panel="graph" hidden>
+          <svg viewBox="0 0 600 360" style="width:100%;height:auto;font-family:var(--font-label);">
+            <g stroke="var(--line-strong)" stroke-width="2.5" fill="none">
+              <line x1="80" y1="100" x2="200" y2="190"></line>
+              <line x1="80" y1="100" x2="300" y2="80"></line>
+              <line x1="200" y1="190" x2="300" y2="80"></line>
+              <line x1="200" y1="190" x2="320" y2="270"></line>
+              <line x1="300" y1="80" x2="440" y2="170"></line>
+              <line x1="320" y1="270" x2="440" y2="170"></line>
+              <line x1="440" y1="170" x2="540" y2="110" stroke="var(--accent)" stroke-dasharray="5 5"></line>
+            </g>
+            <g text-anchor="middle" font-size="12" font-weight="600">
+              <g><circle cx="80" cy="100" r="24" fill="var(--cat-5-fill)" stroke="var(--cat-5)" stroke-width="2.5"></circle><text x="80" y="104" fill="var(--cat-5)">Basics</text></g>
+              <g><circle cx="200" cy="190" r="24" fill="var(--cat-5-fill)" stroke="var(--cat-5)" stroke-width="2.5"></circle><text x="200" y="194" fill="var(--cat-5)">Greedy</text></g>
+              <g><circle cx="300" cy="80" r="24" fill="var(--cat-5-fill)" stroke="var(--cat-5)" stroke-width="2.5"></circle><text x="300" y="84" fill="var(--cat-5)">Graphs</text></g>
+              <g><circle cx="320" cy="270" r="26" fill="var(--cat-3-fill)" stroke="var(--cat-3)" stroke-width="2.5"></circle><text x="320" y="274" fill="var(--warning)">DP</text></g>
+              <g><circle cx="440" cy="170" r="24" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="2.5"></circle><text x="440" y="166" fill="var(--ink-muted)">Number</text><text x="440" y="180" fill="var(--ink-muted)">Theory</text></g>
+              <g><circle cx="540" cy="110" r="30" fill="var(--accent)" stroke="var(--accent-press)" stroke-width="2.5"></circle><text x="540" y="106" fill="var(--accent-ink)" font-size="11">ICPC</text><text x="540" y="120" fill="var(--accent-ink)" font-size="11">★</text></g>
+            </g>
+          </svg>
+        </div>
+      </div>
     </section>
 
     <section style="margin-top:var(--space-8);">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-4);">
-        <h2 class="ps-h2"><span class="mono" style="color:var(--accent-text);">&gt;</span> Upcoming Events</h2>
-        <a class="mono" href="/events" style="font-size:13px;color:var(--accent-text);text-decoration:none;">view all events →</a>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4);">
+        <h2 class="ps-h2" style="display:flex;align-items:center;gap:var(--space-3);"><span class="mono" style="color:var(--accent-text);font-size:0.7em;">&gt;</span> Upcoming Events</h2>
+        <a class="mono mq-navlink" href="/events" style="font-size:13px;color:var(--accent-text);text-decoration:none;">view all events →</a>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
         {upcoming.map((e) => (
@@ -37,12 +132,86 @@ const upcoming = (await getCollection('events'))
     </section>
 
     <section style="margin-top:var(--space-8);">
-      <h2 class="ps-h2"><span class="mono" style="color:var(--accent-text);">&gt;</span> Explore the club</h2>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-top:var(--space-4);">
-        <a class="ps-card ps-card--c6" href="/learn"><div class="ps-card__title">Topic Roadmap</div><div class="ps-card__body">Ordered topics from two-pointers to flows.</div></a>
-        <a class="ps-card ps-card--c2" href="/resources"><div class="ps-card__title">Team Reference</div><div class="ps-card__body">A printable algorithm library.</div></a>
-        <a class="ps-card ps-card--c4" href="/events"><div class="ps-card__title">Events</div><div class="ps-card__body">Weekly practice and workshops.</div></a>
+      <h2 class="ps-h2" style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4);"><span class="mono" style="color:var(--accent-text);font-size:0.7em;">&gt;</span> Explore the club</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+        <a class="ps-card ps-card--c6" href="/learn">
+          <span class="mono" style="font-size:22px;">↳</span>
+          <div class="ps-card__title">Topic Roadmap</div>
+          <div class="ps-card__body">12 ordered topics from two-pointers to flows. Track what you've solved.</div>
+          <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open learn →</span>
+        </a>
+        <a class="ps-card ps-card--c4" href="/resources">
+          <span class="mono" style="font-size:22px;">{'{ }'}</span>
+          <div class="ps-card__title">Team Reference</div>
+          <div class="ps-card__body">A printable algorithm library: graphs, math, strings, geometry — copy-paste ready.</div>
+          <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open resources →</span>
+        </a>
+        <a class="ps-card ps-card--c2" href="/events">
+          <span class="mono" style="font-size:22px;">▟</span>
+          <div class="ps-card__title">Events</div>
+          <div class="ps-card__body">Weekly practice, workshops, and contests — see what's coming up.</div>
+          <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open events →</span>
+        </a>
       </div>
     </section>
   </main>
 </Base>
+
+<style>
+  .mq-hero-tabs {
+    display: inline-flex;
+    background: var(--paper-sunk);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    padding: 3px;
+    gap: 2px;
+  }
+  .mq-hero-tab {
+    border: 0;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--ink-muted);
+    transition: all 0.15s ease;
+  }
+  .mq-hero-tab[data-tab-active="true"] {
+    background: var(--surface);
+    color: var(--accent-text);
+  }
+
+  .mq-hero-split {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .mq-hero-split { grid-template-columns: 1fr; }
+  }
+
+  .mq-hero-panel {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .mq-hero-graph { background: var(--paper-sunk); padding: var(--space-4); }
+</style>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.mq-hero-tab');
+  const panels = document.querySelectorAll<HTMLElement>('.mq-hero-panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.tab;
+      tabs.forEach((t) => t.dataset.tabActive = String(t === tab));
+      panels.forEach((p) => {
+        p.hidden = p.dataset.panel !== key;
+      });
+    });
+  });
+</script>
