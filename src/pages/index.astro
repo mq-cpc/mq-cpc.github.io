@@ -1,9 +1,48 @@
 ---
+// src/pages/index.astro
 import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import EventCard from '../components/EventCard.astro';
+import { getCollection } from 'astro:content';
+
+const now = Date.now();
+const upcoming = (await getCollection('events'))
+  .filter((e) => e.data.date.getTime() >= now)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
+  .slice(0, 3);
 ---
 <Base title="MQ Competitive Programming Club">
-  <main style="padding:var(--space-6);">
-    <h1 class="ps-h1">MQ Competitive Programming Club</h1>
-    <button class="ps-btn" data-theme-toggle>Toggle theme</button>
+  <Header />
+  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-6) var(--space-6) var(--space-8);">
+    <section style="display:flex;flex-direction:column;gap:var(--space-5);">
+      <span class="ps-pill ps-pill--accent"><span class="ps-pill__dot"></span>ACM-ICPC PREP · ALL LEVELS WELCOME</span>
+      <h1 style="font-family:var(--font-display);font-weight:500;font-size:clamp(34px,4.4vw,54px);line-height:1.04;color:var(--ink-strong);margin:0;">
+        Solve hard problems<br /><span style="color:var(--accent-text);">together.</span>
+      </h1>
+      <p style="font-size:var(--text-md);max-width:46ch;color:var(--ink);margin:0;">
+        A student-run club for ACM-ICPC and everyday practice. We hold weekly contests, work through a shared topic roadmap, and keep a team reference.
+      </p>
+    </section>
+
+    <section style="margin-top:var(--space-8);">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-4);">
+        <h2 class="ps-h2"><span class="mono" style="color:var(--accent-text);">&gt;</span> Upcoming Events</h2>
+        <a class="mono" href="/events" style="font-size:13px;color:var(--accent-text);text-decoration:none;">view all events →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+        {upcoming.map((e) => (
+          <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />
+        ))}
+      </div>
+    </section>
+
+    <section style="margin-top:var(--space-8);">
+      <h2 class="ps-h2"><span class="mono" style="color:var(--accent-text);">&gt;</span> Explore the club</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-top:var(--space-4);">
+        <a class="ps-card ps-card--c6" href="/learn"><div class="ps-card__title">Topic Roadmap</div><div class="ps-card__body">Ordered topics from two-pointers to flows.</div></a>
+        <a class="ps-card ps-card--c2" href="/resources"><div class="ps-card__title">Team Reference</div><div class="ps-card__body">A printable algorithm library.</div></a>
+        <a class="ps-card ps-card--c4" href="/events"><div class="ps-card__title">Events</div><div class="ps-card__body">Weekly practice and workshops.</div></a>
+      </div>
+    </section>
   </main>
 </Base>
