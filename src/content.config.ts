@@ -1,5 +1,5 @@
 import { defineCollection, reference as refField, z } from 'astro:content';
-import { file, glob } from 'astro/loaders';
+import { glob } from 'astro/loaders';
 
 const LEVEL = z.enum(['foundations', 'intermediate', 'advanced']);
 const CATEGORY = z.enum(['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
@@ -61,9 +61,7 @@ const reference = defineCollection({
 });
 
 const resources = defineCollection({
-  loader: file('src/content/resources/algorithms.json', {
-    parser: (text) => [{ id: 'algorithms', ...JSON.parse(text) }],
-  }),
+  loader: glob({ pattern: '**/[^_]*.json', base: './src/content/resources' }),
   schema: z.object({
     category: z.string(),
     order: z.number().int().nonnegative().default(0),
