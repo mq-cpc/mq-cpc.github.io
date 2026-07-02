@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  const problems = await getCollection('problems');
+  return topics.map((topic) => ({
+    params: { slug: topic.id },
+    props: {
+      topic,
+      problems: problems
+        .filter((p) => p.data.topic.id === topic.id)
+        .sort((a, b) => a.data.order - b.data.order),
+    },
+  }));
+}
+
+interface Props { topic: CollectionEntry<'topics'>; problems: CollectionEntry<'problems'>[] }
+const { topic, problems } = Astro.props as Props;
+const { Content } = await render(topic);
+const stroke = `var(--cat-${topic.data.color.slice(1)})`;
+const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var(--warning)', hard: 'var(--danger)' };
+---
+<Base title={`${topic.data.name} — MQ CP Club`}>
+  <Header />
+  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-6) var(--space-6) var(--space-8);">
+    <a class="mono" href="/learn" style="font-size:13px;color:var(--ink-muted);text-decoration:none;">← Learn / Roadmap</a>
+    <div style={`border-left:4px solid ${stroke};padding-left:var(--space-4);margin-top:var(--space-4);`}>
+      <h1 class="ps-h1">{topic.data.name}</h1>
+      <div style="color:var(--ink);margin-top:var(--space-3);"><Content /></div>
+    </div>
+
+    {topic.data.videos.length > 0 && (
+      <>
+        <h2 class="ps-h3" style="margin:var(--space-7) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Tutorials</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+          {topic.data.videos.map((v) => (
+            <div style="border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);">
+              <div style="aspect-ratio:16/9;">
+                <iframe width="100%" height="100%" style="border:0;display:block;" src={`https://www.youtube-nocookie.com/embed/${v.youtubeId}`} title={v.title} loading="lazy" allowfullscreen></iframe>
+              </div>
+              <div style="padding:var(--space-3) var(--space-4);">
+                <div style="font-size:var(--text-sm);font-weight:600;color:var(--ink-strong);">{v.title}</div>
+                <div class="mono" style="font-size:11px;color:var(--ink-muted);margin-top:3px;">YouTube{v.channel ? ` · ${v.channel}` : ''}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    )}
+
+    <h2 class="ps-h3" style="margin:var(--space-7) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Problem set</h2>
+    <div style="border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);">
+      <div class="mono" style="display:grid;grid-template-columns:36px 1fr 96px 168px 132px;gap:var(--space-3);padding:11px var(--space-4);background:var(--paper-sunk);border-bottom:1px solid var(--line);font-size:11px;color:var(--ink-muted);text-transform:uppercase;">
+        <span>#</span><span>Problem</span><span>Difficulty</span><span>Links</span><span>Status</span>
+      </div>
+      {problems.map((p, i) => (
+        <div data-problem-id={p.id} style="display:grid;grid-template-columns:36px 1fr 96px 168px 132px;gap:var(--space-3);align-items:center;padding:12px var(--space-4);border-bottom:1px solid var(--line);">
+          <span class="mono" style="color:var(--ink-muted);">{i + 1}</span>
+          <span style="color:var(--ink-strong);">{p.data.title}</span>
+          <span class="ps-pill" style={`color:${diffColor[p.data.difficulty]};border-color:transparent;`}>{p.data.difficulty}</span>
+          <span class="mono" style="font-size:12px;display:flex;gap:12px;">
+            <a href={p.data.url} target="_blank" rel="noopener" style="color:var(--accent-text);">{p.data.judge} →</a>
+            <a href={`/problems/${p.id}`} style="color:var(--ink-muted);">editorial</a>
+          </span>
+          <span class="mono" data-status-slot style="font-size:12px;color:var(--ink-muted);">— sign in —</span>
+        </div>
+      ))}
+    </div>
+  </main>
+</Base>
