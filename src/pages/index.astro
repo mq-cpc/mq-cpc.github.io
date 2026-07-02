@@ -1,7 +1,9 @@
 ---
-const title = 'MQ Competitive Programming Club';
+import Base from '../layouts/Base.astro';
 ---
-<html lang="en">
-  <head><meta charset="utf-8" /><title>{title}</title></head>
-  <body><h1>{title}</h1></body>
-</html>
+<Base title="MQ Competitive Programming Club">
+  <main style="padding:var(--space-6);">
+    <h1 class="ps-h1">MQ Competitive Programming Club</h1>
+    <button class="ps-btn" data-theme-toggle>Toggle theme</button>
+  </main>
+</Base>

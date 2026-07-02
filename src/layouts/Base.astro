@@ -1,0 +1,25 @@
+---
+import '../styles/design/base.css';
+import '../styles/theme.css';
+interface Props { title: string; description?: string }
+const { title, description = 'Macquarie University competitive programming club.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+  </head>
+  <body class="mqcp ps-page">
+    <slot />
+    <script>
+      import { initTheme } from '../scripts/theme-toggle.ts';
+      initTheme();
+    </script>
+  </body>
+</html>

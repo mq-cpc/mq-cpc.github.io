@@ -1,0 +1,47 @@
+/* ============================================================
+   Pastel Design System — Spacing, radius, borders, shadows, motion
+   ============================================================ */
+
+:root {
+  /* --- Spacing scale (4px base) --- */
+  --space-0:  0;
+  --space-1:  0.25rem;  /*  4px */
+  --space-2:  0.5rem;   /*  8px */
+  --space-3:  0.75rem;  /* 12px */
+  --space-4:  1rem;     /* 16px */
+  --space-5:  1.5rem;   /* 24px */
+  --space-6:  2rem;     /* 32px */
+  --space-7:  3rem;     /* 48px */
+  --space-8:  4rem;     /* 64px */
+
+  /* --- Border radius --- */
+  --radius-sm:   4px;   /* chips, inputs, small buttons */
+  --radius-md:   8px;   /* buttons, control groups */
+  --radius-lg:   12px;  /* panels, cards */
+  --radius-xl:   18px;  /* hero cards, modals */
+  --radius-pill: 999px; /* pills / badges */
+
+  /* --- Border widths --- */
+  --border-thin:   1px; /* hairlines, dividers */
+  --border-medium: 1.5px; /* control outlines, card edges */
+  --border-thick:  2px; /* focus, selected emphasis */
+
+  /* --- Shadows — soft, warm, low (paper feel, never harsh) --- */
+  --shadow-sm:
+    0 1px 2px hsl(var(--shadow-color) / 0.10);
+  --shadow-md:
+    0 2px 4px hsl(var(--shadow-color) / 0.08),
+    0 4px 12px hsl(var(--shadow-color) / 0.10);
+  --shadow-lg:
+    0 8px 24px hsl(var(--shadow-color) / 0.14),
+    0 2px 6px  hsl(var(--shadow-color) / 0.10);
+
+  /* --- Motion --- */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --dur-fast: 90ms;  /* @kind other */
+  --dur-mid:  160ms; /* @kind other */
+
+  /* --- Layout --- */
+  --panel-width: 280px; /* default side control panel */
+  --content-max: 1100px; /* readable tool/page width */
+}

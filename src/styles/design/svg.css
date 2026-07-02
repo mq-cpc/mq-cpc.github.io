@@ -1,0 +1,98 @@
+/* ============================================================
+   Pastel Design System — SVG diagram guidance
+   The drawing surface is the heart of every tool. These classes
+   make d3/SVG diagrams share the exact tokens as the chrome, so
+   nodes, edges, and labels feel native to the page.
+
+   Apply to SVG elements:
+     <circle class="ps-node">                    default node
+     <circle class="ps-node ps-node--visited">    state variants
+     <line   class="ps-edge">                     default edge
+     <line   class="ps-edge ps-edge--path">       on shortest path
+     <text   class="ps-weight">                   edge weight label
+     <text   class="ps-node-label">               node id label
+   Category tinting:
+     <circle class="ps-node ps-cat-3">            teal-filled node
+   ============================================================ */
+
+/* --- Drawing surface --- */
+.ps-surface {
+  background: var(--surface);
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-lg);
+  display: block;
+}
+.ps-surface--sunk { background: var(--paper-sunk); }
+
+/* --- Nodes --- */
+.ps-node {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 2px;
+  transition: fill var(--dur-mid) var(--ease-out),
+              stroke var(--dur-mid) var(--ease-out);
+}
+.ps-node--frontier { fill: var(--warning-tint); stroke: var(--warning); }
+.ps-node--visited  { fill: var(--success-tint); stroke: var(--success); }
+.ps-node--current  { fill: var(--accent-tint);  stroke: var(--accent);  stroke-width: 3px; }
+.ps-node--blocked  { fill: var(--danger-tint);  stroke: var(--danger); }
+.ps-node--selected { stroke: var(--accent); stroke-width: 3px; }
+
+/* --- Node labels --- */
+.ps-node-label {
+  fill: var(--ink-strong);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+/* --- Edges --- */
+.ps-edge {
+  stroke: var(--line-strong);
+  stroke-width: 2px;
+  fill: none;
+  transition: stroke var(--dur-mid) var(--ease-out),
+              stroke-width var(--dur-mid) var(--ease-out);
+}
+.ps-edge--candidate { stroke: var(--warning); stroke-dasharray: 5 4; }
+.ps-edge--path      { stroke: var(--success); stroke-width: 4px; }
+.ps-edge--selected  { stroke: var(--accent); stroke-width: 4px; }
+.ps-edge--muted     { stroke: var(--line); }
+
+/* --- Weight labels (sit on edges) --- */
+.ps-weight {
+  fill: var(--ink-muted);
+  font-family: var(--font-label);
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  paint-order: stroke;          /* halo so the number reads over a line */
+  stroke: var(--surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+/* --- Arrowheads ---
+   Define a <marker> in <defs> once and reference it. The marker
+   path should use currentColor; set color on the edge so the head
+   inherits the edge's state color.
+     <marker id="ps-arrow" ...><path class="ps-arrowhead" .../></marker>
+*/
+.ps-arrowhead { fill: currentColor; }
+.ps-edge--arrow { color: var(--line-strong); marker-end: url(#ps-arrow); }
+.ps-edge--arrow.ps-edge--path { color: var(--success); }
+
+/* --- Category tints (match the color tokens) --- */
+.ps-cat-1 { fill: var(--cat-1-fill); stroke: var(--cat-1); }
+.ps-cat-2 { fill: var(--cat-2-fill); stroke: var(--cat-2); }
+.ps-cat-3 { fill: var(--cat-3-fill); stroke: var(--cat-3); }
+.ps-cat-4 { fill: var(--cat-4-fill); stroke: var(--cat-4); }
+.ps-cat-5 { fill: var(--cat-5-fill); stroke: var(--cat-5); }
+.ps-cat-6 { fill: var(--cat-6-fill); stroke: var(--cat-6); }
+/* Use the saturated value as a stroke/series color on lines: */
+.ps-stroke-1 { stroke: var(--cat-1); } .ps-stroke-2 { stroke: var(--cat-2); }
+.ps-stroke-3 { stroke: var(--cat-3); } .ps-stroke-4 { stroke: var(--cat-4); }
+.ps-stroke-5 { stroke: var(--cat-5); } .ps-stroke-6 { stroke: var(--cat-6); }

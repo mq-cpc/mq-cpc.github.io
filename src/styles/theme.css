@@ -1,0 +1,58 @@
+/* ============================================================
+   MQ CP Club — theme glue + dark indigo theme
+   App-specific overrides on top of the pastel design system,
+   copied from the design comp (MQ CP Club.dc.html).
+   ============================================================ */
+
+/* Font stacks: Libre Franklin for display, JetBrains Mono for labels
+   (loaded via Google Fonts in Base.astro). */
+.mqcp {
+  --font-display: 'Libre Franklin', system-ui, sans-serif;
+  --font-label: 'JetBrains Mono', ui-monospace, monospace;
+}
+.mqcp .mono { font-family: var(--font-label); }
+.mqcp ::selection { background: var(--selection-bg); }
+.mqcp ::-webkit-scrollbar { width: 10px; height: 10px; }
+.mqcp ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 2px solid var(--paper); }
+
+/* ===== Dark INDIGO theme override (palette #191970 → neon accents) ===== */
+[data-theme="indigo"] {
+    --paper:          #0f1022;  /* deep desaturated indigo page */
+    --paper-sunk:     #090a18;  /* wells, code wells, track grooves */
+    --surface:        #181a30;  /* panels / cards */
+    --surface-raised: #20223c;  /* popovers / lifted */
+
+    --ink-strong: #e7e8f4;
+    --ink:        #aab0cc;
+    --ink-muted:  #71769a;
+
+    --line:        #262943;
+    --line-strong: #353959;
+
+    /* Primary accent: bright pastel orange (the CTA / brand color) */
+    --accent:        #f0ac82;
+    --accent-hover:  #f4ba94;
+    --accent-press:  #e59d72;
+    --accent-tint:   #2c2018;
+    --accent-ink:    #2a1407;  /* dark ink ON pastel orange */
+    --accent-text:   #f2b48f;  /* pastel orange AS text on indigo */
+
+    /* Semantic — bright pastel */
+    --success:       #8fe3ad;  --success-tint:  #182a22;  /* green  */
+    --warning:       #f2d28a;  --warning-tint:  #2c2818;  /* yellow */
+    --danger:        #ef9f9f;  --danger-tint:   #2c1c1c;  /* coral  */
+
+    /* Category colors — pastel strokes on deep indigo fills */
+    --cat-1:        #8fe3ad;  --cat-1-fill: #182a22;  /* green  */
+    --cat-2:        #f0aa86;  --cat-2-fill: #2c2018;  /* orange */
+    --cat-3:        #f2d28a;  --cat-3-fill: #2c2818;  /* yellow */
+    --cat-4:        #c2dd90;  --cat-4-fill: #232a18;  /* lime   */
+    --cat-5:        #8fd6cd;  --cat-5-fill: #15292a;  /* teal   */
+    --cat-6:        #9fb0e8;  --cat-6-fill: #1a1d33;  /* indigo-blue */
+
+    --focus-ring:   #9fb0e8;
+    --shadow-color: 240 40% 2%;
+    --selection-bg: #2a2e52;
+
+    color-scheme: dark;
+}
