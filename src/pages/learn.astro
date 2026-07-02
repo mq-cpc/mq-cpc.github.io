@@ -14,7 +14,7 @@ const roadmap: RoadmapTopic[] = topicEntries.map((t) => ({
 }));
 const groups = groupTopicsByLevel(roadmap);
 const meta = new Map(topicEntries.map((t) => [t.id, t.data]));
-const strokeOf = (slug: string) => `var(--${meta.get(slug)!.color})`;
+const strokeOf = (slug: string) => `var(--cat-${meta.get(slug)!.color.slice(1)})`;
 const blurbOf = (slug: string) => meta.get(slug)!.blurb;
 ---
 <Base title="Learn — MQ CP Club">
