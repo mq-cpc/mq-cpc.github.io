@@ -4,7 +4,7 @@ The site auto-deploys from the private GitHub repo. No server; output is static.
 
 ## One-time setup (an org owner does this)
 1. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git.
-2. Authorise Cloudflare for the `sutantyo/mq-cpc-app` repo.
+2. Authorise Cloudflare for the `mq-cpc/web-app` repo.
 3. Build settings:
    - Framework preset: **Astro**
    - Build command: `npm run build`

@@ -11,7 +11,7 @@ const all = (await getCollection('events')).sort((a, b) => b.data.date.getTime()
 const upcoming = all.filter((e) => e.data.date.getTime() >= now).reverse();
 const past = all.filter((e) => e.data.date.getTime() < now);
 const team = parseTeamBoard(boardRaw);
-const repoUrl = 'https://github.com/sutantyo/mq-cpc-app';
+const repoUrl = 'https://github.com/mq-cpc/web-app';
 ---
 <Base title="Events — MQ CP Club">
   <Header />
