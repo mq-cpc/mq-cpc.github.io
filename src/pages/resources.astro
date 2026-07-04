@@ -20,7 +20,7 @@ const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
     <div class="mono" style="font-size:12px;color:var(--accent-text);">// RESOURCES</div>
     <h1 class="ps-h1" style="margin-top:8px;">Resources &amp; team reference</h1>
 
-    <h2 class="ps-h2" style="margin:var(--space-6) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Curated links</h2>
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Curated links</h2>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);">
       {linkGroups.map((g) => (
         <div class="ps-card" style="gap:var(--space-3);">
@@ -33,7 +33,7 @@ const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
     </div>
 
     <div style="display:flex;align-items:baseline;justify-content:space-between;margin:var(--space-7) 0 var(--space-4);">
-      <h2 class="ps-h2"><span class="mono" style="color:var(--accent-text);">&gt;</span> Team reference notebook</h2>
+      <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
       <button class="ps-btn ps-btn--sm" onclick="window.print()">⎙ Print / PDF</button>
     </div>
     {[...byCategory.entries()].map(([cat, items]) => (

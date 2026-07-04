@@ -39,6 +39,25 @@ html { font-size: 17px; }
 .mq-navlink:hover::after,
 .mq-navlink[data-active="true"]::after { transform: scaleX(1); }
 
+/* ===== Section heading with a ">" prompt marker =====
+   Add `mq-heading` alongside `ps-h2`/`ps-h3` and just write the heading
+   text — the accent-colored mono ">" and its gap are generated here, so
+   the marker stays consistent across every page instead of being
+   hand-repeated inline. */
+.mq-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.mq-heading::before {
+  content: '>';
+  font-family: var(--font-label);
+  font-weight: var(--weight-regular);
+  font-size: 0.7em;
+  line-height: 1;
+  color: var(--accent-text);
+}
+
 /* The GitHub sign-in CTA is disabled until Plan 2 ships auth, but the
    design system's 45% disabled opacity turns the brand orange muddy.
    Keep the CTA at full brand color; cursor still signals inertness. */

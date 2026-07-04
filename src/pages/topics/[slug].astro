@@ -34,7 +34,7 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
 
     {topic.data.videos.length > 0 && (
       <>
-        <h2 class="ps-h3" style="margin:var(--space-7) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Tutorials</h2>
+        <h2 class="ps-h3 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Tutorials</h2>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
           {topic.data.videos.map((v) => (
             <div style="border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);">
@@ -51,7 +51,7 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
       </>
     )}
 
-    <h2 class="ps-h3" style="margin:var(--space-7) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Problem set</h2>
+    <h2 class="ps-h3 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Problem set</h2>
     <div style="border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);">
       <div class="mono" style="display:grid;grid-template-columns:36px 1fr 96px 168px 132px;gap:var(--space-3);padding:11px var(--space-4);background:var(--paper-sunk);border-bottom:1px solid var(--line);font-size:11px;color:var(--ink-muted);text-transform:uppercase;">
         <span>#</span><span>Problem</span><span>Difficulty</span><span>Links</span><span>Status</span>

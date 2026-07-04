@@ -19,7 +19,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     <div class="mono" style="font-size:12px;color:var(--accent-text);">// EVENTS</div>
     <h1 class="ps-h1" style="margin-top:8px;">What's on</h1>
 
-    <h2 class="ps-h2" style="margin:var(--space-6) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Upcoming</h2>
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Upcoming</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
       {upcoming.length === 0 && <p class="mono" style="color:var(--ink-muted);">Nothing scheduled right now.</p>}
       {upcoming.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />)}
@@ -27,14 +27,14 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
 
     {past.length > 0 && (
       <>
-        <h2 class="ps-h2" style="margin:var(--space-7) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Past</h2>
+        <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Past</h2>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
           {past.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} stroke="var(--line-strong)" />)}
         </div>
       </>
     )}
 
-    <h2 class="ps-h2" style="margin:var(--space-7) 0 var(--space-4);"><span class="mono" style="color:var(--accent-text);">&gt;</span> Looking for a team</h2>
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Looking for a team</h2>
     <p style="color:var(--ink);max-width:60ch;">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);margin-top:var(--space-4);">
       {team.map((t) => (
