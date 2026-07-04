@@ -9,6 +9,19 @@ const { title, description = 'Macquarie University competitive programming club.
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Apply the saved theme before first paint so navigating pages never
+         flashes the light default before the dark theme is restored. -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('mqcp-theme');
+          document.documentElement.setAttribute(
+            'data-theme',
+            t === 'indigo' || t === 'pastel' ? t : 'pastel',
+          );
+        } catch (e) {}
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
