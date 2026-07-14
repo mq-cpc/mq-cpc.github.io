@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+
+const repoUrl = 'https://github.com/mq-cpc/web-app';
+const editUrl = `${repoUrl}/edit/main/src/data/team-board.json`;
+
+const example = `{
+  "handle": "your-gh-handle",
+  "name": "Your Name",
+  "looking": "1 more, intermediate",
+  "contact": "Discord: you#1234"
+}`;
+
+const cliSnippet = `git clone ${repoUrl}.git mq-cpc-webapp
+# the last word is just the folder name on your computer —
+# leave it off to use "web-app", or call it whatever you like
+cd mq-cpc-webapp
+git switch -c add-me-to-board
+# edit src/data/team-board.json, then add your entry
+git commit -am "Add me to the team board"
+git push -u origin add-me-to-board
+# then open the pull-request link GitHub prints`;
+---
+<Base title="Contribute — MQ CP Club" description="How to add yourself to the MQ CP Club team board.">
+  <Header />
+  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
+    <div class="mono" style="font-size:12px;color:var(--accent-text);">// CONTRIBUTE</div>
+    <h1 class="ps-h1" style="margin-top:8px;">Find teammates</h1>
+    <p style="color:var(--ink);max-width:64ch;margin-top:var(--space-3);">
+      The team board is just a JSON file in the club repo — no logins, no server. You add
+      yourself with a pull request, and once a committee member merges it you'll show up on the
+      <a class="mono" href="/events" style="color:var(--accent-text);text-decoration:none;">Events</a> page.
+    </p>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Before you start</h2>
+    <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
+      <li>A free <a class="mono" href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:none;">GitHub account</a>.</li>
+      <li>Access to the club's <span class="mono">mq-cpc</span> GitHub org. The repo is private, so if the links below give you a 404, ask a committee member to add you first.</li>
+    </ul>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Add yourself, step by step</h2>
+    <ol style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3);">
+      <li>Click <b>Edit the team board</b> (below). It opens <span class="mono">src/data/team-board.json</span> in GitHub's web editor on a new branch.</li>
+      <li>Add your entry to the <span class="mono">entries</span> list — copy this shape and change the values:
+        <pre class="mono" style="margin:var(--space-3) 0 0;padding:var(--space-4);background:var(--paper-sunk);border:1px solid var(--line);border-radius:var(--radius-md);font-size:13px;overflow-x:auto;">{example}</pre>
+      </li>
+      <li>Scroll to <b>Commit changes…</b>, keep <b>Create a new branch and start a pull request</b> selected, then click <b>Propose changes</b>.</li>
+      <li>On the next screen, click <b>Create pull request</b>. Done — a committee member reviews and merges it, and you appear on the Events page.</li>
+    </ol>
+
+    <a class="ps-btn ps-btn--primary" href={editUrl} target="_blank" rel="noopener" style="margin-top:var(--space-5);display:inline-block;">Edit the team board →</a>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">What the fields mean</h2>
+    <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
+      <li><span class="mono">handle</span> — your GitHub handle (or any short name).</li>
+      <li><span class="mono">name</span> — your display name (optional).</li>
+      <li><span class="mono">looking</span> — what you're after, e.g. 1 more, intermediate.</li>
+      <li><span class="mono">contact</span> — how teammates reach you (Discord, email, …).</li>
+    </ul>
+
+    <details style="margin-top:var(--space-7);max-width:64ch;border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5);background:var(--surface);">
+      <summary class="mono" style="cursor:pointer;color:var(--accent-text);font-size:13px;">Prefer the command line?</summary>
+      <p style="color:var(--ink);font-size:var(--text-sm);margin-top:var(--space-3);line-height:var(--leading-normal);">
+        Clone the repo, branch, edit <span class="mono">src/data/team-board.json</span>, commit, push, and open a pull request:
+      </p>
+      <pre class="mono" style="margin-top:var(--space-3);padding:var(--space-4);background:var(--paper-sunk);border:1px solid var(--line);border-radius:var(--radius-md);font-size:13px;overflow-x:auto;">{cliSnippet}</pre>
+    </details>
+  </main>
+</Base>

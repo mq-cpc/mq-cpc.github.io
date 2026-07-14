@@ -45,6 +45,9 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
         </div>
       ))}
     </div>
-    <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener" style="margin-top:var(--space-4);display:inline-block;">Add yourself with a pull request →</a>
+    <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-4);">
+      <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener" style="display:inline-block;">Add yourself with a pull request →</a>
+      <a class="mono" href="/contribute" style="font-size:13px;color:var(--accent-text);text-decoration:none;">New here? How to add yourself →</a>
+    </div>
   </main>
 </Base>
