@@ -2,8 +2,12 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 
-const tools: { name: string; blurb: string; url?: string; soon?: boolean }[] = [
-  { name: 'Graph Visualiser', blurb: 'Sketch a graph, then run BFS, DFS, or Dijkstra step by step.', soon: true },
+const tools: { name: string; blurb: string; app?: string; url?: string; soon?: boolean }[] = [
+  {
+    name: 'Graph Visualiser',
+    blurb: 'Sketch graphs on a dot-grid whiteboard — add nodes, connect weighted edges, rename and rearrange, all from the keyboard or a right-click menu.',
+    app: '/tools/graph/',
+  },
 ];
 ---
 <Base title="Tools — MQ CP Club">
@@ -11,7 +15,7 @@ const tools: { name: string; blurb: string; url?: string; soon?: boolean }[] = [
   <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
     <div class="mono" style="font-size:12px;color:var(--accent-text);">// TOOLS</div>
     <h1 class="ps-h1" style="margin-top:8px;">Tools built by members.</h1>
-    <p style="color:var(--ink);max-width:60ch;">Small client-side utilities we use in workshops and while practising. Each lives in its own repo.</p>
+    <p style="color:var(--ink);max-width:60ch;">Small client-side utilities we use in workshops and while practising.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-top:var(--space-6);">
       {tools.map((t) => (
         <div class="ps-card" style="gap:var(--space-2);">
@@ -20,9 +24,11 @@ const tools: { name: string; blurb: string; url?: string; soon?: boolean }[] = [
             {t.soon && <span class="ps-pill">soon</span>}
           </div>
           <div class="ps-card__body">{t.blurb}</div>
-          {t.url
-            ? <a class="mono" href={t.url} target="_blank" rel="noopener" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open repo →</a>
-            : <span class="mono" style="font-size:12px;color:var(--ink-muted);margin-top:auto;">coming soon</span>}
+          {t.app
+            ? <a class="mono" href={t.app} style="font-size:12px;color:var(--accent-text);margin-top:auto;">open tool →</a>
+            : t.url
+              ? <a class="mono" href={t.url} target="_blank" rel="noopener" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open repo →</a>
+              : <span class="mono" style="font-size:12px;color:var(--ink-muted);margin-top:auto;">coming soon</span>}
         </div>
       ))}
     </div>
