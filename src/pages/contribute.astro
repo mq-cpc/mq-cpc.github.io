@@ -26,20 +26,26 @@ git push -u origin add-me-to-board
   <Header />
   <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
     <div class="mono" style="font-size:12px;color:var(--accent-text);">// CONTRIBUTE</div>
-    <h1 class="ps-h1" style="margin-top:8px;">Find teammates</h1>
+    <h1 class="ps-h1" style="margin-top:8px;">Contribute</h1>
     <p style="color:var(--ink);max-width:64ch;margin-top:var(--space-3);">
+      Two ways to pitch in: add yourself to the team board to find teammates, or help improve
+      the site itself. Both happen the same way — a pull request on the club repo.
+    </p>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Find a team</h2>
+    <p style="color:var(--ink);max-width:64ch;">
       The team board is just a JSON file in the club repo — no logins, no server. You add
       yourself with a pull request, and once a committee member merges it you'll show up on the
       <a class="mono" href="/events" style="color:var(--accent-text);text-decoration:none;">Events</a> page.
     </p>
 
-    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Before you start</h2>
+    <h3 class="ps-h3 mq-heading" style="margin:var(--space-5) 0 var(--space-4);">Before you start</h3>
     <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
       <li>A free <a class="mono" href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:none;">GitHub account</a>.</li>
       <li>Access to the club's <span class="mono">mq-cpc</span> GitHub org. The repo is private, so if the links below give you a 404, ask a committee member to add you first.</li>
     </ul>
 
-    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Add yourself, step by step</h2>
+    <h3 class="ps-h3 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Add yourself, step by step</h3>
     <ol style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3);">
       <li>Click <b>Edit the team board</b> (below). It opens <span class="mono">src/data/team-board.json</span> in GitHub's web editor on a new branch.</li>
       <li>Add your entry to the <span class="mono">entries</span> list — copy this shape and change the values:
@@ -51,7 +57,7 @@ git push -u origin add-me-to-board
 
     <a class="ps-btn ps-btn--primary" href={editUrl} target="_blank" rel="noopener" style="margin-top:var(--space-5);display:inline-block;">Edit the team board →</a>
 
-    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">What the fields mean</h2>
+    <h3 class="ps-h3 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">What the fields mean</h3>
     <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
       <li><span class="mono">handle</span> — your GitHub handle (or any short name).</li>
       <li><span class="mono">name</span> — your display name (optional).</li>
@@ -66,5 +72,19 @@ git push -u origin add-me-to-board
       </p>
       <pre class="mono" style="margin-top:var(--space-3);padding:var(--space-4);background:var(--paper-sunk);border:1px solid var(--line);border-radius:var(--radius-md);font-size:13px;overflow-x:auto;">{cliSnippet}</pre>
     </details>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-8) 0 var(--space-4);">Improve the website</h2>
+    <p style="color:var(--ink);max-width:64ch;">
+      This site is built with <b>Astro</b>, a static-site generator: the content — topics,
+      problems, events, resources — lives as Markdown and JSON files in the same repo, and Astro
+      compiles it all to plain HTML, so there's no server to run. Changing the site works just
+      like the team board: edit the relevant file, open a pull request, and a committee member
+      reviews and merges it.
+    </p>
+    <p style="color:var(--ink);max-width:64ch;margin-top:var(--space-3);">
+      Not sure which file does what? The
+      <a class="mono" href="/contribute/website" style="color:var(--accent-text);text-decoration:none;">site guide</a>
+      explains how the pieces fit together and what to edit for each page.
+    </p>
   </main>
 </Base>
