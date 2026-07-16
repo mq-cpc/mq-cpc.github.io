@@ -37,8 +37,8 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Looking for a team</h2>
     <p style="color:var(--ink);max-width:60ch;">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);margin-top:var(--space-4);">
-      {team.map((t) => (
-        <div class="ps-card" style="gap:var(--space-2);">
+      {team.map((t, i) => (
+        <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-2);">
           <div class="ps-card__title">{t.name ?? t.handle} <span class="mono" style="font-size:12px;color:var(--ink-muted);">@{t.handle}</span></div>
           <div style="color:var(--ink);font-size:var(--text-sm);">{t.looking}</div>
           <div class="mono" style="font-size:12px;color:var(--accent-text);">{t.contact}</div>

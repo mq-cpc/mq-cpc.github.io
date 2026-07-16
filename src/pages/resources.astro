@@ -22,8 +22,8 @@ const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
 
     <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Curated links</h2>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);">
-      {linkGroups.map((g) => (
-        <div class="ps-card" style="gap:var(--space-3);">
+      {linkGroups.map((g, i) => (
+        <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-3);">
           <div class="ps-card__title">{g.data.category}</div>
           {g.data.links.map((l) => (
             <a href={l.url} target="_blank" rel="noopener" class="mono" style="font-size:13px;color:var(--accent-text);text-decoration:none;display:block;">{l.label} →</a>
