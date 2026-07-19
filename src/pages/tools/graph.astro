@@ -1,0 +1,88 @@
+---
+// Graph Visualiser — a full-screen whiteboard tool.
+// Rendered as its own document (not the site chrome) because it takes over
+// the viewport, but it imports the SITE's design system (single source of
+// truth — same bundled CSS as Base.astro) instead of shipping its own copy.
+// The vanilla ES-module app + d3 live in public/tools/graph/ and load by
+// absolute path; only the design tokens/components come from src/styles.
+import '../../styles/design/base.css';
+import '../../styles/theme.css';
+import '../../styles/graph-tool.css';
+---
+<!doctype html>
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Apply the saved theme before first paint (shares the site's key). -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('mqcp-theme');
+          document.documentElement.setAttribute(
+            'data-theme',
+            t === 'indigo' || t === 'pastel' ? t : 'pastel',
+          );
+        } catch (e) {}
+      })();
+    </script>
+    <title>Graph Visualiser — MQ CP Club</title>
+    <meta name="description" content="A whiteboard for sketching graphs — Macquarie Competitive Programming Club." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+  </head>
+  <body class="mqcp">
+    <div class="stage">
+      <svg id="board" class="board" role="application" aria-label="Graph drawing canvas">
+        <defs>
+          <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+            <circle class="grid-dot" cx="1.4" cy="1.4" r="1.4"></circle>
+          </pattern>
+        </defs>
+        <rect id="grid" x="0" y="0" width="100%" height="100%" fill="url(#dots)"></rect>
+        <g id="edges"></g>
+        <g id="nodes"></g>
+      </svg>
+
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true">△</div>
+        <div>
+          <div class="brand__name">Graph</div>
+          <div class="brand__sub">whiteboard</div>
+        </div>
+      </div>
+
+      <button class="icon-btn theme-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">☾</button>
+      <button class="icon-btn help-btn" id="help-toggle" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">?</button>
+
+      <div class="hint">
+        <b>Double-click</b> to add a node · <b>drag</b> to move · <b>right-click</b> for actions · <b>?</b> for shortcuts
+      </div>
+    </div>
+
+    <div class="menu" id="menu" hidden></div>
+
+    <div class="scrim" id="help-scrim" hidden>
+      <div class="help" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+        <h2>Shortcuts</h2>
+        <dl>
+          <dt><kbd>Double-click</kbd></dt><dd>Add a node under the cursor</dd>
+          <dt><kbd>N</kbd></dt><dd>Add a node at the pointer</dd>
+          <dt><kbd>Drag</kbd></dt><dd>Move a node</dd>
+          <dt><kbd>Click</kbd></dt><dd>Select a node</dd>
+          <dt><kbd>C</kbd></dt><dd>Connect selected node to the next one clicked</dd>
+          <dt><kbd>R</kbd></dt><dd>Rename the selected node</dd>
+          <dt><kbd>Delete</kbd></dt><dd>Remove the selected node</dd>
+          <dt><kbd>Right-click</kbd></dt><dd>Open the action menu</dd>
+          <dt><kbd>Esc</kbd></dt><dd>Cancel / deselect / close</dd>
+        </dl>
+      </div>
+    </div>
+
+    <!-- d3 as a global UMD build, then the app as an ES module; both are
+         static assets in public/, loaded verbatim (is:inline) by absolute path. -->
+    <script is:inline src="/tools/graph/vendor/d3.v7.min.js"></script>
+    <script type="module" is:inline src="/tools/graph/src/main.js"></script>
+  </body>
+</html>

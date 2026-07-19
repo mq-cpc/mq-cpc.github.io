@@ -1,0 +1,111 @@
+/* ============================================================
+   MQ CP Club — theme glue + dark indigo theme
+   App-specific overrides on top of the pastel design system,
+   copied from the design comp (MQ CP Club.dc.html).
+   ============================================================ */
+
+/* Font stacks: Libre Franklin for display, JetBrains Mono for labels
+   (loaded via Google Fonts in Base.astro). */
+.mqcp {
+  --font-display: 'Libre Franklin', system-ui, sans-serif;
+  --font-label: 'JetBrains Mono', ui-monospace, monospace;
+}
+.mqcp .mono { font-family: var(--font-label); }
+
+/* ===== App layout scale =====
+   Bump the root size so the rem-based type scale AND the rem-based
+   --space-* tokens open up together, and let pages fill the window
+   instead of capping at the design system's 1100px column. */
+html { font-size: 17px; }
+:root { --content-max: 100%; }
+.mqcp ::selection { background: var(--selection-bg); }
+.mqcp ::-webkit-scrollbar { width: 10px; height: 10px; }
+.mqcp ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 2px solid var(--paper); }
+
+/* ===== Nav link active/hover underline indicator (from design comp) ===== */
+.mq-navlink { position: relative; }
+.mq-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.16s ease;
+}
+.mq-navlink:hover::after,
+.mq-navlink[data-active="true"]::after { transform: scaleX(1); }
+
+/* ===== Section heading with a ">" prompt marker =====
+   Add `mq-heading` alongside `ps-h2`/`ps-h3` and just write the heading
+   text — the accent-colored mono ">" and its gap are generated here, so
+   the marker stays consistent across every page instead of being
+   hand-repeated inline. */
+.mq-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.mq-heading::before {
+  content: '>';
+  font-family: var(--font-label);
+  font-weight: var(--weight-regular);
+  font-size: 0.7em;
+  line-height: 1;
+  color: var(--accent-text);
+}
+
+/* The GitHub sign-in CTA is disabled until Plan 2 ships auth, but the
+   design system's 45% disabled opacity turns the brand orange muddy.
+   Keep the CTA at full brand color; cursor still signals inertness. */
+.mqcp .ps-btn--primary:disabled { opacity: 1; }
+
+/* ===== Blinking terminal cursor (from design comp) ===== */
+@keyframes mq-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+/* ===== Dark INDIGO theme override (palette #191970 → neon accents) ===== */
+[data-theme="indigo"] {
+    --paper:          #0f1022;  /* deep desaturated indigo page */
+    --paper-sunk:     #090a18;  /* wells, code wells, track grooves */
+    --surface:        #181a30;  /* panels / cards */
+    --surface-raised: #20223c;  /* popovers / lifted */
+
+    --ink-strong: #e7e8f4;
+    --ink:        #aab0cc;
+    --ink-muted:  #71769a;
+
+    --line:        #262943;
+    --line-strong: #353959;
+
+    /* Primary accent: neon orange (the CTA / brand color).
+       Brightened from the comp's #f0ac82 pastel per user feedback —
+       the design screenshots read as a hotter, more saturated orange. */
+    --accent:        #ff9440;
+    --accent-hover:  #ffa55c;
+    --accent-press:  #ef8330;
+    --accent-tint:   #301c0c;
+    --accent-ink:    #2a1204;  /* dark ink ON neon orange */
+    --accent-text:   #ff9d5c;  /* neon orange AS text on indigo */
+
+    /* Semantic — bright pastel */
+    --success:       #8fe3ad;  --success-tint:  #182a22;  /* green  */
+    --warning:       #f2d28a;  --warning-tint:  #2c2818;  /* yellow */
+    --danger:        #ef9f9f;  --danger-tint:   #2c1c1c;  /* coral  */
+
+    /* Category colors — pastel strokes on deep indigo fills */
+    --cat-1:        #8fe3ad;  --cat-1-fill: #182a22;  /* green  */
+    --cat-2:        #ff9d5c;  --cat-2-fill: #2c2018;  /* orange — aligned with hotter accent */
+    --cat-3:        #f2d28a;  --cat-3-fill: #2c2818;  /* yellow */
+    --cat-4:        #c2dd90;  --cat-4-fill: #232a18;  /* lime   */
+    --cat-5:        #8fd6cd;  --cat-5-fill: #15292a;  /* teal   */
+    --cat-6:        #9fb0e8;  --cat-6-fill: #1a1d33;  /* indigo-blue */
+
+    --focus-ring:   #9fb0e8;
+    --shadow-color: 240 40% 2%;
+    --selection-bg: #2a2e52;
+
+    color-scheme: dark;
+}

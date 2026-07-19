@@ -1,0 +1,17 @@
+/* ============================================================
+   Pastel Design System — global entry point
+   Consumers link THIS one file. Tokens are the single source of
+   truth; everything below references them. Re-theme by editing
+   tokens/colors.css (or any :root file) only.
+   This file is an @import manifest — no rules live here.
+
+   NOTE: import paths adjusted from the design project's
+   tokens/ + components/ layout to this flattened directory.
+   ============================================================ */
+
+@import "./colors.css";
+@import "./typography.css";
+@import "./spacing.css";
+
+@import "./components.css";
+@import "./svg.css";

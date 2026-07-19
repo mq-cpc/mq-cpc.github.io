@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import EventCard from '../components/EventCard.astro';
+import { getCollection } from 'astro:content';
+import { parseTeamBoard } from '../lib/team-board';
+import boardRaw from '../data/team-board.json';
+
+const now = Date.now();
+const all = (await getCollection('events')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const upcoming = all.filter((e) => e.data.date.getTime() >= now).reverse();
+const past = all.filter((e) => e.data.date.getTime() < now);
+const team = parseTeamBoard(boardRaw);
+const repoUrl = 'https://github.com/mq-cpc/web-app';
+---
+<Base title="Events — MQ CP Club">
+  <Header />
+  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
+    <div class="mono" style="font-size:12px;color:var(--accent-text);">// EVENTS</div>
+    <h1 class="ps-h1" style="margin-top:8px;">What's on</h1>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Upcoming</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+      {upcoming.length === 0 && <p class="mono" style="color:var(--ink-muted);">Nothing scheduled right now.</p>}
+      {upcoming.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />)}
+    </div>
+
+    {past.length > 0 && (
+      <>
+        <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Past</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+          {past.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} stroke="var(--line-strong)" />)}
+        </div>
+      </>
+    )}
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Looking for a team</h2>
+    <p style="color:var(--ink);max-width:60ch;">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);margin-top:var(--space-4);">
+      {team.map((t, i) => (
+        <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-2);">
+          <div class="ps-card__title">{t.name ?? t.handle} <span class="mono" style="font-size:12px;color:var(--ink-muted);">@{t.handle}</span></div>
+          <div style="color:var(--ink);font-size:var(--text-sm);">{t.looking}</div>
+          <div class="mono" style="font-size:12px;color:var(--accent-text);">{t.contact}</div>
+        </div>
+      ))}
+    </div>
+    <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-4);">
+      <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener" style="display:inline-block;">Add yourself with a pull request →</a>
+      <a class="mono" href="/contribute" style="font-size:13px;color:var(--accent-text);text-decoration:none;">New here? How to add yourself →</a>
+    </div>
+  </main>
+</Base>

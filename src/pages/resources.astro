@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import { getCollection, render } from 'astro:content';
+
+const linkGroups = (await getCollection('resources')).sort((a, b) => a.data.order - b.data.order);
+const snippets = (await getCollection('reference')).sort((a, b) => a.data.order - b.data.order);
+const byCategory = new Map<string, typeof snippets>();
+for (const s of snippets) {
+  const arr = byCategory.get(s.data.category) ?? [];
+  arr.push(s);
+  byCategory.set(s.data.category, arr);
+}
+const rendered = await Promise.all(snippets.map(async (s) => ({ slug: s.id, Content: (await render(s)).Content })));
+const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
+---
+<Base title="Resources — MQ CP Club">
+  <Header />
+  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
+    <div class="mono" style="font-size:12px;color:var(--accent-text);">// RESOURCES</div>
+    <h1 class="ps-h1" style="margin-top:8px;">Resources &amp; team reference</h1>
+
+    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Curated links</h2>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);">
+      {linkGroups.map((g, i) => (
+        <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-3);">
+          <div class="ps-card__title">{g.data.category}</div>
+          {g.data.links.map((l) => (
+            <a href={l.url} target="_blank" rel="noopener" class="mono" style="font-size:13px;color:var(--accent-text);text-decoration:none;display:block;">{l.label} →</a>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin:var(--space-7) 0 var(--space-4);">
+      <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
+      <button class="ps-btn ps-btn--sm" onclick="window.print()">⎙ Print / PDF</button>
+    </div>
+    {[...byCategory.entries()].map(([cat, items]) => (
+      <section style="margin-bottom:var(--space-6);">
+        <div class="mono" style="font-size:12px;color:var(--ink-muted);text-transform:uppercase;margin-bottom:var(--space-3);">{cat}</div>
+        {items.map((s) => {
+          const C = contentBySlug.get(s.id)!;
+          return (
+            <div style="margin-bottom:var(--space-4);">
+              <div class="mono" style="font-size:13px;color:var(--ink-strong);margin-bottom:6px;">{s.data.title} · {s.data.category}</div>
+              <div class="mqcp-code"><C /></div>
+            </div>
+          );
+        })}
+      </section>
+    ))}
+  </main>
+</Base>

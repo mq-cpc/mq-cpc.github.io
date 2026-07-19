@@ -1,0 +1,8 @@
+{
+  "category": "Algorithms & references",
+  "order": 1,
+  "links": [
+    { "label": "CP-Algorithms", "url": "https://cp-algorithms.com/" },
+    { "label": "USACO Guide", "url": "https://usaco.guide/" }
+  ]
+}

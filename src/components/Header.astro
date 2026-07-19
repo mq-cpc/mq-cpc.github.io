@@ -1,0 +1,36 @@
+---
+const links = [
+  { href: '/', label: 'home' },
+  { href: '/learn', label: 'learn' },
+  { href: '/events', label: 'events' },
+  { href: '/resources', label: 'resources' },
+  { href: '/tools', label: 'tools' },
+  { href: '/contribute', label: 'contribute' },
+];
+const path = Astro.url.pathname;
+---
+<header style="position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:var(--space-5);padding:var(--space-3) var(--space-6);background:color-mix(in srgb, var(--surface) 86%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);">
+  <a href="/" style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;text-decoration:none;">
+    <span style="width:34px;height:34px;border-radius:var(--radius-md);background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--font-label);font-weight:700;font-size:15px;">{'{}'}</span>
+    <span style="display:flex;flex-direction:column;line-height:1.05;">
+      <span style="font-family:var(--font-display);font-weight:600;color:var(--ink-strong);font-size:15px;letter-spacing:-0.01em;white-space:nowrap;">MQ Competitive Programming Club</span>
+      <span class="mono" style="font-size:11px;color:var(--ink-muted);letter-spacing:0.04em;">acm.icpc · macquarie</span>
+    </span>
+  </a>
+
+  <span style="flex:1;"></span>
+
+  <button class="ps-btn ps-btn--sm" data-theme-toggle title="Toggle theme" style="width:34px;height:34px;padding:0;border-radius:var(--radius-md);">
+    <span style="font-size:15px;">◐</span>
+  </button>
+
+  <button class="ps-btn ps-btn--primary" disabled title="Coming soon" style="white-space:nowrap;">Sign in with GitHub</button>
+</header>
+
+<nav style="display:flex;justify-content:center;padding:0 var(--space-6);background:var(--surface);border-bottom:1px solid var(--line);">
+  <div style="display:flex;align-items:center;gap:var(--space-6);max-width:var(--content-max);width:100%;">
+    {links.map((l) => (
+      <a class="mq-navlink mono" href={l.href} data-active={path === l.href} style="font-size:14px;color:var(--ink);cursor:pointer;text-decoration:none;letter-spacing:0.02em;padding:var(--space-3) 0;">{l.label}</a>
+    ))}
+  </div>
+</nav>

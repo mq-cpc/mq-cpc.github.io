@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import TopicCard from '../components/TopicCard.astro';
+import { getCollection } from 'astro:content';
+import { groupTopicsByLevel, type RoadmapTopic } from '../lib/roadmap';
+
+const topicEntries = await getCollection('topics');
+const problems = await getCollection('problems');
+const countFor = (slug: string) => problems.filter((p) => p.data.topic.id === slug).length;
+
+const roadmap: RoadmapTopic[] = topicEntries.map((t) => ({
+  slug: t.id, name: t.data.name, level: t.data.level, order: t.data.order,
+}));
+const groups = groupTopicsByLevel(roadmap);
+const meta = new Map(topicEntries.map((t) => [t.id, t.data]));
+const strokeOf = (slug: string) => `var(--cat-${meta.get(slug)!.color.slice(1)})`;
+const blurbOf = (slug: string) => meta.get(slug)!.blurb;
+---
+<Base title="Learn — MQ CP Club">
+  <Header />
+  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
+    <div class="mono" style="font-size:12px;color:var(--accent-text);">// LEARN</div>
+    <h1 class="ps-h1" style="margin-top:8px;">Topics, in the order we suggest learning them.</h1>
+    {groups.map((group) => (
+      <div style="margin-bottom:var(--space-7);">
+        <div class="mono" style="font-size:12px;color:var(--ink-muted);text-transform:uppercase;margin:var(--space-5) 0 var(--space-3);">{group.label}</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+          {group.items.map((t) => (
+            <TopicCard href={`/topics/${t.slug}`} name={t.name} blurb={blurbOf(t.slug)} total={countFor(t.slug)} stroke={strokeOf(t.slug)} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </main>
+</Base>

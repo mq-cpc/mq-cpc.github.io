@@ -7,7 +7,12 @@ node_modules/
 # Build output
 dist/
 build/
+.astro/
 
 # Env / secrets
 .env
 .env.local
+
+# Local tooling (not part of the project)
+.claude/
+.superpowers/
