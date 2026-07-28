@@ -16,23 +16,23 @@ const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
 ---
 <Base title="Resources — MQ CP Club">
   <Header />
-  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
-    <div class="mono" style="font-size:12px;color:var(--accent-text);">// RESOURCES</div>
-    <h1 class="ps-h1" style="margin-top:8px;">Resources &amp; team reference</h1>
+  <main class="mq-page">
+    <div class="mono mq-eyebrow">// RESOURCES</div>
+    <h1 class="ps-h1 mq-h1-gap">Resources &amp; team reference</h1>
 
-    <h2 class="ps-h2 mq-heading" style="margin:var(--space-6) 0 var(--space-4);">Curated links</h2>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);">
+    <h2 class="ps-h2 mq-heading mq-heading--mt6">Curated links</h2>
+    <div class="mq-grid-2">
       {linkGroups.map((g, i) => (
         <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-3);">
           <div class="ps-card__title">{g.data.category}</div>
           {g.data.links.map((l) => (
-            <a href={l.url} target="_blank" rel="noopener" class="mono" style="font-size:13px;color:var(--accent-text);text-decoration:none;display:block;">{l.label} →</a>
+            <a href={l.url} target="_blank" rel="noopener" class="mono mq-link--13" style="display:block;">{l.label} →</a>
           ))}
         </div>
       ))}
     </div>
 
-    <div style="display:flex;align-items:baseline;justify-content:space-between;margin:var(--space-7) 0 var(--space-4);">
+    <div class="mq-heading--mt7" style="display:flex;align-items:baseline;justify-content:space-between;">
       <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
       <button class="ps-btn ps-btn--sm" onclick="window.print()">⎙ Print / PDF</button>
     </div>

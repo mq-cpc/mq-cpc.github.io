@@ -25,7 +25,7 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
 ---
 <Base title={`${topic.data.name} — MQ CP Club`}>
   <Header />
-  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-6) var(--space-6) var(--space-8);">
+  <main class="mq-page mq-page--tight">
     <a class="mono" href="/learn" style="font-size:13px;color:var(--ink-muted);text-decoration:none;">← Learn / Roadmap</a>
     <div style={`border-left:4px solid ${stroke};padding-left:var(--space-4);margin-top:var(--space-4);`}>
       <h1 class="ps-h1">{topic.data.name}</h1>
@@ -34,7 +34,7 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
 
     {topic.data.videos.length > 0 && (
       <>
-        <h2 class="ps-h3 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Video Tutorials</h2>
+        <h2 class="ps-h3 mq-heading mq-heading--mt7">Video Tutorials</h2>
         <div style="display:flex;gap:var(--space-4);overflow-x:auto;padding:2px 2px var(--space-4);scroll-snap-type:x proximity;">
           {topic.data.videos.map((v) => (
             <div class="video-card" data-yt={v.youtubeId} style="flex:0 0 clamp(240px,58vw,300px);scroll-snap-align:start;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;">
@@ -68,7 +68,7 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
       </>
     )}
 
-    <h2 class="ps-h3 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">Problem set</h2>
+    <h2 class="ps-h3 mq-heading mq-heading--mt7">Problem set</h2>
     <div style="border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);">
       <div class="mono" style="display:grid;grid-template-columns:36px 1fr 96px 168px 132px;gap:var(--space-3);padding:11px var(--space-4);background:var(--paper-sunk);border-bottom:1px solid var(--line);font-size:11px;color:var(--ink-muted);text-transform:uppercase;">
         <span>#</span><span>Problem</span><span>Difficulty</span><span>Links</span><span>Status</span>

@@ -12,11 +12,11 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
 ---
 <Base title="Tools — MQ CP Club">
   <Header />
-  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
-    <div class="mono" style="font-size:12px;color:var(--accent-text);">// TOOLS</div>
-    <h1 class="ps-h1" style="margin-top:8px;">Tools built by members.</h1>
+  <main class="mq-page">
+    <div class="mono mq-eyebrow">// TOOLS</div>
+    <h1 class="ps-h1 mq-h1-gap">Tools built by members.</h1>
     <p style="color:var(--ink);max-width:60ch;">Small client-side utilities we use in workshops and while practising.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-top:var(--space-6);">
+    <div class="mq-grid-3" style="margin-top:var(--space-6);">
       {tools.map((t, i) => (
         <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-2);">
           <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -25,9 +25,9 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
           </div>
           <div class="ps-card__body">{t.blurb}</div>
           {t.app
-            ? <a class="mono" href={t.app} style="font-size:12px;color:var(--accent-text);margin-top:auto;">open tool →</a>
+            ? <a class="mono mq-link mq-link--card" href={t.app}>open tool →</a>
             : t.url
-              ? <a class="mono" href={t.url} target="_blank" rel="noopener" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open repo →</a>
+              ? <a class="mono mq-link mq-link--card" href={t.url} target="_blank" rel="noopener">open repo →</a>
               : <span class="mono" style="font-size:12px;color:var(--ink-muted);margin-top:auto;">coming soon</span>}
         </div>
       ))}

@@ -13,7 +13,7 @@ const upcoming = (await getCollection('events'))
 ---
 <Base title="MQ Competitive Programming Club">
   <Header />
-  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-6) var(--space-6) var(--space-8);">
+  <main class="mq-page mq-page--tight">
 
     <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-5);flex-wrap:wrap;">
       <span class="ps-pill ps-pill--accent"><span class="ps-pill__dot"></span>ACM-ICPC PREP · ALL LEVELS WELCOME</span>
@@ -122,9 +122,9 @@ const upcoming = (await getCollection('events'))
     <section style="margin-top:var(--space-8);">
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4);">
         <h2 class="ps-h2 mq-heading">Upcoming Events</h2>
-        <a class="mono mq-navlink" href="/events" style="font-size:13px;color:var(--accent-text);text-decoration:none;">view all events →</a>
+        <a class="mono mq-navlink mq-link--13" href="/events">view all events →</a>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+      <div class="mq-grid-3">
         {upcoming.map((e) => (
           <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />
         ))}
@@ -132,25 +132,25 @@ const upcoming = (await getCollection('events'))
     </section>
 
     <section style="margin-top:var(--space-8);">
-      <h2 class="ps-h2 mq-heading" style="margin-bottom:var(--space-4);">Explore the club</h2>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+      <h2 class="ps-h2 mq-heading mq-heading--mb4">Explore the club</h2>
+      <div class="mq-grid-3">
         <a class="ps-card ps-card--c6" href="/learn">
           <span class="mono" style="font-size:22px;">↳</span>
           <div class="ps-card__title">Topic Roadmap</div>
           <div class="ps-card__body">12 ordered topics from two-pointers to flows. Track what you've solved.</div>
-          <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open learn →</span>
+          <span class="mono mq-link mq-link--card">open learn →</span>
         </a>
         <a class="ps-card ps-card--c4" href="/resources">
           <span class="mono" style="font-size:22px;">{'{ }'}</span>
           <div class="ps-card__title">Team Reference</div>
           <div class="ps-card__body">A printable algorithm library: graphs, math, strings, geometry — copy-paste ready.</div>
-          <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open resources →</span>
+          <span class="mono mq-link mq-link--card">open resources →</span>
         </a>
         <a class="ps-card ps-card--c2" href="/events">
           <span class="mono" style="font-size:22px;">▟</span>
           <div class="ps-card__title">Events</div>
           <div class="ps-card__body">Weekly practice, workshops, and contests — see what's coming up.</div>
-          <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open events →</span>
+          <span class="mono mq-link mq-link--card">open events →</span>
         </a>
       </div>
     </section>
