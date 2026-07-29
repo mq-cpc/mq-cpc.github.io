@@ -1,0 +1,108 @@
+/* Tailwind v4 entry.
+
+   Preflight (Tailwind's global reset) is intentionally OMITTED: the site
+   already has its own baseline via the design system, and we need strict
+   visual parity during the period where the old CSS and Tailwind coexist.
+   Preflight's `ol,ul{list-style:none}`, `<pre>`/heading/form resets would
+   silently regress existing pages. If we ever want Preflight later, swap
+   the imports below for `@import "tailwindcss";` and fix the affected spots. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* ===== Token bridge =====
+   Map the design system's CSS custom properties into Tailwind's theme so
+   utilities (bg-accent, gap-5, text-md, rounded-lg, shadow-md, font-display…)
+   resolve to `var(--token)`. `inline` is REQUIRED: it substitutes the var
+   reference into each generated utility instead of snapshotting the token's
+   value at build time, so utilities keep swapping with `data-theme` at
+   runtime. The tokens stay defined in design/*.css + theme.css. */
+@theme inline {
+  /* Colors */
+  --color-paper: var(--paper);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-strong: var(--ink-strong);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-press: var(--accent-press);
+  --color-accent-tint: var(--accent-tint);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-text: var(--accent-text);
+  --color-success: var(--success);
+  --color-success-tint: var(--success-tint);
+  --color-warning: var(--warning);
+  --color-warning-tint: var(--warning-tint);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
+  --color-cat-1: var(--cat-1);
+  --color-cat-2: var(--cat-2);
+  --color-cat-3: var(--cat-3);
+  --color-cat-4: var(--cat-4);
+  --color-cat-5: var(--cat-5);
+  --color-cat-6: var(--cat-6);
+  --color-cat-1-fill: var(--cat-1-fill);
+  --color-cat-2-fill: var(--cat-2-fill);
+  --color-cat-3-fill: var(--cat-3-fill);
+  --color-cat-4-fill: var(--cat-4-fill);
+  --color-cat-5-fill: var(--cat-5-fill);
+  --color-cat-6-fill: var(--cat-6-fill);
+  --color-focus-ring: var(--focus-ring);
+
+  /* Spacing — hand-tuned non-linear scale, mapped as named steps
+     (do NOT use Tailwind's default multiplier). */
+  --spacing-0: var(--space-0);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
+  --spacing-8: var(--space-8);
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-label: var(--font-label);
+
+  /* Font sizes */
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-md: var(--text-md);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+  --text-3xl: var(--text-3xl);
+
+  /* Line heights */
+  --leading-tight: var(--leading-tight);
+  --leading-snug: var(--leading-snug);
+  --leading-normal: var(--leading-normal);
+  --leading-loose: var(--leading-loose);
+
+  /* Letter spacing */
+  --tracking-tight: var(--tracking-tight);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: var(--tracking-wide);
+
+  /* Radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
+
+  /* Shadows */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
