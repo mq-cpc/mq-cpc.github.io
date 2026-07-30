@@ -9,28 +9,33 @@ const links = [
 ];
 const path = Astro.url.pathname;
 ---
-<header style="position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:var(--space-5);padding:var(--space-3) var(--space-6);background:color-mix(in srgb, var(--surface) 86%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);">
-  <a href="/" style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;text-decoration:none;">
-    <span style="width:34px;height:34px;border-radius:var(--radius-md);background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--font-label);font-weight:700;font-size:15px;">{'{}'}</span>
-    <span style="display:flex;flex-direction:column;line-height:1.05;">
-      <span style="font-family:var(--font-display);font-weight:600;color:var(--ink-strong);font-size:15px;letter-spacing:-0.01em;white-space:nowrap;">MQ Competitive Programming Club</span>
-      <span class="mono" style="font-size:11px;color:var(--ink-muted);letter-spacing:0.04em;">acm.icpc · macquarie</span>
+<header
+  class="sticky top-0 z-30 flex items-center gap-5 py-3 px-6 border-b border-line backdrop-blur-[10px]"
+  style="background:color-mix(in srgb, var(--surface) 86%, transparent);"
+>
+  <a href="/" class="flex items-center gap-3 cursor-pointer no-underline">
+    <span class="w-[34px] h-[34px] rounded-md bg-accent text-accent-ink grid place-items-center font-label font-bold text-[15px]">{'{}'}</span>
+    <span class="flex flex-col leading-[1.05]">
+      <span class="font-display font-semibold text-ink-strong text-[15px] tracking-tight whitespace-nowrap">MQ Competitive Programming Club</span>
+      <span class="mono text-[11px] text-ink-muted tracking-wide">acm.icpc · macquarie</span>
     </span>
   </a>
 
-  <span style="flex:1;"></span>
+  <span class="flex-1"></span>
 
-  <button class="ps-btn ps-btn--sm" data-theme-toggle title="Toggle theme" style="width:34px;height:34px;padding:0;border-radius:var(--radius-md);">
-    <span style="font-size:15px;">◐</span>
+  <button class="ps-btn ps-btn--sm w-[34px] h-[34px] p-0 rounded-md" data-theme-toggle title="Toggle theme">
+    <span class="text-[15px]">◐</span>
   </button>
 
-  <button class="ps-btn ps-btn--primary" disabled title="Coming soon" style="white-space:nowrap;">Sign in with GitHub</button>
+  {/* Sign-in with GitHub is hidden until auth is supported — keep the markup for later.
+  <button class="ps-btn ps-btn--primary whitespace-nowrap" disabled title="Coming soon">Sign in with GitHub</button>
+  */}
 </header>
 
-<nav style="display:flex;justify-content:center;padding:0 var(--space-6);background:var(--surface);border-bottom:1px solid var(--line);">
-  <div style="display:flex;align-items:center;gap:var(--space-6);max-width:var(--content-max);width:100%;">
+<nav class="flex justify-center px-6 bg-surface border-b border-line">
+  <div class="flex items-center gap-6 max-w-[var(--content-max)] w-full">
     {links.map((l) => (
-      <a class="mq-navlink mono" href={l.href} data-active={path === l.href} style="font-size:14px;color:var(--ink);cursor:pointer;text-decoration:none;letter-spacing:0.02em;padding:var(--space-3) 0;">{l.label}</a>
+      <a class="mq-navlink mono text-[14px] text-ink cursor-pointer no-underline tracking-[0.02em] py-3" href={l.href} data-active={path === l.href}>{l.label}</a>
     ))}
   </div>
 </nav>

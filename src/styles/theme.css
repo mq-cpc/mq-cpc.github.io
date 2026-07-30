@@ -66,6 +66,70 @@ html { font-size: 17px; }
 /* ===== Blinking terminal cursor (from design comp) ===== */
 @keyframes mq-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
+/* ===== Shared page/section chrome =====
+   Extracted from repeated inline styles across pages — each declaration
+   below is a property-for-property copy of the inline style it replaces,
+   so swapping style="..." for these classes changes nothing visually. */
+
+/* <main> wrapper (most pages: space-7 top padding). */
+.mq-page {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-6) var(--space-8);
+}
+/* Modifier for pages whose <main> uses space-6 top padding instead of
+   space-7 (index.astro, topics/[slug].astro). */
+.mq-page--tight {
+  padding-top: var(--space-6);
+}
+
+/* "// SECTION" eyebrow label (pair with class="mono"). */
+.mq-eyebrow {
+  font-size: 12px;
+  color: var(--accent-text);
+}
+
+/* h1 top gap used right under the eyebrow. */
+.mq-h1-gap {
+  margin-top: 8px;
+}
+
+/* Mono accent link/label, 12px — inline "open X →" affordances. */
+.mq-link {
+  font-size: 12px;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+/* Card footer variant: pins the link to the bottom of a flex card. */
+.mq-link--card {
+  margin-top: auto;
+}
+/* 13px variant used for a few standalone nav-style links. */
+.mq-link--13 {
+  font-size: 13px;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+/* mq-heading margin variants (top var(--space-N), bottom space-4). */
+.mq-heading--mt5 { margin: var(--space-5) 0 var(--space-4); }
+.mq-heading--mt6 { margin: var(--space-6) 0 var(--space-4); }
+.mq-heading--mt7 { margin: var(--space-7) 0 var(--space-4); }
+.mq-heading--mt8 { margin: var(--space-8) 0 var(--space-4); }
+.mq-heading--mb4 { margin-bottom: var(--space-4); }
+
+/* Repeated card/section grids. */
+.mq-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+.mq-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
 /* ===== Dark INDIGO theme override (palette #191970 → neon accents) ===== */
 [data-theme="indigo"] {
     --paper:          #0f1022;  /* deep desaturated indigo page */

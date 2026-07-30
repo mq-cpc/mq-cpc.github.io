@@ -4,16 +4,16 @@ import Header from '../../components/Header.astro';
 ---
 <Base title="Site guide — MQ CP Club" description="How the MQ CP Club website is built (work in progress).">
   <Header />
-  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
-    <a class="mono" href="/contribute" style="font-size:13px;color:var(--ink-muted);text-decoration:none;">← Contribute</a>
-    <div class="mono" style="font-size:12px;color:var(--accent-text);margin-top:var(--space-4);">// SITE GUIDE</div>
-    <h1 class="ps-h1" style="margin-top:8px;">How the website is built</h1>
-    <p style="color:var(--ink);max-width:64ch;margin-top:var(--space-3);">
+  <main class="mq-page">
+    <a class="mono text-[13px] text-ink-muted no-underline" href="/contribute">← Contribute</a>
+    <div class="mono mq-eyebrow mt-4">// SITE GUIDE</div>
+    <h1 class="ps-h1 mq-h1-gap">How the website is built</h1>
+    <p class="text-ink max-w-[64ch] mt-3">
       A short tour of how the site is put together — which files hold what, and what to edit to
       change a given page.
     </p>
 
-    <div class="ps-card" style="border-top:3px solid var(--cat-3);margin-top:var(--space-5);max-width:64ch;">
+    <div class="ps-card mt-5 max-w-[64ch]" style="border-top:3px solid var(--cat-3);">
       <div class="ps-card__title">🚧 Work in progress</div>
       <div class="ps-card__body">
         The site is still under active development, so the specifics here — file paths, structure,
@@ -22,8 +22,8 @@ import Header from '../../components/Header.astro';
       </div>
     </div>
 
-    <h2 class="ps-h2 mq-heading" style="margin:var(--space-7) 0 var(--space-4);">What this will cover</h2>
-    <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
+    <h2 class="ps-h2 mq-heading mq-heading--mt7">What this will cover</h2>
+    <ul class="text-ink max-w-[64ch] leading-loose pl-5">
       <li>How Astro turns content files into pages — content collections plus page templates.</li>
       <li>Where each kind of content lives under <span class="mono">src/content/</span>, and how to add or edit it.</li>
       <li>Which file corresponds to which page.</li>

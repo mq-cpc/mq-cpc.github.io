@@ -2,11 +2,11 @@
 interface Props { href: string; name: string; blurb: string; total: number; stroke: string }
 const { href, name, blurb, total, stroke } = Astro.props;
 ---
-<a href={href} style={`display:flex;flex-direction:column;gap:var(--space-3);background:var(--surface);border:1px solid var(--line);border-top:3px solid ${stroke};border-radius:var(--radius-lg);padding:var(--space-4);text-decoration:none;`}>
-  <div style="display:flex;align-items:center;justify-content:space-between;">
-    <span style="font-family:var(--font-display);font-weight:600;font-size:var(--text-md);color:var(--ink-strong);">{name}</span>
-    <span class="mono" style={`font-size:11px;color:${stroke};`}>{total}q</span>
+<a href={href} class="flex flex-col gap-3 bg-surface border border-line rounded-lg p-4 no-underline" style={`border-top:3px solid ${stroke};`}>
+  <div class="flex items-center justify-between">
+    <span class="font-display font-semibold text-md text-ink-strong">{name}</span>
+    <span class="mono text-[11px]" style={`color:${stroke};`}>{total}q</span>
   </div>
-  <div style="font-size:var(--text-sm);color:var(--ink-muted);min-height:2.6em;">{blurb}</div>
-  <span class="mono" style="font-size:12px;color:var(--accent-text);margin-top:auto;">open topic →</span>
+  <div class="text-sm text-ink-muted min-h-[2.6em]">{blurb}</div>
+  <span class="mono mq-link mq-link--card">open topic →</span>
 </a>

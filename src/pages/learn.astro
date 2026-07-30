@@ -19,13 +19,13 @@ const blurbOf = (slug: string) => meta.get(slug)!.blurb;
 ---
 <Base title="Learn — MQ CP Club">
   <Header />
-  <main style="max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-8);">
-    <div class="mono" style="font-size:12px;color:var(--accent-text);">// LEARN</div>
-    <h1 class="ps-h1" style="margin-top:8px;">Topics, in the order we suggest learning them.</h1>
+  <main class="mq-page">
+    <div class="mono mq-eyebrow">// LEARN</div>
+    <h1 class="ps-h1 mq-h1-gap">Topics, in the order we suggest learning them.</h1>
     {groups.map((group) => (
-      <div style="margin-bottom:var(--space-7);">
-        <div class="mono" style="font-size:12px;color:var(--ink-muted);text-transform:uppercase;margin:var(--space-5) 0 var(--space-3);">{group.label}</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);">
+      <div class="mb-7">
+        <div class="mono text-[12px] text-ink-muted uppercase mt-5 mb-3">{group.label}</div>
+        <div class="mq-grid-3">
           {group.items.map((t) => (
             <TopicCard href={`/topics/${t.slug}`} name={t.name} blurb={blurbOf(t.slug)} total={countFor(t.slug)} stroke={strokeOf(t.slug)} />
           ))}

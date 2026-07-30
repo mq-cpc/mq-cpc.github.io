@@ -3,11 +3,11 @@ interface Props { title: string; date: Date; location?: string; tag?: string; st
 const { title, date, location, tag, stroke = 'var(--accent)' } = Astro.props;
 const dateStr = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }).format(date);
 ---
-<div class="ps-card" style={`border-top:3px solid ${stroke};gap:var(--space-3);`}>
-  <div style="display:flex;align-items:center;justify-content:space-between;">
+<div class="ps-card" style={`border-top:3px solid ${stroke};`}>
+  <div class="flex items-center justify-between">
     {tag && <span class="ps-pill">{tag}</span>}
-    {location && <span class="mono" style="font-size:11px;color:var(--ink-muted);">{location}</span>}
+    {location && <span class="mono text-[11px] text-ink-muted">{location}</span>}
   </div>
   <div class="ps-card__title" style="font-size:var(--text-md);">{title}</div>
-  <div class="mono" style="font-size:12px;color:var(--accent-text);">{dateStr}</div>
+  <div class="mono mq-eyebrow">{dateStr}</div>
 </div>
