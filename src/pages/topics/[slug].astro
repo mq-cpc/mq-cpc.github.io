@@ -41,7 +41,7 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
               <div class="aspect-[16/9] relative bg-paper-sunk" data-yt-frame>
                 <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt={v.title} loading="lazy" class="w-full h-full object-cover block" />
                 <span class="absolute inset-0 grid place-items-center pointer-events-none">
-                  <span class="w-[46px] h-[46px] rounded-[999px] grid place-items-center border border-line-strong" style="background:color-mix(in srgb, var(--surface) 80%, transparent);"><span class="text-accent-text text-[15px] ml-[2px]">▶</span></span>
+                  <span class="w-[46px] h-[46px] rounded-pill grid place-items-center border border-line-strong" style="background:color-mix(in srgb, var(--surface) 80%, transparent);"><span class="text-accent-text text-[15px] ml-[2px]">▶</span></span>
                 </span>
                 {v.duration && <span class="mono absolute bottom-[6px] right-[6px] text-paper text-[11px] py-[1px] px-[6px] rounded-sm" style="background:color-mix(in srgb, var(--ink-strong) 76%, transparent);">{v.duration}</span>}
               </div>
