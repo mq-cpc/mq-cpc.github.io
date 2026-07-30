@@ -16,8 +16,7 @@
      #E9ECCE celadon #CDE9DC mint   #C4DFE5 sky
    ============================================================ */
 
-:root,
-[data-theme="light"] {
+:root {
   /* --- Base: neutral warm beige ground + white panels --- */
   --paper:          #f3ede1; /* page background — warm neutral beige */
   --paper-sunk:     #e8dfce; /* recessed wells, track grooves */
@@ -66,53 +65,6 @@
   color-scheme: light;
 }
 
-/* NOTE: This file is copied from the design system, which uses "light" and
-   "dark" theme names. This app's actual themes are "pastel" (served by the
-   :root defaults above) and "indigo" (defined in src/styles/theme.css).
-   The [data-theme="light"] and [data-theme="dark"] selectors here are never
-   matched by this app and are kept only to stay faithful to the design source. */
-[data-theme="dark"] {
-  /* --- Base: neutral warm dark + raised panels --- */
-  --paper:          #201d18;
-  --paper-sunk:     #17150f;
-  --surface:        #2a261f;
-  --surface-raised: #332e26;
-
-  --ink-strong: #f1ebdd;
-  --ink:        #c9c0ae;
-  --ink-muted:  #948b7b;
-
-  --line:        #393327;
-  --line-strong: #4b4233;
-
-  /* --- Primary accent: lighter Color Crush pink for dark --- */
-  --accent:        #dc839e;
-  --accent-hover:  #e795af;
-  --accent-press:  #c9728c;
-  --accent-tint:   #3e2a2f;
-  --accent-ink:    #251a1d; /* dark ink ON light accent */
-  --accent-text:   #e88da6; /* accent AS text on dark paper (AA) */
-
-  /* --- Semantic (lightened for dark bg) --- */
-  --success:       #82bd8c;
-  --success-tint:  #26392b;
-  --warning:       #d6ac55;
-  --warning-tint:  #3c331e;
-  --danger:        #dd7b66;
-  --danger-tint:   #3e2620;
-
-  /* --- Category colors for dark — lighter strokes, deep fills --- */
-  --cat-1:        #c39bd6; --cat-1-fill: #362d3e; /* lilac   */
-  --cat-2:        #e093a3; --cat-2-fill: #402b30; /* pink    */
-  --cat-3:        #deb55e; --cat-3-fill: #40371e; /* butter  */
-  --cat-4:        #bcc77b; --cat-4-fill: #353a21; /* celadon */
-  --cat-5:        #79c496; --cat-5-fill: #22392c; /* mint    */
-  --cat-6:        #79bdce; --cat-6-fill: #1f373f; /* sky     */
-
-  /* --- Effects --- */
-  --focus-ring: #84b6ec;
-  --shadow-color: 34 20% 4%;
-  --selection-bg: #463121;
-
-  color-scheme: dark;
-}
+/* This app's two themes are "pastel" (the :root defaults above) and "indigo"
+   (defined in src/styles/theme.css). The design source's original "light" and
+   "dark" theme blocks were removed — recover them from git history if needed. */
