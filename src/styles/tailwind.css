@@ -105,4 +105,8 @@
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
   --shadow-lg: var(--shadow-lg);
+
+  /* Layout: the prose measure (comfortable text-column width). Used as
+     max-w-measure instead of repeating an arbitrary max-w-[64ch]. */
+  --container-measure: 64ch;
 }
