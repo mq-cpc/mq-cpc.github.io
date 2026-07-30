@@ -9,19 +9,16 @@ const links = [
 ];
 const path = Astro.url.pathname;
 ---
-<header
-  class="sticky top-0 z-30 flex items-center gap-5 py-3 px-6 border-b border-line backdrop-blur-[10px]"
-  style="background:color-mix(in srgb, var(--surface) 86%, transparent);"
->
-  <a href="/" class="flex items-center gap-3 cursor-pointer no-underline">
-    <span class="w-[34px] h-[34px] rounded-md bg-accent text-accent-ink grid place-items-center font-label font-bold text-[15px]">{'{}'}</span>
-    <span class="flex flex-col leading-[1.05]">
-      <span class="font-display font-semibold text-ink-strong text-[15px] tracking-tight whitespace-nowrap">MQ Competitive Programming Club</span>
-      <span class="mono text-[11px] text-ink-muted tracking-wide">acm.icpc · macquarie</span>
+<header class="mq-topbar">
+  <a href="/" class="mq-logo">
+    <span class="mq-logo__mark">{'{}'}</span>
+    <span class="mq-logo__text">
+      <span class="mq-logo__name">MQ Competitive Programming Club</span>
+      <span class="mq-logo__sub">acm.icpc · macquarie</span>
     </span>
   </a>
 
-  <span class="flex-1"></span>
+  <span class="mq-topbar__spacer"></span>
 
   <button class="ps-btn ps-btn--sm w-[34px] h-[34px] p-0 rounded-md" data-theme-toggle title="Toggle theme">
     <span class="text-[15px]">◐</span>
@@ -32,10 +29,10 @@ const path = Astro.url.pathname;
   */}
 </header>
 
-<nav class="flex justify-center px-6 bg-surface border-b border-line">
-  <div class="flex items-center gap-6 max-w-[var(--content-max)] w-full">
+<nav class="mq-nav">
+  <div class="mq-nav__inner">
     {links.map((l) => (
-      <a class="mq-navlink mono text-[14px] text-ink cursor-pointer no-underline tracking-[0.02em] py-3" href={l.href} data-active={path === l.href}>{l.label}</a>
+      <a class="mq-navlink" href={l.href} data-active={path === l.href}>{l.label}</a>
     ))}
   </div>
 </nav>
