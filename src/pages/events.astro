@@ -39,7 +39,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     <div class="mq-grid-2 mt-4">
       {team.map((t, i) => (
         <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-2);">
-          <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-[12px] text-ink-muted">@{t.handle}</span></div>
+          <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-label text-ink-muted">@{t.handle}</span></div>
           <div class="text-ink text-sm">{t.looking}</div>
           <div class="mono mq-eyebrow">{t.contact}</div>
         </div>

@@ -28,7 +28,7 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
             ? <a class="mono mq-link mq-link--card" href={t.app}>open tool →</a>
             : t.url
               ? <a class="mono mq-link mq-link--card" href={t.url} target="_blank" rel="noopener">open repo →</a>
-              : <span class="mono text-[12px] text-ink-muted mt-auto">coming soon</span>}
+              : <span class="mono text-label text-ink-muted mt-auto">coming soon</span>}
         </div>
       ))}
     </div>

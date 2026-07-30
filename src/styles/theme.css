@@ -53,20 +53,20 @@ html { font-size: 17px; }
   color: var(--accent-ink);
   font-family: var(--font-label);
   font-weight: 700;
-  font-size: 15px;
+  font-size: var(--text-label-lg);
 }
 .mq-logo__text { display: flex; flex-direction: column; line-height: 1.05; }
 .mq-logo__name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--text-label-lg);
   letter-spacing: -0.01em;
   color: var(--ink-strong);
   white-space: nowrap;
 }
 .mq-logo__sub {
   font-family: var(--font-label);
-  font-size: 11px;
+  font-size: var(--text-label);
   letter-spacing: 0.04em;
   color: var(--ink-muted);
 }
@@ -91,7 +91,7 @@ html { font-size: 17px; }
   position: relative;
   padding: var(--space-3) 0;
   font-family: var(--font-label);
-  font-size: 14px;
+  font-size: var(--text-label-lg);
   letter-spacing: 0.02em;
   color: var(--ink);
   text-decoration: none;
@@ -162,7 +162,7 @@ html { font-size: 17px; }
 
 /* "// SECTION" eyebrow label (pair with class="mono"). */
 .mq-eyebrow {
-  font-size: 12px;
+  font-size: var(--text-label);
   color: var(--accent-text);
 }
 
@@ -173,7 +173,7 @@ html { font-size: 17px; }
 
 /* Mono accent link/label, 12px — inline "open X →" affordances. */
 .mq-link {
-  font-size: 12px;
+  font-size: var(--text-label);
   color: var(--accent-text);
   text-decoration: none;
 }
@@ -181,9 +181,10 @@ html { font-size: 17px; }
 .mq-link--card {
   margin-top: auto;
 }
-/* 13px variant used for a few standalone nav-style links. */
+/* Standalone nav-style links. Now the same size as .mq-link (both --text-label);
+   kept as a separate name for call sites — candidate to dedupe into .mq-link. */
 .mq-link--13 {
-  font-size: 13px;
+  font-size: var(--text-label);
   color: var(--accent-text);
   text-decoration: none;
 }
