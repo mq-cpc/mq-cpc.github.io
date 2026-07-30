@@ -21,7 +21,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
 
     <h2 class="ps-h2 mq-heading mq-heading--mt6">Upcoming</h2>
     <div class="mq-grid-3">
-      {upcoming.length === 0 && <p class="mono" style="color:var(--ink-muted);">Nothing scheduled right now.</p>}
+      {upcoming.length === 0 && <p class="mono text-ink-muted">Nothing scheduled right now.</p>}
       {upcoming.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />)}
     </div>
 
@@ -35,17 +35,17 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     )}
 
     <h2 class="ps-h2 mq-heading mq-heading--mt7">Looking for a team</h2>
-    <p style="color:var(--ink);max-width:60ch;">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
-    <div class="mq-grid-2" style="margin-top:var(--space-4);">
+    <p class="text-ink max-w-[60ch]">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
+    <div class="mq-grid-2 mt-4">
       {team.map((t, i) => (
         <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-2);">
-          <div class="ps-card__title">{t.name ?? t.handle} <span class="mono" style="font-size:12px;color:var(--ink-muted);">@{t.handle}</span></div>
-          <div style="color:var(--ink);font-size:var(--text-sm);">{t.looking}</div>
+          <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-[12px] text-ink-muted">@{t.handle}</span></div>
+          <div class="text-ink text-sm">{t.looking}</div>
           <div class="mono mq-eyebrow">{t.contact}</div>
         </div>
       ))}
     </div>
-    <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-4);">
+    <div class="flex items-center gap-4 flex-wrap mt-4">
       <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener" style="display:inline-block;">Add yourself with a pull request →</a>
       <a class="mono mq-link--13" href="/contribute">New here? How to add yourself →</a>
     </div>

@@ -27,63 +27,63 @@ git push -u origin add-me-to-board
   <main class="mq-page">
     <div class="mono mq-eyebrow">// CONTRIBUTE</div>
     <h1 class="ps-h1 mq-h1-gap">Contribute</h1>
-    <p style="color:var(--ink);max-width:64ch;margin-top:var(--space-3);">
+    <p class="text-ink max-w-[64ch] mt-3">
       Two ways to pitch in: add yourself to the team board to find teammates, or help improve
       the site itself. Both happen the same way — a pull request on the club repo.
     </p>
 
     <h2 class="ps-h2 mq-heading mq-heading--mt7">Find a team</h2>
-    <p style="color:var(--ink);max-width:64ch;">
+    <p class="text-ink max-w-[64ch]">
       The team board is just a JSON file in the club repo — no logins, no server. You add
       yourself with a pull request, and once a committee member merges it you'll show up on the
-      <a class="mono" href="/events" style="color:var(--accent-text);text-decoration:none;">Events</a> page.
+      <a class="mono text-accent-text no-underline" href="/events">Events</a> page.
     </p>
 
     <h3 class="ps-h3 mq-heading mq-heading--mt5">Before you start</h3>
-    <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
-      <li>A free <a class="mono" href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:none;">GitHub account</a>.</li>
+    <ul class="text-ink max-w-[64ch] leading-loose pl-5">
+      <li>A free <a class="mono text-accent-text no-underline" href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a>.</li>
       <li>Access to the club's <span class="mono">mq-cpc</span> GitHub org. The repo is private, so if the links below give you a 404, ask a committee member to add you first.</li>
     </ul>
 
     <h3 class="ps-h3 mq-heading mq-heading--mt6">Add yourself, step by step</h3>
-    <ol style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3);">
+    <ol class="text-ink max-w-[64ch] leading-loose pl-5 flex flex-col gap-3">
       <li>Click <b>Edit the team board</b> (below). It opens <span class="mono">src/data/team-board.json</span> in GitHub's web editor on a new branch.</li>
       <li>Add your entry to the <span class="mono">entries</span> list — copy this shape and change the values:
-        <pre class="mono" style="margin:var(--space-3) 0 0;padding:var(--space-4);background:var(--paper-sunk);border:1px solid var(--line);border-radius:var(--radius-md);font-size:13px;overflow-x:auto;">{example}</pre>
+        <pre class="mono mt-3 mb-0 p-4 bg-paper-sunk border border-line rounded-md text-[13px] overflow-x-auto">{example}</pre>
       </li>
       <li>Scroll to <b>Commit changes…</b>, keep <b>Create a new branch and start a pull request</b> selected, then click <b>Propose changes</b>.</li>
       <li>On the next screen, click <b>Create pull request</b>. Done — a committee member reviews and merges it, and you appear on the Events page.</li>
     </ol>
 
-    <a class="ps-btn ps-btn--primary" href={editUrl} target="_blank" rel="noopener" style="margin-top:var(--space-5);display:inline-block;">Edit the team board →</a>
+    <a class="ps-btn ps-btn--primary mt-5" href={editUrl} target="_blank" rel="noopener" style="display:inline-block;">Edit the team board →</a>
 
     <h3 class="ps-h3 mq-heading mq-heading--mt6">What the fields mean</h3>
-    <ul style="color:var(--ink);max-width:64ch;line-height:var(--leading-loose);padding-left:var(--space-5);">
+    <ul class="text-ink max-w-[64ch] leading-loose pl-5">
       <li><span class="mono">handle</span> — your GitHub handle (or any short name).</li>
       <li><span class="mono">name</span> — your display name (optional).</li>
       <li><span class="mono">looking</span> — what you're after, e.g. 1 more, intermediate.</li>
       <li><span class="mono">contact</span> — how teammates reach you (Discord, email, …).</li>
     </ul>
 
-    <details style="margin-top:var(--space-7);max-width:64ch;border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5);background:var(--surface);">
-      <summary class="mono" style="cursor:pointer;color:var(--accent-text);font-size:13px;">Prefer the command line?</summary>
-      <p style="color:var(--ink);font-size:var(--text-sm);margin-top:var(--space-3);line-height:var(--leading-normal);">
+    <details class="mt-7 max-w-[64ch] border border-line rounded-md py-4 px-5 bg-surface">
+      <summary class="mono cursor-pointer text-accent-text text-[13px]">Prefer the command line?</summary>
+      <p class="text-ink text-sm mt-3 leading-normal">
         Clone the repo, branch, edit <span class="mono">src/data/team-board.json</span>, commit, push, and open a pull request:
       </p>
-      <pre class="mono" style="margin-top:var(--space-3);padding:var(--space-4);background:var(--paper-sunk);border:1px solid var(--line);border-radius:var(--radius-md);font-size:13px;overflow-x:auto;">{cliSnippet}</pre>
+      <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-[13px] overflow-x-auto">{cliSnippet}</pre>
     </details>
 
     <h2 class="ps-h2 mq-heading mq-heading--mt8">Improve the website</h2>
-    <p style="color:var(--ink);max-width:64ch;">
+    <p class="text-ink max-w-[64ch]">
       This site is built with <b>Astro</b>, a static-site generator: the content — topics,
       problems, events, resources — lives as Markdown and JSON files in the same repo, and Astro
       compiles it all to plain HTML, so there's no server to run. Changing the site works just
       like the team board: edit the relevant file, open a pull request, and a committee member
       reviews and merges it.
     </p>
-    <p style="color:var(--ink);max-width:64ch;margin-top:var(--space-3);">
+    <p class="text-ink max-w-[64ch] mt-3">
       Not sure which file does what? The
-      <a class="mono" href="/contribute/website" style="color:var(--accent-text);text-decoration:none;">site guide</a>
+      <a class="mono text-accent-text no-underline" href="/contribute/website">site guide</a>
       explains how the pieces fit together and what to edit for each page.
     </p>
   </main>

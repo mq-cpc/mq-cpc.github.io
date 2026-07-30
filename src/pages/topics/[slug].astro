@@ -26,28 +26,28 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
 <Base title={`${topic.data.name} — MQ CP Club`}>
   <Header />
   <main class="mq-page mq-page--tight">
-    <a class="mono" href="/learn" style="font-size:13px;color:var(--ink-muted);text-decoration:none;">← Learn / Roadmap</a>
-    <div style={`border-left:4px solid ${stroke};padding-left:var(--space-4);margin-top:var(--space-4);`}>
+    <a class="mono text-[13px] text-ink-muted no-underline" href="/learn">← Learn / Roadmap</a>
+    <div class="pl-4 mt-4" style={`border-left:4px solid ${stroke};`}>
       <h1 class="ps-h1">{topic.data.name}</h1>
-      <div style="color:var(--ink);margin-top:var(--space-3);"><Content /></div>
+      <div class="text-ink mt-3"><Content /></div>
     </div>
 
     {topic.data.videos.length > 0 && (
       <>
         <h2 class="ps-h3 mq-heading mq-heading--mt7">Video Tutorials</h2>
-        <div style="display:flex;gap:var(--space-4);overflow-x:auto;padding:2px 2px var(--space-4);scroll-snap-type:x proximity;">
+        <div class="flex gap-4 overflow-x-auto pt-[2px] px-[2px] pb-4 [scroll-snap-type:x_proximity]">
           {topic.data.videos.map((v) => (
-            <div class="video-card" data-yt={v.youtubeId} style="flex:0 0 clamp(240px,58vw,300px);scroll-snap-align:start;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;">
-              <div data-yt-frame style="aspect-ratio:16/9;position:relative;background:var(--paper-sunk);">
-                <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt={v.title} loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
-                <span style="position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;">
-                  <span style="width:46px;height:46px;border-radius:999px;background:color-mix(in srgb, var(--surface) 80%, transparent);display:grid;place-items:center;border:1px solid var(--line-strong);"><span style="color:var(--accent-text);font-size:15px;margin-left:2px;">▶</span></span>
+            <div class="video-card flex-[0_0_clamp(240px,58vw,300px)] [scroll-snap-align:start] cursor-pointer bg-surface border border-line rounded-lg overflow-hidden" data-yt={v.youtubeId}>
+              <div class="aspect-[16/9] relative bg-paper-sunk" data-yt-frame>
+                <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt={v.title} loading="lazy" class="w-full h-full object-cover block" />
+                <span class="absolute inset-0 grid place-items-center pointer-events-none">
+                  <span class="w-[46px] h-[46px] rounded-[999px] grid place-items-center border border-line-strong" style="background:color-mix(in srgb, var(--surface) 80%, transparent);"><span class="text-accent-text text-[15px] ml-[2px]">▶</span></span>
                 </span>
-                {v.duration && <span class="mono" style="position:absolute;bottom:6px;right:6px;background:color-mix(in srgb, var(--ink-strong) 76%, transparent);color:var(--paper);font-size:11px;padding:1px 6px;border-radius:var(--radius-sm);">{v.duration}</span>}
+                {v.duration && <span class="mono absolute bottom-[6px] right-[6px] text-paper text-[11px] py-[1px] px-[6px] rounded-sm" style="background:color-mix(in srgb, var(--ink-strong) 76%, transparent);">{v.duration}</span>}
               </div>
-              <div style="padding:var(--space-3) var(--space-4);">
-                <div style="font-size:var(--text-sm);font-weight:600;color:var(--ink-strong);line-height:1.25;">{v.title}</div>
-                <div class="mono" style="font-size:11px;color:var(--ink-muted);margin-top:4px;">YouTube{v.channel ? ` · ${v.channel}` : ''}</div>
+              <div class="py-3 px-4">
+                <div class="text-sm font-semibold text-ink-strong leading-[1.25]">{v.title}</div>
+                <div class="mono text-[11px] text-ink-muted mt-[4px]">YouTube{v.channel ? ` · ${v.channel}` : ''}</div>
               </div>
             </div>
           ))}
@@ -69,19 +69,19 @@ const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var
     )}
 
     <h2 class="ps-h3 mq-heading mq-heading--mt7">Problem set</h2>
-    <div style="border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);">
-      <div class="mono" style="display:grid;grid-template-columns:36px 1fr 96px 168px 132px;gap:var(--space-3);padding:11px var(--space-4);background:var(--paper-sunk);border-bottom:1px solid var(--line);font-size:11px;color:var(--ink-muted);text-transform:uppercase;">
+    <div class="border border-line rounded-lg overflow-hidden bg-surface">
+      <div class="mono grid grid-cols-[36px_1fr_96px_168px_132px] gap-3 py-[11px] px-4 bg-paper-sunk border-b border-line text-[11px] text-ink-muted uppercase">
         <span>#</span><span>Problem</span><span>Difficulty</span><span>Links</span><span>Status</span>
       </div>
       {problems.map((p, i) => (
-        <div data-problem-id={p.id} style="display:grid;grid-template-columns:36px 1fr 96px 168px 132px;gap:var(--space-3);align-items:center;padding:12px var(--space-4);border-bottom:1px solid var(--line);">
-          <span class="mono" style="color:var(--ink-muted);">{i + 1}</span>
-          <span style="color:var(--ink-strong);">{p.data.title}</span>
+        <div class="grid grid-cols-[36px_1fr_96px_168px_132px] gap-3 items-center py-[12px] px-4 border-b border-line" data-problem-id={p.id}>
+          <span class="mono text-ink-muted">{i + 1}</span>
+          <span class="text-ink-strong">{p.data.title}</span>
           <span class="ps-pill" style={`color:${diffColor[p.data.difficulty]};border-color:transparent;`}>{p.data.difficulty}</span>
-          <span class="mono" style="font-size:12px;display:flex;gap:12px;">
-            <a href={p.data.url} target="_blank" rel="noopener" style="color:var(--accent-text);">{p.data.judge} →</a>
+          <span class="mono text-[12px] flex gap-[12px]">
+            <a href={p.data.url} target="_blank" rel="noopener" class="text-accent-text">{p.data.judge} →</a>
           </span>
-          <span class="mono" data-status-slot style="font-size:12px;color:var(--ink-muted);">— sign in —</span>
+          <span class="mono text-[12px] text-ink-muted" data-status-slot>— sign in —</span>
         </div>
       ))}
     </div>
