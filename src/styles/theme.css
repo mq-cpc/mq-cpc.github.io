@@ -181,13 +181,6 @@ html { font-size: 17px; }
 .mq-link--card {
   margin-top: auto;
 }
-/* Standalone nav-style links. Now the same size as .mq-link (both --text-label);
-   kept as a separate name for call sites — candidate to dedupe into .mq-link. */
-.mq-link--13 {
-  font-size: var(--text-label);
-  color: var(--accent-text);
-  text-decoration: none;
-}
 
 /* mq-heading margin variants (top var(--space-N), bottom space-4). */
 .mq-heading--mt5 { margin: var(--space-5) 0 var(--space-4); }

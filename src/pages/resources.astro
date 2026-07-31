@@ -26,7 +26,7 @@ const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
         <div class={`ps-card ps-card--c${(i % 6) + 1}`}>
           <div class="ps-card__title">{g.data.category}</div>
           {g.data.links.map((l) => (
-            <a href={l.url} target="_blank" rel="noopener" class="mono mq-link--13 block">{l.label} →</a>
+            <a href={l.url} target="_blank" rel="noopener" class="mono mq-link block">{l.label} →</a>
           ))}
         </div>
       ))}
