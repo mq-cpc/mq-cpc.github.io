@@ -130,6 +130,15 @@ html { font-size: 17px; }
 .mq-navlink:hover::after,
 .mq-navlink[data-active="true"]::after { transform: scaleX(1); }
 
+/* Visible keyboard focus for links (nav, logo, content links). Buttons, cards,
+   and pills already get a ring in design/components.css; this covers the rest
+   with the same focus token so focus is consistent everywhere. */
+.mqcp a:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 /* ===== Section heading with a ">" prompt marker =====
    Add `mq-heading` alongside `ps-h2`/`ps-h3` and just write the heading
    text — the accent-colored mono ">" and its gap are generated here, so
