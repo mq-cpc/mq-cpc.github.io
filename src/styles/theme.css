@@ -22,6 +22,20 @@ html { font-size: 17px; }
 .mqcp ::-webkit-scrollbar { width: 10px; height: 10px; }
 .mqcp ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 2px solid var(--paper); }
 
+/* ===== Respect prefers-reduced-motion =====
+   Drop animations and transitions to their end/base state instead of shortening
+   them, so nothing moves. animation:none (not the duration hack) leaves the
+   blink cursor as a solid block rather than stuck on its opacity:0 keyframe. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ===== Header / site chrome (see components/Header.astro) =====
    The sticky top bar and the nav row below it. Extracted from utilities into
    one named system so the markup reads like the rest of the mq-* components
