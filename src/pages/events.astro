@@ -35,10 +35,10 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     )}
 
     <h2 class="ps-h2 mq-heading mq-heading--mt7">Looking for a team</h2>
-    <p class="text-ink max-w-[60ch]">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
+    <p class="text-ink max-w-measure">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
     <div class="mq-grid-2 mt-4">
       {team.map((t, i) => (
-        <div class={`ps-card ps-card--c${(i % 6) + 1}`} style="gap:var(--space-2);">
+        <div class={`ps-card ps-card--c${(i % 6) + 1}`}>
           <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-label text-ink-muted">@{t.handle}</span></div>
           <div class="text-ink text-sm">{t.looking}</div>
           <div class="mono mq-eyebrow">{t.contact}</div>
@@ -46,7 +46,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
       ))}
     </div>
     <div class="flex items-center gap-4 flex-wrap mt-4">
-      <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener" style="display:inline-block;">Add yourself with a pull request →</a>
+      <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener">Add yourself with a pull request →</a>
       <a class="mono mq-link" href="/contribute">New here? How to add yourself →</a>
     </div>
   </main>
