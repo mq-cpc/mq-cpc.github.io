@@ -18,6 +18,14 @@ obvious ones. An online judge (we mostly use [Kattis](https://open.kattis.com/))
 compiles your code, runs it against a battery of hidden test cases, and tells
 you whether it passed.
 
+The contest the club is built around is the **ICPC** — the International
+Collegiate Programming Contest. It's a team event: three students share a
+*single* computer and have five hours to solve as many problems as they can,
+and it runs in stages, from regional qualifiers up to the annual World Finals.
+We train for it, but you don't have to be chasing the World Finals to belong
+here — the same practice makes you a sharper problem-solver and a stronger coder
+whatever you're after.
+
 The skills carry well beyond contests. You get sharp at turning a messy problem
 into a clear model, choosing the right data structure, reasoning about how fast
 your solution runs, and writing code that's correct the first time. It is also
