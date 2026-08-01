@@ -6,7 +6,7 @@ const dateStr = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numer
 <div class="ps-card" style={`border-top:3px solid ${stroke};`}>
   <div class="flex items-center justify-between">
     {tag && <span class="ps-pill">{tag}</span>}
-    {location && <span class="mono text-[11px] text-ink-muted">{location}</span>}
+    {location && <span class="mono text-label text-ink-muted">{location}</span>}
   </div>
   <div class="ps-card__title" style="font-size:var(--text-md);">{title}</div>
   <div class="mono mq-eyebrow">{dateStr}</div>

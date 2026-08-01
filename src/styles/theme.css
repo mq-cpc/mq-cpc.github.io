@@ -22,8 +22,99 @@ html { font-size: 17px; }
 .mqcp ::-webkit-scrollbar { width: 10px; height: 10px; }
 .mqcp ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 2px solid var(--paper); }
 
-/* ===== Nav link active/hover underline indicator (from design comp) ===== */
-.mq-navlink { position: relative; }
+/* ===== Respect prefers-reduced-motion =====
+   Drop animations and transitions to their end/base state instead of shortening
+   them, so nothing moves. animation:none (not the duration hack) leaves the
+   blink cursor as a solid block rather than stuck on its opacity:0 keyframe. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Header / site chrome (see components/Header.astro) =====
+   The sticky top bar and the nav row below it. Extracted from utilities into
+   one named system so the markup reads like the rest of the mq-* components
+   rather than a wall of classes. Values are a copy of the utilities they
+   replace — appearance is unchanged. */
+.mq-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+}
+.mq-topbar__spacer { flex: 1; }
+
+/* Brand lockup: the {} mark + two-line wordmark. */
+.mq-logo { display: flex; align-items: center; gap: var(--space-3); cursor: pointer; text-decoration: none; }
+.mq-logo__mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: var(--text-label-lg);
+}
+.mq-logo__text { display: flex; flex-direction: column; line-height: 1.05; }
+.mq-logo__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-label-lg);
+  letter-spacing: -0.01em;
+  color: var(--ink-strong);
+  white-space: nowrap;
+}
+.mq-logo__sub {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.mq-nav {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--space-6);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.mq-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+/* Nav link + its active/hover underline indicator (from the design comp). */
+.mq-navlink {
+  position: relative;
+  padding: var(--space-3) 0;
+  font-family: var(--font-label);
+  font-size: var(--text-label-lg);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.16s ease;
+}
+/* Active/hovered link text picks up the accent, matching the underline. */
+.mq-navlink:hover,
+.mq-navlink[data-active="true"] { color: var(--accent-text); }
 .mq-navlink::after {
   content: '';
   position: absolute;
@@ -38,6 +129,15 @@ html { font-size: 17px; }
 }
 .mq-navlink:hover::after,
 .mq-navlink[data-active="true"]::after { transform: scaleX(1); }
+
+/* Visible keyboard focus for links (nav, logo, content links). Buttons, cards,
+   and pills already get a ring in design/components.css; this covers the rest
+   with the same focus token so focus is consistent everywhere. */
+.mqcp a:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
 
 /* ===== Section heading with a ">" prompt marker =====
    Add `mq-heading` alongside `ps-h2`/`ps-h3` and just write the heading
@@ -85,7 +185,7 @@ html { font-size: 17px; }
 
 /* "// SECTION" eyebrow label (pair with class="mono"). */
 .mq-eyebrow {
-  font-size: 12px;
+  font-size: var(--text-label);
   color: var(--accent-text);
 }
 
@@ -96,19 +196,13 @@ html { font-size: 17px; }
 
 /* Mono accent link/label, 12px — inline "open X →" affordances. */
 .mq-link {
-  font-size: 12px;
+  font-size: var(--text-label);
   color: var(--accent-text);
   text-decoration: none;
 }
 /* Card footer variant: pins the link to the bottom of a flex card. */
 .mq-link--card {
   margin-top: auto;
-}
-/* 13px variant used for a few standalone nav-style links. */
-.mq-link--13 {
-  font-size: 13px;
-  color: var(--accent-text);
-  text-decoration: none;
 }
 
 /* mq-heading margin variants (top var(--space-N), bottom space-4). */

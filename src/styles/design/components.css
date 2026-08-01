@@ -118,13 +118,15 @@
 a.ps-card:hover { box-shadow: var(--shadow-md); border-color: var(--line-strong); transform: translateY(-2px); }
 .ps-card__title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--ink-strong); }
 .ps-card__body  { font-size: var(--text-sm); color: var(--ink); line-height: var(--leading-normal); }
-/* Optional pastel top-accent stripe on a card, cycling Color Crush. */
+/* Top-accent stripe on a card. cN = a Color Crush *identity* hue (a topic's or
+   category's own colour); --accent = one accent for category-less cards. */
 .ps-card--c1 { border-top: 3px solid var(--cat-1); }
 .ps-card--c2 { border-top: 3px solid var(--cat-2); }
 .ps-card--c3 { border-top: 3px solid var(--cat-3); }
 .ps-card--c4 { border-top: 3px solid var(--cat-4); }
 .ps-card--c5 { border-top: 3px solid var(--cat-5); }
 .ps-card--c6 { border-top: 3px solid var(--cat-6); }
+.ps-card--accent { border-top: 3px solid var(--accent); }
 
 /* ============================================================
    Focus — visible, consistent everywhere

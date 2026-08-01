@@ -82,6 +82,8 @@
   --text-xl: var(--text-xl);
   --text-2xl: var(--text-2xl);
   --text-3xl: var(--text-3xl);
+  --text-label: var(--text-label);
+  --text-label-lg: var(--text-label-lg);
 
   /* Line heights */
   --leading-tight: var(--leading-tight);
@@ -105,4 +107,8 @@
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
   --shadow-lg: var(--shadow-lg);
+
+  /* Layout: the prose measure (comfortable text-column width). Used as
+     max-w-measure instead of repeating an arbitrary max-w-[64ch]. */
+  --container-measure: 64ch;
 }

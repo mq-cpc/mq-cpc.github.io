@@ -24,7 +24,7 @@ const blurbOf = (slug: string) => meta.get(slug)!.blurb;
     <h1 class="ps-h1 mq-h1-gap">Topics, in the order we suggest learning them.</h1>
     {groups.map((group) => (
       <div class="mb-7">
-        <div class="mono text-[12px] text-ink-muted uppercase mt-5 mb-3">{group.label}</div>
+        <div class="mono text-label text-ink-muted uppercase mt-5 mb-3">{group.label}</div>
         <div class="mq-grid-3">
           {group.items.map((t) => (
             <TopicCard href={`/topics/${t.slug}`} name={t.name} blurb={blurbOf(t.slug)} total={countFor(t.slug)} stroke={strokeOf(t.slug)} />

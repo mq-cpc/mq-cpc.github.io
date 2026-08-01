@@ -32,12 +32,12 @@
 
   /* --- Primary accent: the Color Crush PINK, deepened just enough
      to carry white text at AA. Its pastel form is the tint. --- */
-  --accent:        #c05878; /* primary fill — AA with white text */
-  --accent-hover:  #ad4c69; /* darker on hover */
-  --accent-press:  #9a405a; /* darker on active */
+  --accent:        #b8506f; /* primary fill — rose, AA with white text (4.8:1) */
+  --accent-hover:  #a5475f; /* darker on hover */
+  --accent-press:  #933f53; /* darker on active */
   --accent-tint:   #fcdce1; /* Color Crush pink — selected row / wash */
   --accent-ink:    #ffffff; /* text/icon ON accent */
-  --accent-text:   #b54a6b; /* accent AS text on paper (AA) */
+  --accent-text:   #ac4763; /* accent AS text on paper — rose, AA (4.7:1) */
 
   /* --- Semantic — each maps to a Color Crush pastel fill --- */
   --success:       #4f8a5f; /* visited / done / shortest path */
