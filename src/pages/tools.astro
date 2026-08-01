@@ -17,8 +17,8 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
     <h1 class="ps-h1 mq-h1-gap">Tools built by members.</h1>
     <p class="text-ink max-w-measure">Small client-side utilities we use in workshops and while practising.</p>
     <div class="mq-grid-3 mt-6">
-      {tools.map((t, i) => (
-        <div class={`ps-card ps-card--c${(i % 6) + 1}`}>
+      {tools.map((t) => (
+        <div class="ps-card ps-card--accent">
           <div class="flex justify-between items-center">
             <div class="ps-card__title">{t.name}</div>
             {t.soon && <span class="ps-pill">soon</span>}

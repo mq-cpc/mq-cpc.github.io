@@ -4,6 +4,8 @@ import Header from '../components/Header.astro';
 import { getCollection, render } from 'astro:content';
 
 const linkGroups = (await getCollection('resources')).sort((a, b) => a.data.order - b.data.order);
+// Stable identity colour per category: same category name → same Color Crush hue.
+const catColor = (name: string) => `c${([...name].reduce((n, ch) => n + ch.charCodeAt(0), 0) % 6) + 1}`;
 const snippets = (await getCollection('reference')).sort((a, b) => a.data.order - b.data.order);
 const byCategory = new Map<string, typeof snippets>();
 for (const s of snippets) {
@@ -22,8 +24,8 @@ const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
 
     <h2 class="ps-h2 mq-heading mq-heading--mt6">Curated links</h2>
     <div class="mq-grid-2">
-      {linkGroups.map((g, i) => (
-        <div class={`ps-card ps-card--c${(i % 6) + 1}`}>
+      {linkGroups.map((g) => (
+        <div class={`ps-card ps-card--${catColor(g.data.category)}`}>
           <div class="ps-card__title">{g.data.category}</div>
           {g.data.links.map((l) => (
             <a href={l.url} target="_blank" rel="noopener" class="mono mq-link block">{l.label} →</a>
