@@ -28,7 +28,7 @@ interface Props {
   next: RoadmapTopic | null;
 }
 const { topic, problems, next } = Astro.props as Props;
-const { Content } = await render(topic);
+const { Content, headings } = await render(topic);
 const stroke = `var(--cat-${topic.data.color.slice(1)})`;
 const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var(--warning)', hard: 'var(--danger)' };
 const optional = isOptional(topic.data);
@@ -46,6 +46,17 @@ const notes = new Map(
 const videos = topic.data.videos;
 const runtime = totalDuration(videos.map((v) => v.duration));
 const pad = (n: number) => String(n).padStart(2, '0');
+
+// Contents for the rail: the body's own top-level sections, then the two
+// sections this template adds. Astro slugs markdown headings for us, so the
+// body entries need no ids of their own.
+const contents = [
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ id: h.slug, text: h.text })),
+  ...(videos.length > 0 ? [{ id: 'video-tutorials', text: 'Video tutorials' }] : []),
+  // The Problem set heading renders either way — with an empty-state line when
+  // the topic has none — so it always belongs in the contents.
+  { id: 'problem-set', text: 'Problem set' },
+];
 ---
 <Base title={`${topic.data.name} — MQ CP Club`} description={topic.data.blurb}>
   <Header />
@@ -57,7 +68,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
         The panel repeated the video count verbatim 51px lower, and once the
         split wrapped only this intro its sticky had ~160px of travel on a
         4000px page. Proximity does the job a container was doing badly. */}
-    <div class="pt-4 mt-5" style={`border-top:3px solid ${stroke};`}>
+    {/* The identity stripe spans the whole band; the title, prose and contents
+        rail sit under it in two columns. Prose keeps its reading measure, and
+        the rail occupies the width the measure cannot use — on a prose-heavy
+        topic that was ~890px of empty paper running the length of the page. */}
+    <div class="mq-topic__rule mt-5" style={`border-top:3px solid ${stroke};`}></div>
+    <div class="mq-split mq-split--reading">
+      <div>
         <div class="flex items-center gap-4 flex-wrap">
           <h1 class="ps-h1">{topic.data.name}</h1>
           {optional && <span class="ps-pill">optional</span>}
@@ -80,6 +97,36 @@ const pad = (n: number) => String(n).padStart(2, '0');
           </p>
         )}
         <div class="text-ink mt-3 max-w-measure"><Content /></div>
+      </div>
+
+      <aside class="mq-aside">
+        {contents.length > 0 && (
+          <nav class="mq-toc" aria-label="On this page">
+            <div class="mq-toc__title">On this page</div>
+            <ul class="mq-toc__list">
+              {contents.map((c) => (
+                <li><a class="mq-toc__link" href={`#${c.id}`}>{c.text}</a></li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        {problems.length > 0 && (
+          <div class="mq-toc__stat">
+            <span class="mono">Solved</span>
+            <span
+              class="mono mq-toc__count"
+              data-progress-count="problem"
+              data-progress-format="short"
+              data-progress-ids={problems.map((p) => p.id).join(',')}
+            >0/{problems.length}</span>
+          </div>
+        )}
+
+        {next && (
+          <a class="mq-toc__next mono" href={`/topics/${next.slug}`}>Next: {next.name} →</a>
+        )}
+      </aside>
     </div>
 
     {videos.length > 0 && (
@@ -87,7 +134,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
         {/* --mt8 here and on the next-bar, --mt7 before the problem set: the
             page is orient / work / exit, and the videos and problems are two
             halves of one task. Three identical gaps read as four equal slabs. */}
-        <h2 class="ps-h3 mq-heading mq-heading--mt8">Video tutorials</h2>
+        <h2 id="video-tutorials" class="ps-h3 mq-heading mq-heading--mt8">Video tutorials</h2>
         {/* A wrapping, numbered grid rather than a horizontal carousel: the old
             scroller hid 10 of 13 videos behind an edge with no count or cue. */}
         <ol class="mq-vidlist mq-grid-3" style={`--cols:${videos.length};`}>
@@ -126,7 +173,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
       </>
     )}
 
-    <h2 class="ps-h3 mq-heading mq-heading--mt7">Problem set</h2>
+    <h2 id="problem-set" class="ps-h3 mq-heading mq-heading--mt7">Problem set</h2>
     {problems.length === 0 ? (
       <p class="text-ink max-w-measure">
         No problems for this topic yet — work through the videos above, then pick a topic

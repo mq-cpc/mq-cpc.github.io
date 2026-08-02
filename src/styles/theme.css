@@ -444,6 +444,18 @@ html { font-size: 17px; }
     grid-template-columns: minmax(0, 1fr) 19rem;
     gap: var(--space-7);
   }
+  /* Reading variant: the content column is the measure itself, so the prose
+     fills it and the rail sits right beside the text instead of being pushed
+     to the far edge with a void between them. The band is then left-aligned
+     and deliberately narrower than the full-width grid and table below it —
+     a reading band next to work bands. */
+  .mq-split--reading {
+    grid-template-columns: minmax(0, var(--measure)) 19rem;
+    justify-content: start;
+  }
+  /* The identity stripe belongs to the reading band, so it ends where the band
+     ends rather than running on past the rail into empty paper. */
+  .mq-topic__rule { max-width: calc(var(--measure) + 19rem + var(--space-7)); }
   /* Scoped to the split: an aside outside one has no travel to stick through. */
   .mq-split > .mq-aside { position: sticky; top: var(--sticky-top); }
 }
@@ -852,6 +864,49 @@ body.ps-page > main { flex: 1; }
 /* ===== Next-topic link =====
    The roadmap claimed an order and then dead-ended at the bottom of every
    topic. This is the continuation. */
+/* ===== Topic contents rail =====
+   Not a bordered panel: this is navigation sitting in margin space, and giving
+   it a surface would make it compete with the title it sits beside. A hairline
+   on the left is enough to read it as a separate column. */
+.mq-topic__rule { height: 0; }
+.mq-toc { border-left: 1px solid var(--line-strong); padding-left: var(--space-4); }
+.mq-toc__title {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-3);
+}
+.mq-toc__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.mq-toc__link {
+  font-size: var(--text-sm);
+  color: var(--ink);
+  text-decoration: none;
+  display: block;
+}
+.mq-toc__link:hover { color: var(--accent-text); }
+.mq-toc__stat {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding-left: var(--space-4);
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+}
+.mq-toc__count { color: var(--ink-strong); }
+.mq-toc__count[data-done='1'] { color: var(--success); }
+.mq-toc__next {
+  display: block;
+  margin-top: var(--space-4);
+  padding-left: var(--space-4);
+  font-size: var(--text-label);
+  color: var(--accent-text);
+  text-decoration: none;
+}
+.mq-toc__next:hover { text-decoration: underline; }
+
 /* Topic meta line: the counts, as text under the title, instead of a panel. */
 .mq-topic__meta {
   display: flex;
