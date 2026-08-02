@@ -10,7 +10,7 @@ colors:
   surface: "#ffffff"
   ink-strong: "#2e2a24"
   ink: "#585149"
-  ink-muted: "#8b8376"
+  ink-muted: "#70695f"
   line: "#ece4d4"
   line-strong: "#dacfbb"
   accent: "#b8506f"
@@ -19,15 +19,15 @@ colors:
   accent-tint: "#fcdce1"
   accent-ink: "#ffffff"
   accent-text: "#ac4763"
-  success: "#4f8a5f"
-  warning: "#9a6e15"
-  danger: "#bb4a36"
-  cat-lilac: "#9a64ad"
-  cat-pink: "#c65f7e"
-  cat-butter: "#b07c1f"
-  cat-celadon: "#87964a"
-  cat-mint: "#4f956f"
-  cat-sky: "#4f8da1"
+  success: "#3e6c4b"
+  warning: "#805b11"
+  danger: "#a64230"
+  cat-lilac: "#975fab"
+  cat-pink: "#c04e70"
+  cat-butter: "#9a6c1b"
+  cat-celadon: "#6e7b3d"
+  cat-mint: "#458160"
+  cat-sky: "#467c8e"
   focus-ring: "#3f7fbf"
 typography:
   display:
@@ -57,6 +57,27 @@ typography:
     fontSize: "12px"
     fontWeight: 500
     letterSpacing: "0.04em"
+  # The second of the two fixed label sizes (--text-label-lg): nav, the wordmark,
+  # larger mono captions. Previously only documented in prose below.
+  labelLarge:
+    fontFamily: "'JetBrains Mono', ui-monospace, monospace"
+    fontSize: "15px"
+    fontWeight: 500
+    letterSpacing: "0.04em"
+  # The root size the whole rem scale is defined against. Not a step — the
+  # baseline that makes 1rem == 17px.
+  root:
+    fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+    fontSize: "17px"
+  # Documented exception: the hero terminal panel. The Google-served JetBrains
+  # Mono webfont has no U+2500 box-drawing block and silently falls back, which
+  # drifts the kattis-cli result table's columns — so this one surface uses a
+  # SYSTEM monospace, and 11px is the size at which the 78-column banner fits
+  # the panel. Do not copy either value anywhere else.
+  terminal:
+    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    fontSize: "11px"
+    lineHeight: 1
 rounded:
   sm: "4px"
   md: "8px"
@@ -164,13 +185,13 @@ Reserved for state, never for identity: **Success green** (`#4f8a5f`), **Warning
 - **Label** (JetBrains Mono 500, `12px` or `15px`, tracking 0.04em, often UPPERCASE): eyebrows, tags, nav, captions, terminal text.
 
 ### Named Rules
-**The Two-Label-Sizes Rule.** Mono/label text uses exactly two fixed-px sizes — `12px` (`--text-label`) and `15px` (`--text-label-lg`) — not the rem body scale. Don't introduce an 11/13/14px one-off; snap to one of the two.
+**The Two-Label-Sizes Rule.** Mono/label text uses exactly two fixed-px sizes — `12px` (`--text-label`) and `15px` (`--text-label-lg`) — not the rem body scale. Don't introduce an 11/13/14px one-off; snap to one of the two. **One documented exception:** the hero terminal panel runs at `11px` in a *system* monospace, because the JetBrains Mono webfont lacks the U+2500 box-drawing block and falls back mid-table, drifting the columns. That exception is the panel's alone — see `typography.terminal` above — and does not license a third label size anywhere else.
 
 **The Mono-Vernacular Rule.** The "code" voice — `//SECTION` eyebrows, the `>` heading prompt, `$` terminal lines, the `{}` mark — is always JetBrains Mono. It's the club's accent of personality; keep it for chrome and labels, not body copy.
 
 ## Layout
 
-Content spans the **full window** (`--content-max: 100%`) rather than a capped column; pages breathe edge-to-edge. Spacing is a **hand-tuned, non-linear scale** (`--space-0..8`: `0, .25, .5, .75, 1, 1.5, 2, 3, 4 rem`) — not a linear multiplier — so utilities like `gap-5` map to `1.5rem`, not `5×`. The standard page wrapper (`.mq-page`) is `max-width:100%; margin:0 auto; padding: 3rem 2rem 4rem`. Card and reference grids are fixed 2- and 3-column (`.mq-grid-2`/`-3`, `1rem` gap). The home hero is a two-column split (`1fr 1.15fr`, text left / terminal right) that collapses to one column at **≤860px**. Wide fixed-width content (the box-drawing result banner, the problem table, the video carousel) scrolls inside its own container rather than breaking the page.
+Content sits in a **capped, centred shell** (`--content-max: 1600px` — the outer width, gutters included) rather than spanning the window. The sticky header spans the viewport but aligns its contents to the same column via a `padding-inline` calc, so the wordmark lines up with the page's `h1`. Spacing is a **hand-tuned, non-linear scale** (`--space-0..8`: `0, .25, .5, .75, 1, 1.5, 2, 3, 4 rem`) — not a linear multiplier — so utilities like `gap-5` map to `1.5rem`, not `5×`. The standard page wrapper (`.mq-page`) is `box-sizing:border-box; max-width:var(--content-max); margin:0 auto; padding: 3rem 2rem 4rem` — `border-box` is stated explicitly because preflight is off and nothing sets it globally. Card and reference grids are content-driven, not fixed: `.mq-grid-2`/`-3` are `repeat(auto-fit, minmax(…, 1fr))` with a `1rem` gap, so the column count follows the item count and the viewport, and a section holding one item does not reserve empty tracks. Sections that can legitimately hold a single item cap their container instead. The home hero is a two-column split (`1fr 1.15fr`, text left / terminal right) that collapses to one column at **≤860px**. Video tutorials are a wrapping, numbered grid, not a carousel — a scroller hid most of a 13-video topic behind an edge with no count or cue. The problem table is capped at the width of its own columns (`58rem`) rather than stretched, so a row's title, difficulty and judge link stay within one fixation; the box-drawing result banner still scrolls inside its own container rather than breaking the page.
 
 ## Elevation & Depth
 
