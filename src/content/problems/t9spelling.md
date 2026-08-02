@@ -4,5 +4,11 @@ title: "T9 Spelling"
 difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/t9spelling
-order: 7
+order: 4
+tags: ["collections"]
+videos:
+  - title: "HashMap"
+    youtubeId: "f6hagLrbvkY"
+    channel: Daniel Sutantyo
+    duration: "22:45"
 ---

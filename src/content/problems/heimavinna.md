@@ -4,5 +4,11 @@ title: "Heimavinna"
 difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/heimavinna
-order: 5
+order: 2
+tags: ["strings"]
+videos:
+  - title: "String Splitting"
+    youtubeId: "ytLOqxitrdY"
+    channel: Daniel Sutantyo
+    duration: "11:41"
 ---

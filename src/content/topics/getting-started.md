@@ -4,11 +4,7 @@ level: foundations
 order: 0
 color: c5
 blurb: New here? What competitive programming is, and how to begin.
-videos:
-  - title: Intro to Competitive Programming
-    youtubeId: "2vi1o0Fr0Uk"
-    channel: Daniel Sutantyo
-    duration: "14:06"
+videos: []
 ---
 Competitive programming is the sport of solving well-defined algorithmic
 puzzles under time pressure. You're handed a problem — a precise description of

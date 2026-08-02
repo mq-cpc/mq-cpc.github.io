@@ -13,14 +13,6 @@ videos:
     youtubeId: "dmAJMyJyxoY"
     channel: Daniel Sutantyo
     duration: "24:43"
-  - title: Geppetto
-    youtubeId: "sMHcsO4MT2Q"
-    channel: Daniel Sutantyo
-    duration: "17:02"
-  - title: Good Morning!
-    youtubeId: "lh6PX4KUydc"
-    channel: Daniel Sutantyo
-    duration: "26:59"
 ---
 Recursion is how you turn a problem you can't see the answer to into a smaller
 version of itself. The hard part is rarely the code — it's learning to see the

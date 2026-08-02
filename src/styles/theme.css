@@ -270,7 +270,7 @@ html { font-size: 17px; }
    auto-FIT, not auto-fill: auto-fill keeps empty tracks alive, so three cards
    in a 1532px row still reserved five slots and left ~610px of holes. auto-fit
    collapses the empty ones so the items divide the row. Where a section can
-   hold a single item, cap the container instead (see .mq-vidlist) — otherwise
+   hold a single item, cap the container instead (see .mq-vgrid) — otherwise
    one card stretches across the whole page. */
 .mq-grid-3 {
   display: grid;
@@ -753,114 +753,6 @@ body.ps-page > main { flex: 1; }
   }
 }
 
-/* ===== Video list (topics/[slug].astro) =====
-   Preflight is off, so the <ol> needs its UA list styling removed explicitly. */
-/* --cols carries the real item count from the page, so a topic with one video
-   caps at one card's width instead of stretching a lone card across 1500px.
-   Falls back to a high number, i.e. no cap, if the var is ever missing. */
-.mq-vidlist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-width: calc(var(--cols, 99) * 23rem);
-}
-.mq-vid {
-  display: flex;
-  flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.mq-vid__play {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-.mq-vid__play:focus-visible {
-  outline: var(--border-thick) solid var(--focus-ring);
-  outline-offset: -2px;
-}
-.mq-vid__frame {
-  display: block;
-  position: relative;
-  aspect-ratio: 16 / 9;
-  background: var(--paper-sunk);
-}
-.mq-vid__frame img,
-.mq-vid__frame iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  border: 0;
-  object-fit: cover;
-}
-.mq-vid__badge {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  color: var(--accent-text);
-  font-size: var(--text-label-lg);
-}
-.mq-vid__dur {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  font-size: var(--text-label);
-  color: var(--paper);
-  background: color-mix(in srgb, var(--ink-strong) 76%, transparent);
-}
-.mq-vid__body {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-}
-/* The ordinal is the point of the redesign: the videos are a sequence, and the
-   old carousel gave no sense of position or length. */
-.mq-vid__idx { font-size: var(--text-label); color: var(--ink-muted); flex: none; }
-.mq-vid__title {
-  flex: 1;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-  color: var(--ink-strong);
-  line-height: 1.25;
-}
-.mq-vid__close {
-  flex: none;
-  border: 1px solid var(--line-strong);
-  background: var(--surface);
-  color: var(--ink);
-  border-radius: var(--radius-sm);
-  font-size: var(--text-label);
-  padding: 2px var(--space-2);
-  cursor: pointer;
-}
-.mq-vid:has(.mq-check[data-done='1']) .mq-vid__title { color: var(--ink-muted); }
-
-/* On a phone, 13 poster-sized cards stacked to ~3300px and buried the problem
-   set four screens down. A compact horizontal row keeps the same information
-   at roughly a quarter of the height. */
-@media (max-width: 720px) {
-  .mq-vid { display: grid; grid-template-columns: 104px 1fr; align-items: center; }
-  .mq-vid__badge { font-size: var(--text-label); }
-  .mq-vid__dur { display: none; }
-  .mq-vid__body { padding: var(--space-3); }
-}
-
-/* Every in-page anchor (the cross-topic "first submission" link) otherwise
-   lands underneath the sticky topbar. */
-.mqcp [id] { scroll-margin-top: var(--sticky-top); }
-
 /* ===== Next-topic link =====
    The roadmap claimed an order and then dead-ended at the bottom of every
    topic. This is the continuation. */
@@ -951,108 +843,6 @@ body.ps-page > main { flex: 1; }
   color: var(--ink-strong);
 }
 
-/* ===== Problem table (topics/[slug].astro) =====
-   A named component rather than arbitrary utilities, so the columns can carry a
-   real breakpoint: below 720px the grid stops being a table and each row
-   becomes a stacked block. Column template lives in one place for the head and
-   the rows, so they can never drift apart. */
-.mq-ptable {
-  /* Sized to its columns rather than to the page. 58rem is exactly the five
-     tracks at their maximum plus gaps and padding, so the surface ends where
-     the data ends instead of enclosing several hundred pixels of nothing.
-     Tabular data does not have to span a wide monitor; the video grid above it
-     does, and that contrast is the point. */
-  max-width: 58rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  overflow: hidden;
-}
-.mq-ptable__head,
-.mq-ptable__row {
-  display: grid;
-  /* The title column was `1fr`, which on a wide monitor grew to ~970px at 1440
-     and ~1130px at 1920 to hold strings like "Filip" — pushing the difficulty
-     pill and the judge link about 1100px away from the title they belong to.
-     Bounded instead, with the surplus falling outside the last column, so a
-     row's three fields sit within one fixation. The container still spans the
-     page; only the data band is capped. */
-  grid-template-columns: 1.75rem 1.75rem minmax(12rem, 34rem) 6rem 9rem;
-  justify-content: start;
-  gap: var(--space-3);
-  align-items: center;
-  padding: var(--space-3) var(--space-4);
-}
-.mq-ptable__head {
-  font-family: var(--font-label);
-  font-size: var(--text-label);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  background: var(--paper-sunk);
-  border-bottom: 1px solid var(--line);
-}
-/* The divider moved from the row to the wrapper so a row plus its expanded
-   notes read as one record. */
-.mq-ptable__item { border-bottom: 1px solid var(--line); }
-.mq-ptable__item:last-child { border-bottom: 0; }
-.mq-ptable__num { font-family: var(--font-label); color: var(--ink-muted); }
-.mq-ptable__title { color: var(--ink-strong); }
-/* On wide viewports the meta wrapper is transparent to the grid, so difficulty
-   and judge link occupy their own columns. The narrow block below turns it back
-   into a real flex row. Declared here, before the media query, so the override
-   actually wins. */
-.mq-ptable__meta { display: contents; }
-
-@media (max-width: 720px) {
-  /* The header labels stop being useful once the row is stacked; the values
-     are self-describing (a difficulty pill, a judge link). */
-  .mq-ptable__head { display: none; }
-  .mq-ptable__row {
-    grid-template-columns: 1.75rem 1fr;
-    row-gap: var(--space-2);
-    padding: var(--space-4);
-  }
-  /* The ordinal is decoration once the rows are stacked blocks; the checkbox
-     and title carry the row. */
-  .mq-ptable__num { display: none; }
-  /* Realign with the narrow row's title column (checkbox + gap). */
-  .mq-ptable__notes { padding-left: 3.5rem; }
-  /* Difficulty and judge link share row 2, indented past the checkbox so the
-     left edge stays a single clean column. */
-  .mq-ptable__row > .mq-ptable__meta {
-    grid-column: 2;
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-  }
-}
-
-/* Per-problem notes. Indented to line up with the problem title so the
-   disclosure clearly belongs to the row above it. */
-.mq-ptable__notes { padding: 0 var(--space-4) var(--space-3) 6rem; }
-.mq-ptable__notes summary {
-  display: inline-block;
-  font-size: var(--text-label);
-  color: var(--accent-text);
-  cursor: pointer;
-  padding: var(--space-1) 0;
-}
-.mq-ptable__notes summary:focus-visible {
-  outline: var(--border-thick) solid var(--focus-ring);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-.mq-ptable__notes-body {
-  max-width: var(--measure, 64ch);
-  margin-top: var(--space-2);
-  font-size: var(--text-sm);
-  color: var(--ink);
-}
-.mq-ptable__notes-body > :first-child { margin-top: 0; }
-.mq-ptable__notes-body > :last-child { margin-bottom: 0; }
-
 /* ===== Progress checkbox =====
    A real <button aria-pressed>, not a checkbox input: nothing is submitted and
    the state is local. Sized to the 1.75rem track, with a hit area padded out
@@ -1090,7 +880,135 @@ body.ps-page > main { flex: 1; }
   outline-offset: 2px;
 }
 /* The row dims once solved so an eye scanning the table lands on what is left. */
-.mq-ptable__row:has(.mq-check[data-done='1']) .mq-ptable__title { color: var(--ink-muted); }
+.mq-prob:has(.mq-check[data-done='1']) .mq-prob__title { color: var(--ink-muted); }
+
+/* ===== Problem list (topics/[slug].astro) =====
+   One accordion replaces the old split of a video grid plus a problem table.
+   The problem is the unit: its walkthrough, notes and judge link were never
+   separate things, and presenting them as two lists made students look in two
+   places for one task. */
+.mq-filters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); }
+.mq-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-label); font-size: var(--text-label);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-pill);
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.mq-chip::before {
+  content: ''; width: 8px; height: 8px; border-radius: var(--radius-pill);
+  background: var(--tag, var(--ink-muted));
+}
+.mq-chip__n { color: var(--ink-muted); }
+.mq-chip.is-on { background: var(--ink-strong); color: var(--paper); border-color: var(--ink-strong); }
+.mq-chip.is-on .mq-chip__n { color: var(--paper); }
+.mq-chip:focus-visible { outline: var(--border-thick) solid var(--focus-ring); outline-offset: 2px; }
+
+.mq-plist {
+  list-style: none; margin: 0; padding: 0;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface); overflow: hidden;
+}
+.mq-prob {
+  display: grid; grid-template-columns: 1.75rem 1fr; gap: var(--space-3);
+  align-items: start; padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+.mq-prob:last-child { border-bottom: 0; }
+.mq-prob[hidden] { display: none; }
+.mq-prob__d { min-width: 0; }
+
+/* Title and tag stay together and bounded; difficulty and the walkthrough
+   marker stay right-aligned as a column you scan vertically. */
+.mq-prob__sum {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 24rem) max-content 1fr max-content;
+  gap: var(--space-3); align-items: center;
+  cursor: pointer; list-style: none;
+}
+.mq-prob__sum::-webkit-details-marker { display: none; }
+.mq-prob__sum:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring); outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.mq-prob__num { font-size: var(--text-label); color: var(--ink-muted); }
+.mq-prob__title { color: var(--ink-strong); }
+.mq-prob__tag {
+  font-size: var(--text-label); color: var(--ink);
+  padding: 2px var(--space-3); border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--tag) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag) 45%, transparent);
+  white-space: nowrap;
+}
+.mq-prob__meta { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-label); }
+.mq-prob__has { color: var(--accent-text); }
+
+/* Action row spans both columns; below it the walkthrough sits left and the
+   notes right, tops aligned. */
+.mq-prob__body {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, var(--measure));
+  justify-content: start;
+  gap: var(--space-4) var(--space-5);
+  align-items: start;
+  padding: var(--space-4) 0 var(--space-4) 2.75rem;
+}
+.mq-prob__body--novideo { grid-template-columns: minmax(0, var(--measure)); }
+.mq-prob__actions { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+/* The id is near-redundant with the title while browsing and essential while
+   submitting, so it sits with the action rather than in the list. */
+.mq-prob__id {
+  font-size: var(--text-label); color: var(--ink-strong);
+  background: var(--paper-sunk); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill); padding: 4px var(--space-3);
+  user-select: all; cursor: text;
+}
+.mq-prob__notes { min-width: 0; font-size: var(--text-sm); color: var(--ink); }
+.mq-prob__notes > :first-child { margin-top: 0; }
+.mq-prob__notes > :last-child { margin-bottom: 0; }
+.mq-prob__empty { color: var(--ink-muted); margin: 0; }
+
+/* ===== Video card =====
+   Used both inside a problem and in a topic's concept-video grid. The play
+   target and runtime chip are the conventions that say "video" rather than
+   "picture". */
+.mq-vgrid { list-style: none; margin: 0; padding: 0; max-width: calc(var(--cols, 99) * 23rem); }
+.mq-vcard {
+  display: block; text-decoration: none; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.mq-vcard:hover { border-color: var(--accent); }
+.mq-vcard__frame { display: block; position: relative; aspect-ratio: 16/9; background: var(--paper-sunk); }
+.mq-vcard__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mq-vcard__play {
+  position: absolute; inset: 0; margin: auto;
+  width: 44px; height: 44px; border-radius: var(--radius-pill);
+  display: grid; place-items: center; padding-left: 3px;
+  background: color-mix(in srgb, var(--ink-strong) 72%, transparent);
+  color: #fff; font-size: 15px;
+}
+.mq-vcard:hover .mq-vcard__play { background: var(--accent); }
+.mq-vcard__dur {
+  position: absolute; right: 6px; bottom: 6px;
+  padding: 1px 6px; border-radius: var(--radius-sm);
+  font-size: var(--text-label); color: #fff;
+  background: color-mix(in srgb, var(--ink-strong) 80%, transparent);
+}
+.mq-vcard__meta { display: block; padding: var(--space-2) var(--space-3); }
+.mq-vcard__label { display: block; font-size: var(--text-label); color: var(--accent-text); letter-spacing: var(--tracking-wide); }
+.mq-vcard__title { display: block; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--ink-strong); line-height: 1.25; }
+
+@media (max-width: 900px) {
+  .mq-prob__body,
+  .mq-prob__body--novideo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .mq-prob__sum { grid-template-columns: 1.75rem minmax(0, 1fr) max-content; row-gap: var(--space-2); }
+  .mq-prob__tag { grid-column: 2 / -1; justify-self: start; }
+  .mq-prob__spacer { display: none; }
+  .mq-prob__body { padding-left: 0; }
+}
 
 /* ===== Narrow viewports =====
    The site had exactly one width breakpoint (the hero split) before this block;

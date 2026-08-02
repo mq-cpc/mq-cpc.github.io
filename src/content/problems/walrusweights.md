@@ -5,6 +5,16 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/walrusweights
 order: 3
+tags: ["dynamic programming"]
+videos:
+  - title: "Walrus Weights — Top-Down"
+    youtubeId: "63f33LGNsrs"
+    channel: Daniel Sutantyo
+    duration: "19:41"
+  - title: "Walrus Weights — Bottom-Up"
+    youtubeId: "_4QPE5LHr4s"
+    channel: Daniel Sutantyo
+    duration: "17:48"
 ---
 **Placeholder — replace this.** Notes go in the body of
 `src/content/problems/walrusweights.md`, under the frontmatter. Write whatever

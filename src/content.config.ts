@@ -7,6 +7,16 @@ const LEVEL = z.enum(['foundations', 'intermediate', 'advanced', 'optional']);
 const CATEGORY = z.enum(['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
 const DIFFICULTY = z.enum(['easy', 'medium', 'hard']);
 
+// Shared by topics and problems. A video usually teaches one problem, so it
+// lives on that problem; topics keep the ones that teach a concept with no
+// problem attached.
+const VIDEO = z.object({
+  title: z.string(),
+  youtubeId: z.string(),
+  channel: z.string().optional(),
+  duration: z.string().optional(),
+});
+
 const topics = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: 'src/content/topics' }),
   schema: z.object({
@@ -15,16 +25,9 @@ const topics = defineCollection({
     order: z.number().int().nonnegative(),
     blurb: z.string(),
     color: CATEGORY,
-    videos: z
-      .array(
-        z.object({
-          title: z.string(),
-          youtubeId: z.string(),
-          channel: z.string().optional(),
-          duration: z.string().optional(),
-        }),
-      )
-      .default([]),
+    // Concept videos only: anything that walks through a specific problem
+    // belongs on that problem instead.
+    videos: z.array(VIDEO).default([]),
   }),
 });
 
@@ -38,6 +41,9 @@ const problems = defineCollection({
     judge: z.string(),
     url: z.string().url(),
     order: z.number().int().nonnegative().default(0),
+    // Usually one walkthrough; Walrus Weights has two (top-down and bottom-up),
+    // which is why this is an array.
+    videos: z.array(VIDEO).default([]),
   }),
 });
 
