@@ -110,5 +110,5 @@
 
   /* Layout: the prose measure (comfortable text-column width). Used as
      max-w-measure instead of repeating an arbitrary max-w-[64ch]. */
-  --container-measure: 64ch;
+  --container-measure: 70ch;
 }

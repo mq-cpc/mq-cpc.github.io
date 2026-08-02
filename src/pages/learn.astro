@@ -1,36 +1,106 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
-import TopicCard from '../components/TopicCard.astro';
 import { getCollection } from 'astro:content';
-import { groupTopicsByLevel, type RoadmapTopic } from '../lib/roadmap';
+import { groupTopicsByLevel, roadmapNumbers, totalDuration, isOptional, type RoadmapTopic } from '../lib/roadmap';
 
 const topicEntries = await getCollection('topics');
 const problems = await getCollection('problems');
-const countFor = (slug: string) => problems.filter((p) => p.data.topic.id === slug).length;
 
 const roadmap: RoadmapTopic[] = topicEntries.map((t) => ({
   slug: t.id, name: t.data.name, level: t.data.level, order: t.data.order,
 }));
 const groups = groupTopicsByLevel(roadmap);
+
+// Continuous numbering across levels — the spine is one sequence, not three.
+// Optional topics are absent from this map and render an unnumbered node.
+const numbers = roadmapNumbers(roadmap);
+
 const meta = new Map(topicEntries.map((t) => [t.id, t.data]));
 const strokeOf = (slug: string) => `var(--cat-${meta.get(slug)!.color.slice(1)})`;
 const blurbOf = (slug: string) => meta.get(slug)!.blurb;
+const videosOf = (slug: string) => meta.get(slug)!.videos;
+const problemsOf = (slug: string) => problems.filter((p) => p.data.topic.id === slug);
 ---
-<Base title="Learn — MQ CP Club">
+<Base
+  title="Learn — MQ CP Club"
+  description="The MQ Competitive Programming Club roadmap: topics from foundations to dynamic programming, each with video tutorials and a Kattis problem set."
+>
   <Header />
   <main class="mq-page">
     <div class="mono mq-eyebrow">// LEARN</div>
     <h1 class="ps-h1 mq-h1-gap">Topics, in the order we suggest learning them.</h1>
+    <p class="text-ink max-w-measure mt-3">
+      Start at the top and work down. Each topic has videos recorded by the club and a set of
+      problems to solve afterwards; your progress is remembered in this browser.
+    </p>
+
     {groups.map((group) => (
-      <div class="mb-7">
-        <div class="mono text-label text-ink-muted uppercase mt-5 mb-3">{group.label}</div>
-        <div class="mq-grid-3">
-          {group.items.map((t) => (
-            <TopicCard href={`/topics/${t.slug}`} name={t.name} blurb={blurbOf(t.slug)} total={countFor(t.slug)} stroke={strokeOf(t.slug)} />
-          ))}
+      <section class="mq-level">
+        <div class="mq-level__head">
+          <h2 class="mq-level__title">{group.label}</h2>
+          {group.level === 'optional' && (
+            <p class="mq-level__note">
+              Supplementary. Not part of the main path, and safe to skip entirely.
+            </p>
+          )}
         </div>
-      </div>
+        <ol class="mq-spine">
+          {group.items.map((t) => {
+            const ps = problemsOf(t.slug);
+            const vids = videosOf(t.slug);
+            const runtime = totalDuration(vids.map((v) => v.duration));
+            const num = numbers.get(t.slug);
+            return (
+              <li class="mq-spine__item">
+                {num ? (
+                  <span class="mq-spine__node mono" style={`background:${strokeOf(t.slug)};`} aria-hidden="true">
+                    {String(num).padStart(2, '0')}
+                  </span>
+                ) : (
+                  <span
+                    class="mq-spine__node mq-spine__node--optional"
+                    style={`border-color:${strokeOf(t.slug)};`}
+                    aria-hidden="true"
+                  ></span>
+                )}
+                <a class="mq-spine__body" href={`/topics/${t.slug}`}>
+                  <span class="mq-spine__name">
+                    {t.name}
+                    {isOptional(t) && <span class="ps-pill mq-spine__opt">optional</span>}
+                  </span>
+                  <span class="mq-spine__blurb">{blurbOf(t.slug)}</span>
+                  <span class="mq-spine__meta mono">
+                    {vids.length > 0 && (
+                      <span>{vids.length} {vids.length === 1 ? 'video' : 'videos'}{runtime ? ` · ${runtime}` : ''}</span>
+                    )}
+                    {ps.length > 0 && (
+                      <span
+                        class="mq-spine__count"
+                        data-progress-count="problem"
+                        data-progress-ids={ps.map((p) => p.id).join(',')}
+                      >{ps.length} problems</span>
+                    )}
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
     ))}
+
+    {/* The reset has to live somewhere — it is the only way to undo a tick —
+        but it is housekeeping, not content, so it sits quietly at the end
+        rather than in a panel competing with the roadmap. */}
+    <p class="mono mq-learn__note">
+      Progress is stored in this browser only.
+      <button class="mq-learn__reset" data-progress-reset>Clear it</button>
+    </p>
   </main>
+
+  <script>
+    import { initProgress } from '../scripts/progress.ts';
+    initProgress();
+  </script>
 </Base>

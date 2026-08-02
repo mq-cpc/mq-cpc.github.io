@@ -10,27 +10,46 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
   },
 ];
 ---
-<Base title="Tools — MQ CP Club">
+<Base title="Tools — MQ CP Club" description="Small browser-based utilities built by MQ Competitive Programming Club members, for use while practising.">
   <Header />
   <main class="mq-page">
     <div class="mono mq-eyebrow">// TOOLS</div>
     <h1 class="ps-h1 mq-h1-gap">Tools built by members.</h1>
-    <p class="text-ink max-w-measure">Small client-side utilities we use in workshops and while practising.</p>
-    <div class="mq-grid-3 mt-6">
+    <p class="text-ink max-w-measure">
+      Small utilities we use while practising. They run entirely in your browser — nothing you
+      draw leaves your machine.
+    </p>
+
+    {/* A row list rather than a card grid: with one tool a grid leaves a single
+        card stranded in an otherwise empty track, and rows read the same at one
+        item or at ten. */}
+    <ul class="mq-tools">
       {tools.map((t) => (
-        <div class="ps-card ps-card--accent">
-          <div class="flex justify-between items-center">
-            <div class="ps-card__title">{t.name}</div>
-            {t.soon && <span class="ps-pill">soon</span>}
+        <li class="mq-tool">
+          <div class="mq-tool__text">
+            <h2 class="mq-tool__name">
+              {t.name}
+              {t.soon && <span class="ps-pill">soon</span>}
+            </h2>
+            <p class="mq-tool__blurb">{t.blurb}</p>
           </div>
-          <div class="ps-card__body">{t.blurb}</div>
-          {t.app
-            ? <a class="mono mq-link mq-link--card" href={t.app}>open tool →</a>
-            : t.url
-              ? <a class="mono mq-link mq-link--card" href={t.url} target="_blank" rel="noopener">open repo →</a>
-              : <span class="mono text-label text-ink-muted mt-auto">coming soon</span>}
-        </div>
+          {t.app ? (
+            <a class="ps-btn ps-btn--primary" href={t.app}>Open tool →</a>
+          ) : t.url ? (
+            <a class="ps-btn" href={t.url} target="_blank" rel="noopener">View repo →</a>
+          ) : (
+            <span class="mono text-label text-ink-muted">coming soon</span>
+          )}
+        </li>
       ))}
-    </div>
+    </ul>
+
+    <p class="text-ink max-w-measure mt-6">
+      {tools.length === 1
+        ? 'One tool so far.'
+        : `${tools.length} tools so far.`}
+      {' '}Built something you use while practising? It can live here —
+      <a class="mono text-accent-text no-underline" href="/contribute">how to contribute →</a>
+    </p>
   </main>
 </Base>

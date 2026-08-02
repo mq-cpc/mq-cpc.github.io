@@ -54,6 +54,9 @@
   background: var(--surface);
   color: var(--ink-strong);
   cursor: pointer;
+  /* Preflight is off, so an <a class="ps-btn"> keeps the UA underline —
+     every link-styled button on the site was rendering underlined. */
+  text-decoration: none;
   transition: background var(--dur-fast) var(--ease-out),
               border-color var(--dur-fast) var(--ease-out),
               transform var(--dur-fast) var(--ease-out);

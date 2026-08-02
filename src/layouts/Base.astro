@@ -2,6 +2,7 @@
 import '../styles/tailwind.css';
 import '../styles/design/base.css';
 import '../styles/theme.css';
+import Footer from '../components/Footer.astro';
 interface Props { title: string; description?: string }
 const { title, description = 'Macquarie University competitive programming club.' } = Astro.props;
 ---
@@ -31,6 +32,7 @@ const { title, description = 'Macquarie University competitive programming club.
   </head>
   <body class="mqcp ps-page">
     <slot />
+    <Footer />
     <script>
       import { initTheme } from '../scripts/theme-toggle.ts';
       initTheme();

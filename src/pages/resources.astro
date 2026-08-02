@@ -4,8 +4,11 @@ import Header from '../components/Header.astro';
 import { getCollection, render } from 'astro:content';
 
 const linkGroups = (await getCollection('resources')).sort((a, b) => a.data.order - b.data.order);
-// Stable identity colour per category: same category name → same Color Crush hue.
-const catColor = (name: string) => `c${([...name].reduce((n, ch) => n + ch.charCodeAt(0), 0) % 6) + 1}`;
+// Identity hue by position, not by a hash of the category name: the old
+// char-code sum silently recoloured a group when it was renamed, and two names
+// could collide on the same hue with no fallback.
+const hueFor = (i: number) => `c${(i % 6) + 1}`;
+
 const snippets = (await getCollection('reference')).sort((a, b) => a.data.order - b.data.order);
 const byCategory = new Map<string, typeof snippets>();
 for (const s of snippets) {
@@ -16,41 +19,87 @@ for (const s of snippets) {
 const rendered = await Promise.all(snippets.map(async (s) => ({ slug: s.id, Content: (await render(s)).Content })));
 const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
 ---
-<Base title="Resources — MQ CP Club">
+<Base title="Resources — MQ CP Club" description="Curated competitive-programming links, plus the club's team reference notebook of copy-paste algorithm implementations.">
   <Header />
   <main class="mq-page">
-    <div class="mono mq-eyebrow">// RESOURCES</div>
-    <h1 class="ps-h1 mq-h1-gap">Resources &amp; team reference</h1>
+    <div class="mono mq-eyebrow mq-noprint">// RESOURCES</div>
+    <h1 class="ps-h1 mq-h1-gap mq-noprint">Resources &amp; team reference</h1>
 
-    <h2 class="ps-h2 mq-heading mq-heading--mt6">Curated links</h2>
-    <div class="mq-grid-2">
-      {linkGroups.map((g) => (
-        <div class={`ps-card ps-card--${catColor(g.data.category)}`}>
-          <div class="ps-card__title">{g.data.category}</div>
-          {g.data.links.map((l) => (
-            <a href={l.url} target="_blank" rel="noopener" class="mono mq-link block">{l.label} →</a>
-          ))}
+    {/* Notebook in the main column, curated links beside it. Two real things
+        sharing the width beats one thing stretched across it — a single code
+        snippet in a full-width surface was 1532px of paper holding 500px of
+        code, and the links panel was three lines in a 1532px box. */}
+    <div class="mq-split mt-6">
+      <div>
+        {/* Gap, not space-between: pushed to opposite ends of a wide column the
+            button ended up ~1000px from the heading it acts on. */}
+        <div class="flex items-baseline gap-5 flex-wrap">
+          <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
+          <button class="ps-btn ps-btn--sm mq-noprint" onclick="window.print()">
+            <span aria-hidden="true">⎙</span> Print the notebook
+          </button>
         </div>
-      ))}
-    </div>
+        <p class="text-ink max-w-measure mt-3 mq-noprint">
+          Implementations to copy into a solution, or to print and bring to a contest — printing
+          this page gives you the notebook on its own, without the site around it.
+        </p>
 
-    <div class="mq-heading--mt7 flex items-baseline justify-between">
-      <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
-      <button class="ps-btn ps-btn--sm" onclick="window.print()">⎙ Print / PDF</button>
+        {snippets.length === 0 ? (
+          <p class="text-ink max-w-measure mt-5">
+            The notebook is empty so far. Snippets are Markdown files in the club repo — add one
+            with a pull request and it appears here.
+          </p>
+        ) : (
+          <>
+            {[...byCategory.entries()].map(([cat, items]) => (
+              <section class="mt-6">
+                <h3 class="mq-nb__cat mono">{cat}</h3>
+                {items.map((s) => {
+                  const C = contentBySlug.get(s.id)!;
+                  return (
+                    <article class="mq-nb__item">
+                      <h4 class="mq-nb__title">
+                        {s.data.title}
+                        <span class="mono mq-nb__lang">{s.data.lang}</span>
+                      </h4>
+                      <div class="mqcp-code"><C /></div>
+                    </article>
+                  );
+                })}
+              </section>
+            ))}
+            <p class="text-ink max-w-measure mt-6 mq-noprint">
+              {snippets.length === 1
+                ? 'One entry so far. The notebook grows by pull request — add the routine you keep rewriting.'
+                : `${snippets.length} entries so far. Add the routine you keep rewriting.`}
+              {' '}
+              <a class="mono text-accent-text no-underline" href="/contribute">How to contribute →</a>
+            </p>
+          </>
+        )}
+      </div>
+
+      <aside class="mq-aside mq-noprint">
+        <div class="mq-panel">
+          <div class="mq-panel__title">Curated links</div>
+          {linkGroups.length === 0 && (
+            <p class="text-sm text-ink m-0">Nothing here yet.</p>
+          )}
+          {/* One column in the sidebar, several when the panel stands alone. */}
+          <div class="mq-panel__groups">
+            {linkGroups.map((g, i) => (
+              <div class="mq-links" style={`--group:var(--cat-${hueFor(i).slice(1)});`}>
+                <div class="mq-links__cat">{g.data.category}</div>
+                {g.data.links.map((l) => (
+                  <a href={l.url} target="_blank" rel="noopener" class="mono mq-links__link">
+                    {l.label} →
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
     </div>
-    {[...byCategory.entries()].map(([cat, items]) => (
-      <section class="mb-6">
-        <div class="mono text-label text-ink-muted uppercase mb-3">{cat}</div>
-        {items.map((s) => {
-          const C = contentBySlug.get(s.id)!;
-          return (
-            <div class="mb-4">
-              <div class="mono text-label text-ink-strong mb-[6px]">{s.data.title} · {s.data.category}</div>
-              <div class="mqcp-code"><C /></div>
-            </div>
-          );
-        })}
-      </section>
-    ))}
   </main>
 </Base>

@@ -1,0 +1,53 @@
+---
+// The site had no footer at all, which meant a visitor convinced by the home
+// page had nowhere to find out how to actually reach the club.
+//
+// Every club-fact block below is conditional on src/data/site.json. Unset
+// values render nothing rather than a placeholder — an empty "Contact" heading
+// would be worse than no heading, and PRODUCT.md forbids shipping anything
+// unverifiable. Fill in site.json and the blocks appear.
+import site from '../data/site.json';
+
+const contact = site.contact as { label: string; url: string } | null;
+const meetings = site.meetings as string | null;
+
+const nav = [
+  { href: '/learn', label: 'learn' },
+  { href: '/events', label: 'events' },
+  { href: '/resources', label: 'resources' },
+  { href: '/tools', label: 'tools' },
+  { href: '/contribute', label: 'contribute' },
+];
+const repoUrl = 'https://github.com/mq-cpc/web-app';
+---
+<footer class="mq-footer">
+  <div class="mq-footer__inner">
+    <div class="mq-footer__brand">
+      <span class="mq-logo__mark" aria-hidden="true">{'{}'}</span>
+      <div>
+        <div class="mq-footer__name">MQ Competitive Programming Club</div>
+        <div class="mono mq-footer__sub">Macquarie University</div>
+      </div>
+    </div>
+
+    <nav class="mq-footer__nav" aria-label="Footer">
+      {nav.map((l) => <a class="mono mq-footer__link" href={l.href}>{l.label}</a>)}
+      <a
+        class="mono mq-footer__link"
+        href={repoUrl}
+        target="_blank"
+        rel="noopener"
+        aria-label="Site source on GitHub (opens in a new tab)"
+      >source</a>
+    </nav>
+
+    {(meetings || contact) && (
+      <div class="mq-footer__meta">
+        {meetings && <div class="mq-footer__meet">{meetings}</div>}
+        {contact && (
+          <a class="ps-btn ps-btn--primary ps-btn--sm" href={contact.url}>{contact.label}</a>
+        )}
+      </div>
+    )}
+  </div>
+</footer>

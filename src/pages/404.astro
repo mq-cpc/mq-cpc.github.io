@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+
+// The site positions itself on permanence and addressability, so a stale or
+// mistyped URL landing on the host's bare error page was the worst possible
+// contradiction. Recovery is by destination, not a generic "go home".
+const routes = [
+  { href: '/learn', label: 'the roadmap', note: 'topics in the order we suggest' },
+  { href: '/events', label: 'events', note: "what's on, and the team board" },
+  { href: '/resources', label: 'resources', note: 'curated links and the team reference' },
+  { href: '/contribute', label: 'contribute', note: 'how to change the site or add yourself' },
+];
+---
+<Base title="Page not found — MQ CP Club" description="That page doesn't exist. Here's how to find what you were after.">
+  <Header />
+  <main class="mq-page">
+    <div class="mono mq-eyebrow">// 404</div>
+    <h1 class="ps-h1 mq-h1-gap">That page doesn&rsquo;t exist.</h1>
+    <p class="text-ink max-w-measure mt-3">
+      The link may be out of date, or the address may have a typo in it. Nothing here is behind
+      a login, so if you were sent this link by someone in the club it should still work once
+      you land in the right place:
+    </p>
+
+    <div class="mq-grid-2 mt-6">
+      {routes.map((r) => (
+        <a class="ps-card ps-card--accent" href={r.href}>
+          <div class="ps-card__title">{r.label}</div>
+          <div class="ps-card__body">{r.note}</div>
+        </a>
+      ))}
+    </div>
+
+    <p class="text-ink max-w-measure mt-6">
+      Still stuck? Every page on this site is a Markdown or JSON file in the club repo, so if
+      something moved, its history is there — see{' '}
+      <a class="mono text-accent-text no-underline" href="/contribute">contribute</a>
+      for how to get access.
+    </p>
+  </main>
+</Base>

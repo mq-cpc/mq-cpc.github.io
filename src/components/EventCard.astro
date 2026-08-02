@@ -2,12 +2,17 @@
 interface Props { title: string; date: Date; location?: string; tag?: string; stroke?: string }
 const { title, date, location, tag, stroke = 'var(--accent)' } = Astro.props;
 const dateStr = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }).format(date);
+// The card used to render only the logistics. The event body is where the
+// "all levels welcome"-type reassurance lives, and a room number plus a
+// timestamp is a record, not an invitation — so the body is rendered too.
+const hasBody = Astro.slots.has('default');
 ---
 <div class="ps-card" style={`border-top:3px solid ${stroke};`}>
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between gap-3">
     {tag && <span class="ps-pill">{tag}</span>}
     {location && <span class="mono text-label text-ink-muted">{location}</span>}
   </div>
   <div class="ps-card__title" style="font-size:var(--text-md);">{title}</div>
   <div class="mono mq-eyebrow">{dateStr}</div>
+  {hasBody && <div class="ps-card__body"><slot /></div>}
 </div>
