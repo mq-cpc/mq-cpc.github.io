@@ -59,7 +59,7 @@ These two sit in tension and future work should treat it as a known seam, not an
 
 - Name: **MQ Competitive Programming Club**. Short form in page titles: *MQ CP Club*.
 - Voice, as evidenced consistently in the shipped copy rather than separately confirmed: **approachable rigour**. Serious contest preparation that stays beginner-kind — "all levels welcome" appears on the hero, the events, and the Getting Started topic. Never edgy, never intimidating, never assuming prior knowledge.
-- The wordmark subtitle currently reads `acm.icpc · macquarie`. ICPC dropped ACM sponsorship in 2018; this is flagged as inaccurate and unresolved.
+- The wordmark subtitle reads `macquarie university`. It previously read `acm.icpc · macquarie`, which was inaccurate — ICPC dropped ACM sponsorship in 2018 — and was corrected on 2026-08-03.
 
 ## Evidence on Hand
 

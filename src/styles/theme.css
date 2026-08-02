@@ -97,7 +97,9 @@ html { font-size: 17px; }
   font-weight: 700;
   font-size: var(--text-label-lg);
 }
-.mq-logo__text { display: flex; flex-direction: column; line-height: 1.05; }
+/* line-height stays tight so each line sets solid; the gap separates the two
+   siblings instead, which is the relationship that actually needs the space. */
+.mq-logo__text { display: flex; flex-direction: column; gap: var(--space-1); line-height: 1.05; }
 .mq-logo__name {
   font-family: var(--font-display);
   font-weight: 600;
