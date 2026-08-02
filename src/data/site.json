@@ -1,0 +1,15 @@
+{
+  "_README": [
+    "Club facts shown in the site footer. Everything here is optional: each block",
+    "renders only when it is filled in, so leaving a value as null is safe and the",
+    "footer simply omits that line. Nothing here should be a guess — this file is",
+    "the reason the site can say 'we meet on Tuesdays' without anyone inventing it.",
+    "",
+    "contact  — how a newcomer reaches the club. label is what the link says,",
+    "           url is where it goes (a Discord invite, a mailto:, a form).",
+    "meetings — one line describing when and where the club meets, e.g.",
+    "           'Weekly during semester · Tuesdays 6pm · 4CC 105'."
+  ],
+  "contact": null,
+  "meetings": null
+}

@@ -1,7 +1,9 @@
 import { defineCollection, reference as refField, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const LEVEL = z.enum(['foundations', 'intermediate', 'advanced']);
+// `optional` is a band, not a difficulty: supplementary topics that sit after
+// the required path and can be skipped entirely.
+const LEVEL = z.enum(['foundations', 'intermediate', 'advanced', 'optional']);
 const CATEGORY = z.enum(['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
 const DIFFICULTY = z.enum(['easy', 'medium', 'hard']);
 
