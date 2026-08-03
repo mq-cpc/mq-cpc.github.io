@@ -1,0 +1,69 @@
+---
+// The whole reference as one document, for the printed copy a team carries
+// into a contest. Static route, so it wins over [category].astro — no category
+// may be named "notebook".
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import { getCollection, render } from 'astro:content';
+
+const cats = (await getCollection('refcategories')).sort((a, b) => a.data.order - b.data.order);
+const snippets = await getCollection('reference');
+
+const sections = await Promise.all(
+  cats.map(async (cat) => ({
+    cat,
+    entries: await Promise.all(
+      snippets
+        .filter((s) => s.data.category.id === cat.id)
+        .sort((a, b) => a.data.order - b.data.order)
+        .map(async (e) => ({ id: e.id, data: e.data, Body: (await render(e)).Content })),
+    ),
+  })),
+);
+const total = snippets.length;
+---
+<Base
+  title="Team reference notebook — MQ CP Club"
+  description="The club's full Java reference notebook, laid out to print for a contest."
+>
+  <Header />
+  <main class="mq-page mq-page--tight">
+    <a class="mono text-label text-ink-muted no-underline mq-noprint" href="/resources">← Team reference</a>
+
+    <div class="mq-nb__head">
+      <h1 class="ps-h1">Team reference notebook</h1>
+      <p class="mono mq-nb__stamp">
+        MQ Competitive Programming Club · {total} entries · {cats.length} sections
+      </p>
+    </div>
+
+    <div class="mq-noprint mt-5 flex items-center gap-4 flex-wrap">
+      <button class="ps-btn ps-btn--primary" onclick="window.print()">
+        <span aria-hidden="true">⎙</span> Print
+      </button>
+      <span class="text-ink text-sm">
+        Printing gives you the notebook on its own — no navigation, no colours to drink your toner.
+      </span>
+    </div>
+
+    {sections.map((s) => (
+      <section class="mq-nb__section">
+        <h2 class="mq-nb__section-title" style={`--cat:var(--cat-${s.cat.data.color.slice(1)});`}>
+          {s.cat.data.name}
+        </h2>
+        <div class="mq-nb">
+          {s.entries.map((e) => (
+            <article class="mq-nb__entry" id={e.id}>
+              <h3 class="mq-nb__title">
+                {e.data.title}
+                <span class="mono mq-nb__lang">{e.data.lang}</span>
+              </h3>
+              {e.data.blurb && <p class="mq-nb__blurb">{e.data.blurb}</p>}
+              <div class="mq-nb__body"><e.Body /></div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </main>
+</Base>

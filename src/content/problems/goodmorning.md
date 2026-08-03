@@ -4,7 +4,7 @@ title: "Good Morning!"
 difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/goodmorning
-order: 2
+order: 3
 tags: ["backtracking"]
 videos:
   - title: "Good Morning!"

@@ -289,7 +289,8 @@ html { font-size: 17px; }
    --shiki-dark per token (see astro.config.mjs) and the surface comes from the
    design tokens, so the block themes with the rest of the site instead of
    importing GitHub's. */
-.mqcp-code {
+.mqcp-code,
+.mq-nb__body pre.astro-code {
   /* Sized to the longest line, not to the page — a 60-character snippet was
      being stretched across 1532px of surface. Still scrolls internally when a
      line is genuinely longer than the column. */
@@ -300,17 +301,22 @@ html { font-size: 17px; }
   background: var(--paper-sunk);
   overflow: hidden;
 }
-.mqcp-code pre {
-  margin: 0; /* preflight is off, so <pre> keeps its 1em UA margin */
+.mqcp-code pre,
+.mq-nb__body pre.astro-code {
+  margin: 0 0 var(--space-4); /* preflight is off, so <pre> keeps its 1em UA margin */
   padding: var(--space-4);
   overflow-x: auto;
-  background: transparent !important;
+  background: var(--paper-sunk) !important;
   font-family: var(--font-label);
   font-size: var(--text-label);
   line-height: 1.6;
 }
 .mqcp-code .astro-code,
-.mqcp-code .astro-code span { color: var(--shiki-light); }
+.mqcp-code .astro-code span,
+.mq-nb__body .astro-code,
+.mq-nb__body .astro-code span { color: var(--shiki-light); }
+[data-theme='indigo'] .mq-nb__body .astro-code,
+[data-theme='indigo'] .mq-nb__body .astro-code span { color: var(--shiki-dark); }
 [data-theme='indigo'] .mqcp-code .astro-code,
 [data-theme='indigo'] .mqcp-code .astro-code span { color: var(--shiki-dark); }
 
@@ -351,27 +357,78 @@ html { font-size: 17px; }
      column, and capping it left a gap between the text and the button. */
 }
 
-/* Notebook headings and the curated-links sidebar. */
-.mq-nb__cat {
-  margin: 0 0 var(--space-3);
-  font-size: var(--text-label);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  font-weight: var(--weight-medium);
+/* ===== Reference notebook =====
+   A section index of cards, a page per section, and one page that prints the
+   lot. The printed copy is the artefact — a team is allowed a paper reference
+   at a contest, so the screen layout has to fold down to something readable in
+   black and white. */
+.mq-cats { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4);
+           grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+/* The li stretches (grid default) and the card fills it via flex. `height:100%`
+   on the card resolved against an auto-height parent and overflowed its own
+   grid cell, so the content below it was overlapped. */
+.mq-cats > li { display: flex; }
+.mq-cat {
+  display: flex; flex-direction: column; gap: var(--space-3); flex: 1;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--cat, var(--accent));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  transition: box-shadow var(--dur-mid) var(--ease-out),
+              border-color var(--dur-mid) var(--ease-out),
+              transform var(--dur-mid) var(--ease-out);
 }
-.mq-nb__item { margin-bottom: var(--space-5); }
+.mq-cat:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.mq-cat__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.mq-cat__name {
+  font-family: var(--font-display); font-size: var(--text-lg);
+  font-weight: var(--weight-semibold); color: var(--ink-strong); line-height: var(--leading-tight);
+}
+.mq-cat__n { font-size: var(--text-label); color: var(--ink-muted); white-space: nowrap; }
+.mq-cat__blurb { font-size: var(--text-sm); color: var(--ink); flex: 1; }
+.mq-cat__foot { display: flex; align-items: center; gap: var(--space-3); }
+.mq-cat__lang {
+  font-size: var(--text-label); color: var(--ink);
+  padding: 2px var(--space-3); border-radius: var(--radius-pill);
+  background: var(--paper-sunk); border: 1px solid var(--line);
+}
+.mq-cat__go { margin-left: auto; font-size: var(--text-label); color: var(--accent-text); }
+
+.mq-nb__head { margin-top: var(--space-5); }
+.mq-nb__stamp { font-size: var(--text-label); color: var(--ink-muted); margin: var(--space-2) 0 0; }
+.mq-nb__section { margin-top: var(--space-8); }
+.mq-nb__section-title {
+  margin: 0 0 var(--space-5);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--cat, var(--line-strong));
+  font-family: var(--font-display); font-size: var(--text-xl);
+  font-weight: var(--weight-semibold); color: var(--ink-strong);
+}
+/* Two columns on a wide screen: these entries are short and stacking them
+   single-file wastes the width and lengthens the printout. */
+.mq-nb { display: grid; gap: var(--space-6) var(--space-7); align-items: start;
+         grid-template-columns: repeat(auto-fit, minmax(min(34rem, 100%), 1fr)); }
+.mq-nb__entry { break-inside: avoid; page-break-inside: avoid; }
 .mq-nb__title {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
+  display: flex; align-items: baseline; gap: var(--space-3);
   margin: 0 0 var(--space-2);
-  font-family: var(--font-display);
-  font-size: var(--text-md);
-  font-weight: var(--weight-semibold);
-  color: var(--ink-strong);
+  font-family: var(--font-display); font-size: var(--text-md);
+  font-weight: var(--weight-semibold); color: var(--ink-strong);
 }
 .mq-nb__lang { font-size: var(--text-label); color: var(--ink-muted); font-weight: var(--weight-regular); }
+.mq-nb__blurb { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--ink-muted); }
+.mq-nb__body > :first-child { margin-top: 0; }
+.mq-nb__body > :last-child { margin-bottom: 0; }
+.mq-nb__body p { font-size: var(--text-sm); max-width: var(--measure); }
+.mq-nb__body ul { font-size: var(--text-sm); padding-left: var(--space-5); }
+.mq-nb__body code:not(pre code) {
+  font-family: var(--font-label); font-size: 0.92em;
+  background: var(--paper-sunk); border-radius: var(--radius-sm); padding: 1px 4px;
+}
+.mq-toc__print { margin-top: var(--space-4); margin-left: var(--space-4); }
 
 .mq-links { border-left: 2px solid var(--group, var(--line-strong)); padding-left: var(--space-4); }
 .mq-links + .mq-links { margin-top: var(--space-4); }
@@ -413,10 +470,28 @@ html { font-size: 17px; }
   .mq-noprint { display: none !important; }
 
   .mq-page { padding: 0; max-width: 100%; }
-  .mqcp-code { border-color: var(--line-strong); page-break-inside: avoid; break-inside: avoid; }
+  .mqcp-code,
+  .mq-nb__body pre.astro-code {
+    border-color: var(--line-strong);
+    background: #fff !important;
+    page-break-inside: avoid; break-inside: avoid;
+  }
   .mqcp-code .astro-code,
-  .mqcp-code .astro-code span { color: var(--shiki-light) !important; }
+  .mqcp-code .astro-code span,
+  .mq-nb__body .astro-code,
+  .mq-nb__body .astro-code span { color: var(--shiki-light) !important; }
   h1, h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
+
+  /* The printed notebook: tighter than the screen so a section fits fewer
+     pages, and two columns because these entries are short. */
+  .mq-nb { grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+  .mq-nb__entry { break-inside: avoid; page-break-inside: avoid; }
+  .mq-nb__section { margin-top: var(--space-6); break-before: page; page-break-before: always; }
+  .mq-nb__section:first-of-type { break-before: auto; page-break-before: auto; }
+  /* Points, not pixels: this is a physical page, and the screen type ramp
+     does not govern how many lines fit on A4. */
+  .mq-nb__body pre.astro-code { font-size: 7.5pt; line-height: 1.45; padding: var(--space-3); }
+  .mq-topic__rule, .mq-split .mq-aside { display: none; }
 }
 
 /* ===== Two-column page composition =====

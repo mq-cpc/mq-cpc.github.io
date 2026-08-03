@@ -1,91 +1,79 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 const linkGroups = (await getCollection('resources')).sort((a, b) => a.data.order - b.data.order);
-// Identity hue by position, not by a hash of the category name: the old
-// char-code sum silently recoloured a group when it was renamed, and two names
-// could collide on the same hue with no fallback.
 const hueFor = (i: number) => `c${(i % 6) + 1}`;
 
-const snippets = (await getCollection('reference')).sort((a, b) => a.data.order - b.data.order);
-const byCategory = new Map<string, typeof snippets>();
-for (const s of snippets) {
-  const arr = byCategory.get(s.data.category) ?? [];
-  arr.push(s);
-  byCategory.set(s.data.category, arr);
-}
-const rendered = await Promise.all(snippets.map(async (s) => ({ slug: s.id, Content: (await render(s)).Content })));
-const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
+const cats = (await getCollection('refcategories')).sort((a, b) => a.data.order - b.data.order);
+const snippets = await getCollection('reference');
+const countFor = (id: string) => snippets.filter((s) => s.data.category.id === id).length;
+const langsFor = (id: string) =>
+  [...new Set(snippets.filter((s) => s.data.category.id === id).map((s) => s.data.lang))];
 ---
-<Base title="Resources — MQ CP Club" description="Curated competitive-programming links, plus the club's team reference notebook of copy-paste algorithm implementations.">
+<Base
+  title="Resources — MQ CP Club"
+  description="The club's team reference notebook — algorithms written in Java, ready to print for a contest — plus curated competitive-programming links."
+>
   <Header />
   <main class="mq-page">
-    <div class="mono mq-eyebrow mq-noprint">// RESOURCES</div>
-    <h1 class="ps-h1 mq-h1-gap mq-noprint">Resources &amp; team reference</h1>
+    <div class="mono mq-eyebrow">// RESOURCES</div>
+    <h1 class="ps-h1 mq-h1-gap">Team reference</h1>
+    <p class="text-ink max-w-measure mt-3">
+      A notebook the club builds once and keeps. Most published references are C++; ours is
+      written in <b>Java</b>, because that is what most of us actually take into a contest.
+    </p>
 
-    {/* Notebook in the main column, curated links beside it. Two real things
-        sharing the width beats one thing stretched across it — a single code
-        snippet in a full-width surface was 1532px of paper holding 500px of
-        code, and the links panel was three lines in a 1532px box. */}
     <div class="mq-split mt-6">
       <div>
-        {/* Gap, not space-between: pushed to opposite ends of a wide column the
-            button ended up ~1000px from the heading it acts on. */}
-        <div class="flex items-baseline gap-5 flex-wrap">
-          <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
-          <button class="ps-btn ps-btn--sm mq-noprint" onclick="window.print()">
-            <span aria-hidden="true">⎙</span> Print the notebook
-          </button>
-        </div>
-        <p class="text-ink max-w-measure mt-3 mq-noprint">
-          Implementations to copy into a solution, or to print and bring to a contest — printing
-          this page gives you the notebook on its own, without the site around it.
+        <h2 class="ps-h2 mq-heading">Notebook</h2>
+        <p class="text-ink max-w-measure mt-3 mb-5">
+          Each section is a page you can read on its own, or print as part of one document to
+          bring to a contest — ICPC lets you carry a printed reference, and this is it.
         </p>
 
-        {snippets.length === 0 ? (
-          <p class="text-ink max-w-measure mt-5">
-            The notebook is empty so far. Snippets are Markdown files in the club repo — add one
-            with a pull request and it appears here.
-          </p>
-        ) : (
-          <>
-            {[...byCategory.entries()].map(([cat, items]) => (
-              <section class="mt-6">
-                <h3 class="mq-nb__cat mono">{cat}</h3>
-                {items.map((s) => {
-                  const C = contentBySlug.get(s.id)!;
-                  return (
-                    <article class="mq-nb__item">
-                      <h4 class="mq-nb__title">
-                        {s.data.title}
-                        <span class="mono mq-nb__lang">{s.data.lang}</span>
-                      </h4>
-                      <div class="mqcp-code"><C /></div>
-                    </article>
-                  );
-                })}
-              </section>
-            ))}
-            <p class="text-ink max-w-measure mt-6 mq-noprint">
-              {snippets.length === 1
-                ? 'One entry so far. The notebook grows by pull request — add the routine you keep rewriting.'
-                : `${snippets.length} entries so far. Add the routine you keep rewriting.`}
-              {' '}
-              <a class="mono text-accent-text no-underline" href="/contribute">How to contribute →</a>
-            </p>
-          </>
+        <ul class="mq-cats">
+          {cats.map((c, i) => (
+            <li>
+              <a class="mq-cat" href={`/resources/${c.id}`} style={`--cat:var(--cat-${c.data.color.slice(1)});`}>
+                <span class="mq-cat__head">
+                  <span class="mq-cat__name">{c.data.name}</span>
+                  <span class="mono mq-cat__n">
+                    {countFor(c.id)} {countFor(c.id) === 1 ? 'entry' : 'entries'}
+                  </span>
+                </span>
+                <span class="mq-cat__blurb">{c.data.blurb}</span>
+                <span class="mq-cat__foot">
+                  {langsFor(c.id).map((l) => <span class="mono mq-cat__lang">{l}</span>)}
+                  <span class="mono mq-cat__go">open →</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        {cats.length > 0 && (
+          <div class="flex items-center gap-4 flex-wrap mt-5">
+            <a class="ps-btn ps-btn--primary" href="/resources/notebook">
+              <span aria-hidden="true">⎙</span> The whole notebook, to print
+            </a>
+            <span class="mono text-label text-ink-muted">
+              {snippets.length} entries across {cats.length} sections
+            </span>
+          </div>
         )}
+
+        <p class="text-ink max-w-measure mt-6">
+          Missing something you keep rewriting? Sections are Markdown files in the club repo —
+          <a class="mono text-accent-text no-underline" href="/contribute"> how to contribute →</a>
+        </p>
       </div>
 
-      <aside class="mq-aside mq-noprint">
+      <aside class="mq-aside">
         <div class="mq-panel">
           <div class="mq-panel__title">Curated links</div>
-          {linkGroups.length === 0 && (
-            <p class="text-sm text-ink m-0">Nothing here yet.</p>
-          )}
-          {/* One column in the sidebar, several when the panel stands alone. */}
+          {linkGroups.length === 0 && <p class="text-sm text-ink m-0">Nothing here yet.</p>}
           <div class="mq-panel__groups">
             {linkGroups.map((g, i) => (
               <div class="mq-links" style={`--group:var(--cat-${hueFor(i).slice(1)});`}>

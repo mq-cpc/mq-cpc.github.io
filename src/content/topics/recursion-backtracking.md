@@ -9,10 +9,6 @@ videos:
     youtubeId: "snBcanv7m04"
     channel: Daniel Sutantyo
     duration: "18:57"
-  - title: Group Sum
-    youtubeId: "dmAJMyJyxoY"
-    channel: Daniel Sutantyo
-    duration: "24:43"
 ---
 Recursion is how you turn a problem you can't see the answer to into a smaller
 version of itself. The hard part is rarely the code — it's learning to see the

@@ -38,8 +38,14 @@ const problems = defineCollection({
     title: z.string(),
     difficulty: DIFFICULTY,
     tags: z.array(z.string()).default([]),
+    // Free-form on purpose: Kattis, CodingBat, HackerRank, LeetCode, …
     judge: z.string(),
     url: z.string().url(),
+    // The identifier at that judge — what you type into kattis-cli, or the
+    // method name CodingBat asks you to implement. Optional because Kattis
+    // puts it in the URL; set it whenever the URL does not carry it, as
+    // CodingBat's /prob/p145416 does not.
+    problemId: z.string().optional(),
     order: z.number().int().nonnegative().default(0),
     // Usually one walkthrough; Walrus Weights has two (top-down and bottom-up),
     // which is why this is an array.
@@ -58,13 +64,29 @@ const events = defineCollection({
   }),
 });
 
+// A page of the team reference notebook. Categories are their own collection so
+// each can carry a blurb and an identity colour, and so a typo in a snippet's
+// category fails the build instead of silently creating an orphan page.
+const refcategories = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: 'src/content/refcategories' }),
+  schema: z.object({
+    name: z.string(),
+    blurb: z.string(),
+    order: z.number().int().nonnegative().default(0),
+    color: CATEGORY,
+  }),
+});
+
 const reference = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: 'src/content/reference' }),
   schema: z.object({
     title: z.string(),
-    category: z.string(),
-    lang: z.string().default('cpp'),
+    category: refField('refcategories'),
+    // Java by default: writing the reference in Java is the thing that makes
+    // this notebook ours rather than a copy of every other team's.
+    lang: z.string().default('java'),
     order: z.number().int().nonnegative().default(0),
+    blurb: z.string().optional(),
   }),
 });
 
@@ -79,4 +101,4 @@ const resources = defineCollection({
   }),
 });
 
-export const collections = { topics, problems, events, reference, resources };
+export const collections = { topics, problems, events, refcategories, reference, resources };

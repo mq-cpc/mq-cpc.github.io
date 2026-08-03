@@ -42,9 +42,10 @@ const rows = await Promise.all(
   problems.map(async (p) => ({
     slug: p.id,
     data: p.data,
-    // The Kattis problem id is the last URL segment — exactly what kattis-cli
-    // takes, and what the hero terminal submits.
-    kid: p.data.url.replace(/\/+$/, '').split('/').pop(),
+    // Explicit when the judge's URL does not carry the id (CodingBat's
+    // /prob/p145416 is not the problem name), otherwise the last URL segment,
+    // which is what Kattis uses and what kattis-cli takes.
+    kid: p.data.problemId ?? p.data.url.replace(/\/+$/, '').split('/').pop(),
     Body: p.body && p.body.trim() ? (await render(p)).Content : null,
   })),
 );
@@ -157,7 +158,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
         <p class="text-ink max-w-measure mb-4">
           Each row is one problem with its walkthrough and notes. Tick them off as you solve them —
           that is kept in this browser only.
-          {topic.id !== 'getting-started' && (
+          {/* Only offer the Kattis primer where there is actually a Kattis
+              problem — this topic may send you to CodingBat or elsewhere. */}
+          {topic.id !== 'getting-started' && rows.some((r) => r.data.judge === 'Kattis') && (
             <>
               {' '}New to Kattis?{' '}
               <a class="text-accent-text" href="/topics/getting-started#your-first-submission">
@@ -211,7 +214,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
                 <div class={`mq-prob__body${r.data.videos.length ? '' : ' mq-prob__body--novideo'}`}>
                   <div class="mq-prob__actions">
-                    <code class="mq-prob__id mono" title="Kattis problem id">{r.kid}</code>
+                    <code class="mq-prob__id mono" title={`${r.data.judge} problem id`}>{r.kid}</code>
                     <a class="ps-btn ps-btn--sm" href={r.data.url} target="_blank" rel="noopener">
                       Solve on {r.data.judge} →
                     </a>
