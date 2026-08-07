@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/base';
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
@@ -68,7 +69,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 <Base title={`${topic.data.name} — MQ CP Club`} description={topic.data.blurb}>
   <Header />
   <main class="mq-page mq-page--tight">
-    <a class="mono text-label text-ink-muted no-underline" href="/learn">← All topics</a>
+    <a class="mono text-label text-ink-muted no-underline" href={withBase("/learn")}>← All topics</a>
 
     <div class="mq-topic__rule mt-5" style={`border-top:3px solid ${stroke};`}></div>
     <div class="mq-split mq-split--reading">
@@ -115,7 +116,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
           </div>
         )}
         {next && (
-          <a class="mq-toc__next mono" href={`/topics/${next.slug}`}>Next: {next.name} →</a>
+          <a class="mq-toc__next mono" href={withBase(`/topics/${next.slug}`)}>Next: {next.name} →</a>
         )}
       </aside>
     </div>
@@ -151,19 +152,19 @@ const pad = (n: number) => String(n).padStart(2, '0');
     {problems.length === 0 ? (
       <p class="text-ink max-w-measure">
         No problems for this topic yet — pick another from the
-        <a class="mono text-accent-text no-underline" href="/learn"> roadmap</a>.
+        <a class="mono text-accent-text no-underline" href={withBase("/learn")}> roadmap</a>.
       </p>
     ) : (
       <>
         <p class="text-ink max-w-measure mb-4">
-          Each row is one problem with its walkthrough and notes. Tick them off as you solve them —
-          that is kept in this browser only.
+          You can tick off the problems as you solve them to keep track of your progress
+          (stored in this browser only).
           {/* Only offer the Kattis primer where there is actually a Kattis
               problem — this topic may send you to CodingBat or elsewhere. */}
           {topic.id !== 'getting-started' && rows.some((r) => r.data.judge === 'Kattis') && (
             <>
               {' '}New to Kattis?{' '}
-              <a class="text-accent-text" href="/topics/getting-started#your-first-submission">
+              <a class="text-accent-text" href={withBase("/topics/getting-started#your-first-submission")}>
                 What happens when you submit →
               </a>
             </>
@@ -246,12 +247,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
     )}
 
     {next ? (
-      <a class="mq-next" href={`/topics/${next.slug}`}>
+      <a class="mq-next" href={withBase(`/topics/${next.slug}`)}>
         <span class="mono text-label text-ink-muted">Next in the roadmap</span>
         <span class="mq-next__name">{next.name} →</span>
       </a>
     ) : (
-      <a class="mq-next" href="/learn">
+      <a class="mq-next" href={withBase("/learn")}>
         <span class="mono text-label text-ink-muted">
           {optional ? 'Back to the main path' : 'End of the roadmap'}
         </span>

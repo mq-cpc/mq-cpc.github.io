@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 
@@ -43,7 +44,7 @@ git push -u origin add-me-to-board
     <p class="text-ink max-w-measure">
       The team board is just a JSON file in the club repo — no logins, no server. You add
       yourself with a pull request, and once a committee member merges it you'll show up on the{' '}
-      <a class="mono text-accent-text no-underline" href="/events">Events</a> page.
+      <a class="mono text-accent-text no-underline" href={withBase("/events")}>Events</a> page.
     </p>
 
     <a class="ps-btn ps-btn--primary mt-4" href={editUrl} target="_blank" rel="noopener">
@@ -109,7 +110,7 @@ git push -u origin add-me-to-board
         <p class="text-ink max-w-measure mt-3">
           If you do want to run it: clone the repo, <span class="mono">npm install</span>, then{' '}
           <span class="mono">npm run dev</span>. Deeper detail is in the{' '}
-          <a class="mono text-accent-text no-underline" href="/contribute/website">site guide</a>,
+          <a class="mono text-accent-text no-underline" href={withBase("/contribute/website")}>site guide</a>,
           which is still being written.
         </p>
       </div>

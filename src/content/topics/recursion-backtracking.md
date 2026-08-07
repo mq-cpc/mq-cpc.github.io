@@ -19,5 +19,5 @@ abandoning a branch the moment it can't lead anywhere. These are the problems
 where the first correct solution is often "try everything, carefully".
 
 This is also the direct groundwork for
-[Dynamic Programming](/topics/dynamic-programming) — you can't memoise a
+[Dynamic Programming](../dynamic-programming/) — you can't memoise a
 recursion you haven't written yet.

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/base';
 // The whole reference as one document, for the printed copy a team carries
 // into a contest. Static route, so it wins over [category].astro — no category
 // may be named "notebook".
@@ -28,7 +29,7 @@ const total = snippets.length;
 >
   <Header />
   <main class="mq-page mq-page--tight">
-    <a class="mono text-label text-ink-muted no-underline mq-noprint" href="/resources">← Team reference</a>
+    <a class="mono text-label text-ink-muted no-underline mq-noprint" href={withBase("/resources")}>← Team reference</a>
 
     <div class="mq-nb__head">
       <h1 class="ps-h1">Team reference notebook</h1>

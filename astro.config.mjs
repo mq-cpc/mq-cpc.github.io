@@ -15,8 +15,12 @@ export default defineConfig({
       wrap: false,
     },
   },
-  // Placeholder — confirm the real Cloudflare Pages URL after the first
-  // deploy (the subdomain follows the Pages *project* name, not the repo).
-  site: 'https://web-app.pages.dev',
+  // GitHub Pages, project site: served under /web-app/. `base` must match the
+  // repo name; internal links/asset srcs in .astro are wrapped via
+  // src/lib/base.ts (withBase). Internal links authored in Markdown should be
+  // written RELATIVE (e.g. ../other-topic/) so they resolve under the subpath
+  // without coupling to the base. (A custom domain would let us drop `base`.)
+  site: 'https://mq-cpc.github.io',
+  base: '/web-app',
   vite: { plugins: [tailwindcss()] },
 });
