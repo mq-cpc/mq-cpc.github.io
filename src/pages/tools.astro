@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 
@@ -34,7 +35,7 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
             <p class="mq-tool__blurb">{t.blurb}</p>
           </div>
           {t.app ? (
-            <a class="ps-btn ps-btn--primary" href={t.app}>Open tool →</a>
+            <a class="ps-btn ps-btn--primary" href={withBase(t.app)}>Open tool →</a>
           ) : t.url ? (
             <a class="ps-btn" href={t.url} target="_blank" rel="noopener">View repo →</a>
           ) : (
@@ -49,7 +50,7 @@ const tools: { name: string; blurb: string; app?: string; url?: string; soon?: b
         ? 'One tool so far.'
         : `${tools.length} tools so far.`}
       {' '}Built something you use while practising? It can live here —
-      <a class="mono text-accent-text no-underline" href="/contribute">how to contribute →</a>
+      <a class="mono text-accent-text no-underline" href={withBase("/contribute")}>how to contribute →</a>
     </p>
   </main>
 </Base>

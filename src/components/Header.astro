@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 const links = [
   { href: '/', label: 'home' },
   { href: '/learn', label: 'learn' },
@@ -10,7 +11,7 @@ const links = [
 const path = Astro.url.pathname;
 ---
 <header class="mq-topbar">
-  <a href="/" class="mq-logo">
+  <a href={withBase("/")} class="mq-logo">
     <span class="mq-logo__mark">{'{}'}</span>
     <span class="mq-logo__text">
       <span class="mq-logo__name mq-logo__name--full">MQ Competitive Programming Club</span>
@@ -34,7 +35,7 @@ const path = Astro.url.pathname;
 <nav class="mq-nav">
   <div class="mq-nav__inner">
     {links.map((l) => (
-      <a class="mq-navlink" href={l.href} data-active={path === l.href}>{l.label}</a>
+      <a class="mq-navlink" href={withBase(l.href)} data-active={path === l.href}>{l.label}</a>
     ))}
   </div>
 </nav>

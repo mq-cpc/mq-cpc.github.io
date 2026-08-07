@@ -8,7 +8,7 @@ videos: []
 ---
 Dynamic programming is recursion that stops repeating itself. Once you can see
 the subproblem structure from
-[Recursion &amp; Backtracking](/topics/recursion-backtracking), memoising it
+[Recursion &amp; Backtracking](../recursion-backtracking/), memoising it
 turns an exponential search into something that actually finishes — and
 rewriting it bottom-up often makes it faster still.
 

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 
@@ -25,7 +26,7 @@ const routes = [
 
     <div class="mq-grid-2 mt-6">
       {routes.map((r) => (
-        <a class="ps-card ps-card--accent" href={r.href}>
+        <a class="ps-card ps-card--accent" href={withBase(r.href)}>
           <div class="ps-card__title">{r.label}</div>
           <div class="ps-card__body">{r.note}</div>
         </a>
@@ -35,7 +36,7 @@ const routes = [
     <p class="text-ink max-w-measure mt-6">
       Still stuck? Every page on this site is a Markdown or JSON file in the club repo, so if
       something moved, its history is there — see{' '}
-      <a class="mono text-accent-text no-underline" href="/contribute">contribute</a>
+      <a class="mono text-accent-text no-underline" href={withBase("/contribute")}>contribute</a>
       for how to get access.
     </p>
   </main>
