@@ -15,12 +15,10 @@ export default defineConfig({
       wrap: false,
     },
   },
-  // GitHub Pages, project site: served under /web-app/. `base` must match the
-  // repo name; internal links/asset srcs in .astro are wrapped via
-  // src/lib/base.ts (withBase). Internal links authored in Markdown should be
-  // written RELATIVE (e.g. ../other-topic/) so they resolve under the subpath
-  // without coupling to the base. (A custom domain would let us drop `base`.)
+  // Org GitHub Pages site (repo is named mq-cpc.github.io), served at the root,
+  // so no `base`. Internal links still flow through src/lib/base.ts withBase(),
+  // which is a no-op at root — kept so a future move to a subpath is one config
+  // line, not a link-wide refactor.
   site: 'https://mq-cpc.github.io',
-  base: '/web-app',
   vite: { plugins: [tailwindcss()] },
 });
