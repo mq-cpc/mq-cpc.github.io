@@ -3,7 +3,7 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import EventCard from '../components/EventCard.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 // The kattis-cli "Accepted" banner, reproduced for the hero terminal.
 // The emoji celebration lines are verbatim (first line left-aligned); the
@@ -33,6 +33,9 @@ const upcoming = (await getCollection('events'))
   .filter((e) => e.data.date.getTime() >= now)
   .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
   .slice(0, 3);
+const bodies = new Map(
+  await Promise.all(upcoming.map(async (e) => [e.id, (await render(e)).Content] as const)),
+);
 ---
 <Base title="MQ Competitive Programming Club">
   <Header />
@@ -48,19 +51,17 @@ const upcoming = (await getCollection('events'))
           Solve hard problems<br /><span class="text-accent-text">together.</span>
         </h1>
         <p class="text-md max-w-[46ch] text-ink m-0 leading-normal">
-          A student-run club for ICPC prep and general coding practice. 
-          Join us for regular meetups to discuss and train problem-solving skills. 
-
-
+          A student-run club for ICPC prep and general coding practice. We meet
+          regularly to work through problems together and get sharper at solving them.
         </p>
+        <div class="flex flex-wrap gap-3">
+          <a class="ps-btn ps-btn--primary ps-btn--lg" href="/topics/getting-started">Getting Started →</a>
+        </div>
         {/* Sign-in with GitHub is hidden until auth is supported — keep the markup for later.
         <div class="flex flex-wrap gap-3">
           <button class="ps-btn ps-btn--primary" disabled title="Coming soon" style="min-height:42px;padding:0 var(--space-5);font-size:var(--text-base);">Sign in with GitHub</button>
         </div>
         */}
-        <div class="mono text-label text-ink-muted flex gap-3 flex-wrap items-center">
-          <span>127 members</span><span class="text-line-strong">·</span><span>all levels welcome</span><span class="text-line-strong">·</span><span class="text-accent-text">running since 2021</span>
-        </div>
       </div>
 
       <div class="mq-hero-panel">
@@ -84,12 +85,24 @@ const upcoming = (await getCollection('events'))
     </section>
 
     <section class="mt-8">
-      <h2 class="ps-h2 mq-heading mq-heading--mb4">Upcoming Events</h2>
-      <div class="mq-grid-3">
-        {upcoming.map((e) => (
-          <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />
-        ))}
-      </div>
+      <h2 class="ps-h2 mq-heading mq-heading--mb4">Upcoming events</h2>
+      {upcoming.length === 0 ? (
+        <p class="text-ink max-w-measure m-0">
+          Nothing scheduled right now — new sessions are posted here as they're set.
+          <a class="mono mq-link ml-3" href="/events">See past events →</a>
+        </p>
+      ) : (
+        <div class="mq-grid-3">
+          {upcoming.map((e) => {
+            const Body = bodies.get(e.id)!;
+            return (
+              <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag}>
+                <Body />
+              </EventCard>
+            );
+          })}
+        </div>
+      )}
     </section>
 
     <section class="mt-8">
@@ -97,20 +110,20 @@ const upcoming = (await getCollection('events'))
       <div class="mq-grid-3">
         <a class="ps-card ps-card--c6" href="/learn">
           <span class="mono text-[22px]">↳</span>
-          <div class="ps-card__title">Topic Roadmap</div>
-          <div class="ps-card__body">12 ordered topics from two-pointers to flows. Track what you've solved.</div>
+          <div class="ps-card__title">Topic roadmap</div>
+          <div class="ps-card__body">Foundations to dynamic programming, in the order we suggest learning them.</div>
           <span class="mono mq-link mq-link--card">open learn →</span>
         </a>
         <a class="ps-card ps-card--c4" href="/resources">
           <span class="mono text-[22px]">{'{ }'}</span>
-          <div class="ps-card__title">Team Reference</div>
-          <div class="ps-card__body">A printable algorithm library: graphs, math, strings, geometry — copy-paste ready.</div>
+          <div class="ps-card__title">Team reference</div>
+          <div class="ps-card__body">Curated links, plus a copy-paste algorithm notebook you can print before a contest.</div>
           <span class="mono mq-link mq-link--card">open resources →</span>
         </a>
         <a class="ps-card ps-card--c2" href="/events">
           <span class="mono text-[22px]">▟</span>
           <div class="ps-card__title">Events</div>
-          <div class="ps-card__body">Weekly practice, workshops, and contests — see what's coming up.</div>
+          <div class="ps-card__body">Practice contests and meetups — see what's coming up, and find a team.</div>
           <span class="mono mq-link mq-link--card">open events →</span>
         </a>
       </div>

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-02",
+  "title": "Design System: MQ Competitive Programming Club",
+  "extensions": {
+    "colorMeta": {
+      "accent":     { "role": "primary", "displayName": "Warm Rose", "canonical": "#b8506f", "note": "Cool/dark theme swaps this role to Neon Orange #ff9440.", "tonalRamp": ["#2e1319", "#4d2029", "#6d2e3c", "#8c3c50", "#b8506f", "#cd7488", "#e0a3b0", "#f3dce1"] },
+      "paper":      { "role": "neutral", "displayName": "Warm Paper", "canonical": "#f3ede1", "note": "Cool/dark: deep indigo #0f1022.", "tonalRamp": ["#3a3222", "#574c34", "#756848", "#94875f", "#b3a67d", "#d0c6a4", "#e8dfce", "#f3ede1"] },
+      "surface":    { "role": "neutral", "displayName": "Surface White", "canonical": "#ffffff", "note": "Cool/dark: #181a30." },
+      "ink-strong": { "role": "neutral", "displayName": "Warm Charcoal Ink", "canonical": "#2e2a24", "note": "Cool/dark: #e7e8f4." },
+      "line":       { "role": "neutral", "displayName": "Hairline", "canonical": "#ece4d4", "note": "Cool/dark: #262943." },
+      "success":    { "role": "tertiary", "displayName": "Status Green", "canonical": "#4f8a5f" },
+      "warning":    { "role": "tertiary", "displayName": "Status Amber", "canonical": "#9a6e15" },
+      "danger":     { "role": "tertiary", "displayName": "Status Coral", "canonical": "#bb4a36" },
+      "cat-lilac":   { "role": "secondary", "displayName": "Lilac",   "canonical": "#9a64ad", "tonalRamp": ["#2c1d33", "#43304d", "#5b4368", "#785a89", "#9a64ad", "#b389c1", "#cdb2d6", "#f0d9ef"] },
+      "cat-pink":    { "role": "secondary", "displayName": "Pink",    "canonical": "#c65f7e", "tonalRamp": ["#361a24", "#512838", "#6d374c", "#8a4661", "#c65f7e", "#d68599", "#e6afbc", "#fcdce1"] },
+      "cat-butter":  { "role": "secondary", "displayName": "Butter",  "canonical": "#b07c1f", "tonalRamp": ["#33240a", "#4d3710", "#684a17", "#8a611f", "#b07c1f", "#c99f52", "#e0c48c", "#ffe6bb"] },
+      "cat-celadon": { "role": "secondary", "displayName": "Celadon", "canonical": "#87964a", "tonalRamp": ["#242a15", "#353d1f", "#48522a", "#657434", "#87964a", "#a6b473", "#c7d2a2", "#e9ecce"] },
+      "cat-mint":    { "role": "secondary", "displayName": "Mint",    "canonical": "#4f956f", "tonalRamp": ["#152a1f", "#1f3e2d", "#2a523c", "#3a744f", "#4f956f", "#79c496", "#a6dcbc", "#cde9dc"] },
+      "cat-sky":     { "role": "secondary", "displayName": "Sky",     "canonical": "#4f8da1", "tonalRamp": ["#152a30", "#1f3e47", "#2a525e", "#3a7484", "#4f8da1", "#79bdce", "#a6d6e0", "#c4dfe5"] }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display", "purpose": "Home hero headline only." },
+      "headline": { "displayName": "Headline", "purpose": "Page titles (ps-h1 / ps-h2)." },
+      "title":    { "displayName": "Title", "purpose": "Card and panel headings (ps-h3 / ps-card__title)." },
+      "body":     { "displayName": "Body", "purpose": "Paragraphs and UI text; native system sans, ~64ch measure." },
+      "label":    { "displayName": "Label / Mono", "purpose": "The whole 'code' vernacular — eyebrows, tags, nav, captions, terminal. JetBrains Mono; two fixed sizes (12px, 15px)." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 1px 2px hsl(var(--shadow-color) / 0.10)", "purpose": "Card resting state — barely there." },
+      { "name": "shadow-md", "value": "0 2px 4px hsl(var(--shadow-color) / 0.08), 0 4px 12px hsl(var(--shadow-color) / 0.10)", "purpose": "Card hover." },
+      { "name": "shadow-lg", "value": "0 8px 24px hsl(var(--shadow-color) / 0.14)", "purpose": "The hero terminal panel only. Note: --shadow-color is theme-tinted (warm 38 16% 32% light / cool 240 40% 2% dark)." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.22, 0.61, 0.36, 1)", "purpose": "Default easing for hover/state transitions." },
+      { "name": "dur-fast", "value": "90ms", "purpose": "Buttons, small state changes." },
+      { "name": "dur-mid", "value": "160ms", "purpose": "Card hover lift, nav underline." }
+    ],
+    "breakpoints": [
+      { "name": "hero-collapse", "value": "860px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main call-to-action (hero 'Getting Started', form submits).",
+      "html": "<button class=\"ds-btn-primary\">Getting Started →</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 34px; padding: var(--space-2) var(--space-4); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 0.875rem; font-weight: 500; color: var(--accent-ink); background: var(--accent); border: 1.5px solid var(--accent); border-radius: var(--radius-md); cursor: pointer; transition: background 90ms cubic-bezier(0.22,0.61,0.36,1), transform 90ms cubic-bezier(0.22,0.61,0.36,1); } .ds-btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Secondary action — white surface with a strong hairline.",
+      "html": "<button class=\"ds-btn-default\">⎙ Print / PDF</button>",
+      "css": ".ds-btn-default { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 34px; padding: var(--space-2) var(--space-4); font-family: system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; color: var(--ink-strong); background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: var(--radius-md); cursor: pointer; transition: background 90ms, border-color 90ms; } .ds-btn-default:hover { background: var(--paper-sunk); border-color: var(--ink-muted); } .ds-btn-default:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Identity-Stripe Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The recurring card: white surface, hairline border, a 3px identity-coloured top stripe, lifts on hover.",
+      "html": "<a class=\"ds-card\" href=\"#\"><span class=\"ds-card-title\">Topic Roadmap</span><span class=\"ds-card-body\">12 ordered topics from two-pointers to flows.</span></a>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--cat-6, #4f8da1); border-radius: var(--radius-lg); box-shadow: 0 1px 2px hsl(var(--shadow-color) / 0.10); text-decoration: none; transition: box-shadow 160ms cubic-bezier(0.22,0.61,0.36,1), transform 160ms cubic-bezier(0.22,0.61,0.36,1); } .ds-card:hover { box-shadow: 0 2px 4px hsl(var(--shadow-color) / 0.08), 0 4px 12px hsl(var(--shadow-color) / 0.10); transform: translateY(-2px); } .ds-card-title { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 1.375rem; font-weight: 600; color: var(--ink-strong); } .ds-card-body { font-size: 0.875rem; color: var(--ink); line-height: 1.55; }"
+    },
+    {
+      "name": "Pill",
+      "kind": "chip",
+      "refersTo": "pill",
+      "description": "Mono uppercase tag. Accent variant is the badge form (e.g. 'ICPC PREP').",
+      "html": "<span class=\"ds-pill\">soon</span> <span class=\"ds-pill ds-pill-accent\"><span class=\"ds-pill-dot\"></span>ICPC PREP</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-1) var(--space-3); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); background: var(--paper-sunk); border: 1px solid var(--line); border-radius: var(--radius-pill); } .ds-pill-accent { color: var(--accent-text); background: var(--accent-tint); border-color: transparent; } .ds-pill-dot { width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--accent); }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Mono nav link with an animated accent underline; active/hover also takes the accent text colour.",
+      "html": "<a class=\"ds-navlink\" href=\"#\">learn</a> <a class=\"ds-navlink\" data-active=\"true\" href=\"#\">events</a>",
+      "css": ".ds-navlink { position: relative; padding: var(--space-3) 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 14px; letter-spacing: 0.02em; color: var(--ink); text-decoration: none; cursor: pointer; transition: color 160ms ease; } .ds-navlink::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 160ms ease; } .ds-navlink:hover, .ds-navlink[data-active=\"true\"] { color: var(--accent-text); } .ds-navlink:hover::after, .ds-navlink[data-active=\"true\"]::after { transform: scaleX(1); } .ds-navlink:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Section Heading",
+      "kind": "custom",
+      "refersTo": "mq-heading",
+      "description": "The '>' prompt marker generated before every section heading — a signature of the terminal vernacular.",
+      "html": "<h2 class=\"ds-heading\">Upcoming Events</h2>",
+      "css": ".ds-heading { display: flex; align-items: center; gap: var(--space-3); margin: 0; font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-strong); } .ds-heading::before { content: '>'; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 400; font-size: 0.7em; line-height: 1; color: var(--accent-text); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "MQ Competitive Programming Club — a terminal/code aesthetic on warm paper, shipped in two temperatures of one identity (warm light default, cool indigo dark). Named after the app; no separate metaphor.",
+    "overview": "A static, content-driven site for a university competitive-programming club. The design is a terminal/code aesthetic on warm paper: JetBrains Mono labels, a {} brand mark, $ and > prompts, macOS-style window panels, on a warm beige ground with soft Color Crush pastels for wayfinding. It ships two themes of one identity, differing only in palette temperature — warm light (pastel + rose) and cool indigo dark (deep indigo + neon orange); the code core is identical in both. The tone is approachable rigour: serious contest prep that stays beginner-kind, never edgy or intimidating.",
+    "keyCharacteristics": [
+      "Two temperatures of one identity (warm light default, cool indigo dark) — role tokens, not hardcoded colour.",
+      "A terminal/code vernacular: {} mark, $/> prompts, mono labels, window-title-bar panels.",
+      "Warm neutral paper (not white) as the ground; clean white surfaces sit on it.",
+      "Six pastel identity hues, kept distinct from green/amber/red status colours.",
+      "Flat by default — hairline borders and tonal layering carry structure; shadows are theme-tinted and rare.",
+      "Restrained, precise, human; personality lives in the details, not decoration."
+    ],
+    "rules": [
+      { "name": "The Two-Temperature Rule", "body": "Every colour is a role token, never a hardcoded hex. Warm/light is default; the cool/indigo theme swaps every role including the accent hue (rose → neon orange) and the shadow tint. New UI that reads roles themes for free.", "section": "colors" },
+      { "name": "The Two-Language Rule", "body": "The six pastels mean identity (what a thing is); green/amber/red mean status/difficulty. Never colour a card stripe by difficulty, never use a pastel to signal state.", "section": "colors" },
+      { "name": "The Rare-Accent Rule", "body": "The accent marks actions and the current thing (buttons, active nav, the > prompt), not surfaces. A screen washed in accent is wrong.", "section": "colors" },
+      { "name": "The Two-Label-Sizes Rule", "body": "Mono/label text uses exactly two fixed-px sizes — 12px and 15px — not the rem body scale. Snap to one; don't add an 11/13/14px one-off.", "section": "typography" },
+      { "name": "The Mono-Vernacular Rule", "body": "The code voice — // eyebrows, the > heading prompt, $ terminal lines, the {} mark — is always JetBrains Mono. Chrome and labels only, not body copy.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest — borders and tone do the work. A shadow appears only as a response (hover) or for the single hero panel.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do read colours from role tokens (var(--accent), var(--ink), var(--cat-N)) so new UI themes in both temperatures for free.",
+      "Do keep the terminal vernacular where it belongs: // eyebrows, the > heading marker, $ prompts, JetBrains Mono labels, the {} mark.",
+      "Do use the six pastels as identity and green/amber/red as status — and keep them apart.",
+      "Do stay flat: hairline borders + tonal layering; shadow only on hover or the hero panel.",
+      "Do use the two label sizes (12/15px) for mono chrome, and arbitrary utilities for raw-px values (text-[14px]) — the 17px root makes rem tokens diverge from px.",
+      "Do hold WCAG AA on accent/text, and respect prefers-reduced-motion."
+    ],
+    "donts": [
+      "Don't hardcode a hex in markup or components — it breaks a theme. One exception: dynamic per-item colours already sourced from --cat-N.",
+      "Don't add a gradient/glassmorphism hero, drop-shadow everything, or trade the flat papery terminal feel for generic-SaaS gloss.",
+      "Don't colour a card stripe by difficulty, or use a pastel to signal state.",
+      "Don't wash a screen in the accent — it marks actions and the current thing, not surfaces.",
+      "Don't introduce a third label size or reach for the rem scale for mono labels."
+    ]
+  }
+}

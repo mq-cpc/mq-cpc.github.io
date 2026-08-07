@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const cats = await getCollection('refcategories');
+  const snippets = await getCollection('reference');
+  return cats.map((cat) => ({
+    params: { category: cat.id },
+    props: {
+      cat,
+      entries: snippets
+        .filter((s) => s.data.category.id === cat.id)
+        .sort((a, b) => a.data.order - b.data.order),
+    },
+  }));
+}
+
+interface Props { cat: CollectionEntry<'refcategories'>; entries: CollectionEntry<'reference'>[] }
+const { cat, entries } = Astro.props as Props;
+const stroke = `var(--cat-${cat.data.color.slice(1)})`;
+const rendered = await Promise.all(
+  entries.map(async (e) => ({ id: e.id, data: e.data, Body: (await render(e)).Content })),
+);
+---
+<Base title={`${cat.data.name} — MQ CP Club`} description={cat.data.blurb}>
+  <Header />
+  <main class="mq-page mq-page--tight">
+    <a class="mono text-label text-ink-muted no-underline mq-noprint" href="/resources">← Team reference</a>
+
+    <div class="mq-topic__rule mt-5" style={`border-top:3px solid ${stroke};`}></div>
+    <div class="mq-split mq-split--reading">
+      <div>
+        <h1 class="ps-h1">{cat.data.name}</h1>
+        <div class="mono mq-topic__meta">
+          <span>{entries.length} {entries.length === 1 ? 'entry' : 'entries'}</span>
+          {[...new Set(entries.map((e) => e.data.lang))].map((l) => <span>{l}</span>)}
+        </div>
+        <p class="text-ink mt-3 max-w-measure">{cat.data.blurb}</p>
+      </div>
+
+      <aside class="mq-aside mq-noprint">
+        <nav class="mq-toc" aria-label="On this page">
+          <div class="mq-toc__title">In this section</div>
+          <ul class="mq-toc__list">
+            {rendered.map((e) => (
+              <li><a class="mq-toc__link" href={`#${e.id}`}>{e.data.title}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <button class="ps-btn ps-btn--sm mq-toc__print" onclick="window.print()">
+          <span aria-hidden="true">⎙</span> Print this section
+        </button>
+      </aside>
+    </div>
+
+    <div class="mq-nb mt-7">
+      {rendered.map((e) => (
+        <article class="mq-nb__entry" id={e.id}>
+          <h2 class="mq-nb__title">
+            {e.data.title}
+            <span class="mono mq-nb__lang">{e.data.lang}</span>
+          </h2>
+          {e.data.blurb && <p class="mq-nb__blurb">{e.data.blurb}</p>}
+          <div class="mq-nb__body"><e.Body /></div>
+        </article>
+      ))}
+    </div>
+  </main>
+</Base>

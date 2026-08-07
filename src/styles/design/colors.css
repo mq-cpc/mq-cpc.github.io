@@ -25,7 +25,7 @@
 
   --ink-strong: #2e2a24; /* headings, primary text — neutral warm charcoal */
   --ink:        #585149; /* body text */
-  --ink-muted:  #8b8376; /* captions, hints, disabled labels */
+  --ink-muted:  #70695f; /* captions, hints — AA on paper (4.65:1) and surface (5.42:1) */
 
   --line:        #ece4d4; /* hairline borders, dividers */
   --line-strong: #dacfbb; /* emphasized borders, control outlines */
@@ -39,23 +39,30 @@
   --accent-ink:    #ffffff; /* text/icon ON accent */
   --accent-text:   #ac4763; /* accent AS text on paper — rose, AA (4.7:1) */
 
-  /* --- Semantic — each maps to a Color Crush pastel fill --- */
-  --success:       #4f8a5f; /* visited / done / shortest path */
+  /* --- Semantic — each maps to a Color Crush pastel fill ---
+     Strokes are tuned to clear AA as *text* on --paper-sunk, because that is
+     what they are: the difficulty pills on every problem table put these
+     colours on a sunk-paper fill at 12px. */
+  --success:       #3e6c4b; /* visited / done / shortest path — 4.60:1 on sunk */
   --success-tint:  #cde9dc; /* Color Crush mint */
-  --warning:       #9a6e15; /* frontier / pending (AA as text) */
+  --warning:       #805b11; /* frontier / pending — 4.64:1 on sunk */
   --warning-tint:  #ffe6bb; /* Color Crush butter */
-  --danger:        #bb4a36; /* error / blocked / remove */
+  --danger:        #a64230; /* error / blocked / remove — 4.61:1 on sunk */
   --danger-tint:   #f6d6cb; /* soft peach (pink family, warmer) */
 
   /* --- Category colors (graph nodes / edges / series) ---
      FILL = the literal Color Crush pastel.
-     STROKE/INK = a derived, darker member of the same hue. --- */
-  --cat-1:        #9a64ad; --cat-1-fill: #f0d9ef; /* lilac   */
-  --cat-2:        #c65f7e; --cat-2-fill: #fcdce1; /* pink    */
-  --cat-3:        #b07c1f; --cat-3-fill: #ffe6bb; /* butter  */
-  --cat-4:        #87964a; --cat-4-fill: #e9ecce; /* celadon */
-  --cat-5:        #4f956f; --cat-5-fill: #cde9dc; /* mint    */
-  --cat-6:        #4f8da1; --cat-6-fill: #c4dfe5; /* sky     */
+     STROKE/INK = a derived, darker member of the same hue.
+     Strokes clear AA against white in both directions — they are used as text
+     (the per-topic problem count) and as a fill under white text (the roadmap
+     spine numerals), and those are the same colour pair. Hue and saturation are
+     unchanged from the Color Crush derivation; only lightness moved. --- */
+  --cat-1:        #975fab; --cat-1-fill: #f0d9ef; /* lilac   — 4.62:1 */
+  --cat-2:        #c04e70; --cat-2-fill: #fcdce1; /* pink    — 4.60:1 */
+  --cat-3:        #9a6c1b; --cat-3-fill: #ffe6bb; /* butter  — 4.63:1 */
+  --cat-4:        #6e7b3d; --cat-4-fill: #e9ecce; /* celadon — 4.60:1 */
+  --cat-5:        #458160; --cat-5-fill: #cde9dc; /* mint    — 4.60:1 */
+  --cat-6:        #467c8e; --cat-6-fill: #c4dfe5; /* sky     — 4.63:1 */
 
   /* --- Effects --- */
   --focus-ring: #3f7fbf;          /* visible focus — high-contrast blue */

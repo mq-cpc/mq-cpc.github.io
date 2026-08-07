@@ -2,10 +2,14 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { nextTopic, totalDuration, isOptional, type RoadmapTopic } from '../../lib/roadmap';
 
 export async function getStaticPaths() {
   const topics = await getCollection('topics');
   const problems = await getCollection('problems');
+  const roadmap: RoadmapTopic[] = topics.map((t) => ({
+    slug: t.id, name: t.data.name, level: t.data.level, order: t.data.order,
+  }));
   return topics.map((topic) => ({
     params: { slug: topic.id },
     props: {
@@ -13,77 +17,267 @@ export async function getStaticPaths() {
       problems: problems
         .filter((p) => p.data.topic.id === topic.id)
         .sort((a, b) => a.data.order - b.data.order),
+      next: nextTopic(roadmap, topic.id),
     },
   }));
 }
 
-interface Props { topic: CollectionEntry<'topics'>; problems: CollectionEntry<'problems'>[] }
-const { topic, problems } = Astro.props as Props;
-const { Content } = await render(topic);
+interface Props {
+  topic: CollectionEntry<'topics'>;
+  problems: CollectionEntry<'problems'>[];
+  next: RoadmapTopic | null;
+}
+const { topic, problems, next } = Astro.props as Props;
+const { Content, headings } = await render(topic);
 const stroke = `var(--cat-${topic.data.color.slice(1)})`;
+const optional = isOptional(topic.data);
+
+// Videos live on the problem they teach; a topic only keeps the ones that
+// teach a concept with no problem attached.
+const conceptVideos = topic.data.videos;
+const allVideos = [...problems.flatMap((p) => p.data.videos), ...conceptVideos];
+const runtime = totalDuration(allVideos.map((v) => v.duration));
+
+const rows = await Promise.all(
+  problems.map(async (p) => ({
+    slug: p.id,
+    data: p.data,
+    // Explicit when the judge's URL does not carry the id (CodingBat's
+    // /prob/p145416 is not the problem name), otherwise the last URL segment,
+    // which is what Kattis uses and what kattis-cli takes.
+    kid: p.data.problemId ?? p.data.url.replace(/\/+$/, '').split('/').pop(),
+    Body: p.body && p.body.trim() ? (await render(p)).Content : null,
+  })),
+);
+
+// Hue by position within this page's own tag list, so no two tags on a page
+// ever share a colour.
+const pageTags = [...new Set(rows.flatMap((r) => r.data.tags))];
+const hueOf = (tag: string) => `var(--cat-${(pageTags.indexOf(tag) % 6) + 1})`;
+const counts = pageTags.map((t) => ({ tag: t, n: rows.filter((r) => r.data.tags.includes(t)).length }));
+
+const contents = [
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ id: h.slug, text: h.text })),
+  ...(conceptVideos.length > 0 ? [{ id: 'concepts', text: 'Concept videos' }] : []),
+  { id: 'problems', text: 'Problems' },
+];
+
 const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var(--warning)', hard: 'var(--danger)' };
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
-<Base title={`${topic.data.name} — MQ CP Club`}>
+<Base title={`${topic.data.name} — MQ CP Club`} description={topic.data.blurb}>
   <Header />
   <main class="mq-page mq-page--tight">
-    <a class="mono text-label text-ink-muted no-underline" href="/learn">← Learn / Roadmap</a>
-    <div class="pl-4 mt-4" style={`border-left:4px solid ${stroke};`}>
-      <h1 class="ps-h1">{topic.data.name}</h1>
-      <div class="text-ink mt-3"><Content /></div>
+    <a class="mono text-label text-ink-muted no-underline" href="/learn">← All topics</a>
+
+    <div class="mq-topic__rule mt-5" style={`border-top:3px solid ${stroke};`}></div>
+    <div class="mq-split mq-split--reading">
+      <div>
+        <div class="flex items-center gap-4 flex-wrap">
+          <h1 class="ps-h1">{topic.data.name}</h1>
+          {optional && <span class="ps-pill">optional</span>}
+        </div>
+        <div class="mono mq-topic__meta">
+          {problems.length > 0 && <span>{problems.length} problems</span>}
+          {allVideos.length > 0 && (
+            <span>{allVideos.length} {allVideos.length === 1 ? 'video' : 'videos'}</span>
+          )}
+          {runtime && <span>{runtime}</span>}
+        </div>
+        {optional && (
+          <p class="text-ink max-w-measure mt-3">
+            Supplementary — not a step on the roadmap, and safe to skip entirely.
+          </p>
+        )}
+        <div class="text-ink mt-3 max-w-measure"><Content /></div>
+      </div>
+
+      <aside class="mq-aside">
+        {contents.length > 0 && (
+          <nav class="mq-toc" aria-label="On this page">
+            <div class="mq-toc__title">On this page</div>
+            <ul class="mq-toc__list">
+              {contents.map((c) => (
+                <li><a class="mq-toc__link" href={`#${c.id}`}>{c.text}</a></li>
+              ))}
+            </ul>
+          </nav>
+        )}
+        {problems.length > 0 && (
+          <div class="mq-toc__stat">
+            <span class="mono">Solved</span>
+            <span
+              class="mono mq-toc__count"
+              data-progress-count="problem"
+              data-progress-format="short"
+              data-progress-ids={rows.map((r) => r.slug).join(',')}
+            >0/{problems.length}</span>
+          </div>
+        )}
+        {next && (
+          <a class="mq-toc__next mono" href={`/topics/${next.slug}`}>Next: {next.name} →</a>
+        )}
+      </aside>
     </div>
 
-    {topic.data.videos.length > 0 && (
+    {conceptVideos.length > 0 && (
       <>
-        <h2 class="ps-h3 mq-heading mq-heading--mt7">Video Tutorials</h2>
-        <div class="flex gap-4 overflow-x-auto pt-[2px] px-[2px] pb-4 [scroll-snap-type:x_proximity]">
-          {topic.data.videos.map((v) => (
-            <div class="video-card flex-[0_0_clamp(240px,58vw,300px)] [scroll-snap-align:start] cursor-pointer bg-surface border border-line rounded-lg overflow-hidden" data-yt={v.youtubeId}>
-              <div class="aspect-[16/9] relative bg-paper-sunk" data-yt-frame>
-                <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt={v.title} loading="lazy" class="w-full h-full object-cover block" />
-                <span class="absolute inset-0 grid place-items-center pointer-events-none">
-                  <span class="w-[46px] h-[46px] rounded-pill grid place-items-center border border-line-strong" style="background:color-mix(in srgb, var(--surface) 80%, transparent);"><span class="text-accent-text text-label-lg ml-[2px]">▶</span></span>
+        <h2 id="concepts" class="ps-h3 mq-heading mq-heading--mt8">Concept videos</h2>
+        <p class="text-ink max-w-measure mb-4">
+          These teach an idea rather than a specific problem. Everything else is attached to the
+          problem it walks through.
+        </p>
+        <ul class="mq-vgrid mq-grid-3" style={`--cols:${conceptVideos.length};`}>
+          {conceptVideos.map((v) => (
+            <li>
+              <a class="mq-vcard" href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noopener">
+                <span class="mq-vcard__frame">
+                  <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" />
+                  <span class="mq-vcard__play" aria-hidden="true">▶</span>
+                  {v.duration && <span class="mq-vcard__dur mono" aria-hidden="true">{v.duration}</span>}
                 </span>
-                {v.duration && <span class="mono absolute bottom-[6px] right-[6px] text-paper text-label py-[1px] px-[6px] rounded-sm" style="background:color-mix(in srgb, var(--ink-strong) 76%, transparent);">{v.duration}</span>}
-              </div>
-              <div class="py-3 px-4">
-                <div class="text-sm font-semibold text-ink-strong leading-[1.25]">{v.title}</div>
-                <div class="mono text-label text-ink-muted mt-[4px]">YouTube{v.channel ? ` · ${v.channel}` : ''}</div>
-              </div>
-            </div>
+                <span class="mq-vcard__meta">
+                  <span class="mq-vcard__label mono">Watch</span>
+                  <span class="mq-vcard__title">{v.title}</span>
+                </span>
+              </a>
+            </li>
           ))}
-        </div>
-        <script>
-          document.querySelectorAll('.video-card').forEach((card) => {
-            card.addEventListener('click', () => {
-              const id = card.getAttribute('data-yt');
-              const frame = card.querySelector('[data-yt-frame]');
-              if (!id || !frame || frame.dataset.playing) return;
-              frame.dataset.playing = '1';
-              frame.innerHTML =
-                '<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;" src="https://www.youtube-nocookie.com/embed/' +
-                id + '?autoplay=1" title="video" allow="autoplay; fullscreen" allowfullscreen></iframe>';
-            });
-          });
-        </script>
+        </ul>
       </>
     )}
 
-    <h2 class="ps-h3 mq-heading mq-heading--mt7">Problem set</h2>
-    <div class="border border-line rounded-lg overflow-x-auto bg-surface">
-      <div class="mono grid grid-cols-[36px_1fr_96px_168px_132px] gap-3 py-[11px] px-4 bg-paper-sunk border-b border-line text-label text-ink-muted uppercase">
-        <span>#</span><span>Problem</span><span>Difficulty</span><span>Links</span><span>Status</span>
-      </div>
-      {problems.map((p, i) => (
-        <div class="grid grid-cols-[36px_1fr_96px_168px_132px] gap-3 items-center py-[12px] px-4 border-b border-line" data-problem-id={p.id}>
-          <span class="mono text-ink-muted">{i + 1}</span>
-          <span class="text-ink-strong">{p.data.title}</span>
-          <span class="ps-pill" style={`color:${diffColor[p.data.difficulty]};border-color:transparent;`}>{p.data.difficulty}</span>
-          <span class="mono text-label flex gap-[12px]">
-            <a href={p.data.url} target="_blank" rel="noopener" class="text-accent-text">{p.data.judge} →</a>
-          </span>
-          <span class="mono text-label text-ink-muted" data-status-slot>— sign in —</span>
-        </div>
-      ))}
-    </div>
+    <h2 id="problems" class="ps-h3 mq-heading mq-heading--mt8">Problems</h2>
+    {problems.length === 0 ? (
+      <p class="text-ink max-w-measure">
+        No problems for this topic yet — pick another from the
+        <a class="mono text-accent-text no-underline" href="/learn"> roadmap</a>.
+      </p>
+    ) : (
+      <>
+        <p class="text-ink max-w-measure mb-4">
+          Each row is one problem with its walkthrough and notes. Tick them off as you solve them —
+          that is kept in this browser only.
+          {/* Only offer the Kattis primer where there is actually a Kattis
+              problem — this topic may send you to CodingBat or elsewhere. */}
+          {topic.id !== 'getting-started' && rows.some((r) => r.data.judge === 'Kattis') && (
+            <>
+              {' '}New to Kattis?{' '}
+              <a class="text-accent-text" href="/topics/getting-started#your-first-submission">
+                What happens when you submit →
+              </a>
+            </>
+          )}
+        </p>
+
+        {counts.length > 1 && (
+          <div class="mq-filters" role="group" aria-label="Filter by concept">
+            <button class="mq-chip is-on" data-filter="*" aria-pressed="true">
+              All <span class="mq-chip__n">{rows.length}</span>
+            </button>
+            {counts.map((c) => (
+              <button class="mq-chip" data-filter={c.tag} aria-pressed="false" style={`--tag:${hueOf(c.tag)};`}>
+                {c.tag} <span class="mq-chip__n">{c.n}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <ul class="mq-plist">
+          {rows.map((r, i) => (
+            <li class="mq-prob" data-tags={r.data.tags.join('|')}>
+              <button
+                class="mq-check"
+                data-progress-kind="problem"
+                data-progress-id={r.slug}
+                aria-pressed="false"
+                aria-label={`Mark "${r.data.title}" as solved`}
+              >✓</button>
+              {/* Native details, and the checkbox above is a SIBLING: an
+                  interactive control inside <summary> gets swallowed by the
+                  disclosure toggle. */}
+              <details class="mq-prob__d">
+                <summary class="mq-prob__sum">
+                  <span class="mq-prob__num mono">{pad(i + 1)}</span>
+                  <span class="mq-prob__title">{r.data.title}</span>
+                  {r.data.tags.map((t) => (
+                    <span class="mq-prob__tag mono" style={`--tag:${hueOf(t)};`}>{t}</span>
+                  ))}
+                  <span class="mq-prob__spacer"></span>
+                  <span class="mq-prob__meta">
+                    <span class="mono" style={`color:${diffColor[r.data.difficulty]};`}>{r.data.difficulty}</span>
+                    {r.data.videos.length > 0 && (
+                      <span class="mq-prob__has mono" title="Has a walkthrough">▶</span>
+                    )}
+                  </span>
+                </summary>
+
+                <div class={`mq-prob__body${r.data.videos.length ? '' : ' mq-prob__body--novideo'}`}>
+                  <div class="mq-prob__actions">
+                    <code class="mq-prob__id mono" title={`${r.data.judge} problem id`}>{r.kid}</code>
+                    <a class="ps-btn ps-btn--sm" href={r.data.url} target="_blank" rel="noopener">
+                      Solve on {r.data.judge} →
+                    </a>
+                  </div>
+
+                  {r.data.videos.map((v) => (
+                    <a class="mq-vcard" href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noopener">
+                      <span class="mq-vcard__frame">
+                        <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" />
+                        <span class="mq-vcard__play" aria-hidden="true">▶</span>
+                        {v.duration && <span class="mq-vcard__dur mono" aria-hidden="true">{v.duration}</span>}
+                      </span>
+                      <span class="mq-vcard__meta">
+                        <span class="mq-vcard__label mono">Watch</span>
+                        <span class="mq-vcard__title">{v.title}</span>
+                      </span>
+                    </a>
+                  ))}
+
+                  <div class="mq-prob__notes">
+                    {r.Body ? <r.Body /> : <p class="mq-prob__empty">No notes yet.</p>}
+                  </div>
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+
+    {next ? (
+      <a class="mq-next" href={`/topics/${next.slug}`}>
+        <span class="mono text-label text-ink-muted">Next in the roadmap</span>
+        <span class="mq-next__name">{next.name} →</span>
+      </a>
+    ) : (
+      <a class="mq-next" href="/learn">
+        <span class="mono text-label text-ink-muted">
+          {optional ? 'Back to the main path' : 'End of the roadmap'}
+        </span>
+        <span class="mq-next__name">All topics →</span>
+      </a>
+    )}
   </main>
+
+  <script>
+    import { initProgress } from '../../scripts/progress.ts';
+    initProgress();
+
+    const chips = document.querySelectorAll<HTMLButtonElement>('.mq-chip');
+    const items = document.querySelectorAll<HTMLElement>('.mq-prob');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const want = chip.dataset.filter!;
+        chips.forEach((c) => {
+          const on = c === chip;
+          c.classList.toggle('is-on', on);
+          c.setAttribute('aria-pressed', String(on));
+        });
+        items.forEach((li) => {
+          li.hidden = want !== '*' && !(li.dataset.tags ?? '').split('|').includes(want);
+        });
+      });
+    });
+  </script>
 </Base>

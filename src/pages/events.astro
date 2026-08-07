@@ -2,49 +2,90 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import EventCard from '../components/EventCard.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { parseTeamBoard } from '../lib/team-board';
 import boardRaw from '../data/team-board.json';
 
 const now = Date.now();
 const all = (await getCollection('events')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+// Event bodies carry the "who is this for" reassurance; render them alongside
+// the logistics rather than dropping them.
+const bodies = new Map(
+  await Promise.all(all.map(async (e) => [e.id, (await render(e)).Content] as const)),
+);
 const upcoming = all.filter((e) => e.data.date.getTime() >= now).reverse();
 const past = all.filter((e) => e.data.date.getTime() < now);
 const team = parseTeamBoard(boardRaw);
 const repoUrl = 'https://github.com/mq-cpc/web-app';
 ---
-<Base title="Events — MQ CP Club">
+<Base title="Events — MQ CP Club" description="Practice contests and meetups run by the MQ Competitive Programming Club, plus the board for finding teammates.">
   <Header />
   <main class="mq-page">
     <div class="mono mq-eyebrow">// EVENTS</div>
     <h1 class="ps-h1 mq-h1-gap">What's on</h1>
 
     <h2 class="ps-h2 mq-heading mq-heading--mt6">Upcoming</h2>
-    <div class="mq-grid-3">
-      {upcoming.length === 0 && <p class="mono text-ink-muted">Nothing scheduled right now.</p>}
-      {upcoming.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} />)}
-    </div>
+    {upcoming.length === 0 ? (
+      <div class="mq-empty">
+        <p class="mq-empty__text">
+          Nothing scheduled right now — new sessions are posted here as they're set.
+        </p>
+        <a class="mono mq-link" href="/learn">Work the roadmap in the meantime →</a>
+      </div>
+    ) : (
+      <div class="mq-grid-3">
+        {upcoming.map((e) => {
+          const Body = bodies.get(e.id)!;
+          return (
+            <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag}>
+              <Body />
+            </EventCard>
+          );
+        })}
+      </div>
+    )}
 
     {past.length > 0 && (
       <>
         <h2 class="ps-h2 mq-heading mq-heading--mt7">Past</h2>
         <div class="mq-grid-3">
-          {past.map((e) => <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} stroke="var(--line-strong)" />)}
+          {past.map((e) => {
+            const Body = bodies.get(e.id)!;
+            return (
+              <EventCard title={e.data.title} date={e.data.date} location={e.data.location} tag={e.data.tag} stroke="var(--line-strong)">
+                <Body />
+              </EventCard>
+            );
+          })}
         </div>
       </>
     )}
 
     <h2 class="ps-h2 mq-heading mq-heading--mt7">Looking for a team</h2>
-    <p class="text-ink max-w-measure">The board is just a JSON file in the club repo — no logins, no server. Add an entry, open a PR, and you'll appear here once it's merged.</p>
-    <div class="mq-grid-2 mt-4">
-      {team.map((t) => (
-        <div class="ps-card ps-card--accent">
-          <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-label text-ink-muted">@{t.handle}</span></div>
-          <div class="text-ink text-sm">{t.looking}</div>
-          <div class="mono mq-eyebrow">{t.contact}</div>
+    {team.length === 0 ? (
+      <div class="mq-empty">
+        <p class="mq-empty__text">
+          Nobody's on the board yet. Add your name and what you're looking for in a teammate,
+          and it shows up here once a committee member merges it.
+        </p>
+      </div>
+    ) : (
+      <>
+        <p class="text-ink max-w-measure">
+          The board is just a JSON file in the club repo — no logins, no server. Add an entry,
+          open a pull request, and you appear here once a committee member merges it.
+        </p>
+        <div class="mq-grid-2 mt-4">
+          {team.map((t) => (
+            <div class="ps-card ps-card--accent">
+              <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-label text-ink-muted">@{t.handle}</span></div>
+              <div class="text-ink text-sm">{t.looking}</div>
+              <div class="mono mq-eyebrow">{t.contact}</div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </>
+    )}
     <div class="flex items-center gap-4 flex-wrap mt-4">
       <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener">Add yourself with a pull request →</a>
       <a class="mono mq-link" href="/contribute">New here? How to add yourself →</a>

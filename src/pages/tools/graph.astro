@@ -34,6 +34,9 @@ import '../../styles/graph-tool.css';
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
   </head>
   <body class="mqcp">
+    {/* The page rendered no h1 at all, so its outline started at the shortcuts
+        dialog's h2. Visually hidden because the canvas is the interface. */}
+    <h1 class="sr-only">Graph visualiser, MQ CP Club</h1>
     <div class="stage">
       <svg id="board" class="board" role="application" aria-label="Graph drawing canvas">
         <defs>
@@ -46,15 +49,18 @@ import '../../styles/graph-tool.css';
         <g id="nodes"></g>
       </svg>
 
-      <div class="brand">
-        <div class="brand__mark" aria-hidden="true">△</div>
+      {/* One identity across the site: the same {} mark and ◐ toggle as the
+          main header, and the brand is a link home. The tool used to be a
+          one-way trip with no route back. */}
+      <a class="brand" href="/" aria-label="MQ CP Club home">
+        <div class="brand__mark" aria-hidden="true">{'{}'}</div>
         <div>
           <div class="brand__name">Graph</div>
           <div class="brand__sub">whiteboard</div>
         </div>
-      </div>
+      </a>
 
-      <button class="icon-btn theme-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">☾</button>
+      <button class="icon-btn theme-btn" id="theme-toggle" title="Switch to dark theme" aria-label="Switch to dark theme">◐</button>
       <button class="icon-btn help-btn" id="help-toggle" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">?</button>
 
       <div class="hint">

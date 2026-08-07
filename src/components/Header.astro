@@ -13,15 +13,17 @@ const path = Astro.url.pathname;
   <a href="/" class="mq-logo">
     <span class="mq-logo__mark">{'{}'}</span>
     <span class="mq-logo__text">
-      <span class="mq-logo__name">MQ Competitive Programming Club</span>
-      <span class="mq-logo__sub">acm.icpc · macquarie</span>
+      <span class="mq-logo__name mq-logo__name--full">MQ Competitive Programming Club</span>
+      <span class="mq-logo__name mq-logo__name--short">MQ CP Club</span>
+      <span class="mq-logo__sub">macquarie university</span>
     </span>
   </a>
 
   <span class="mq-topbar__spacer"></span>
 
-  <button class="ps-btn ps-btn--sm w-[34px] h-[34px] p-0 rounded-md" data-theme-toggle title="Toggle theme">
-    <span class="text-label-lg">◐</span>
+  <button class="ps-btn ps-btn--sm w-[34px] h-[34px] p-0 rounded-md" data-theme-toggle
+          title="Switch to dark theme" aria-label="Switch to dark theme">
+    <span class="text-label-lg" aria-hidden="true">◐</span>
   </button>
 
   {/* Sign-in with GitHub is hidden until auth is supported — keep the markup for later.

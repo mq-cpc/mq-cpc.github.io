@@ -17,7 +17,20 @@
    --space-* tokens open up together, and let pages fill the window
    instead of capping at the design system's 1100px column. */
 html { font-size: 17px; }
-:root { --content-max: 100%; }
+/* The shell width, gutters included. Was 100%, which meant `margin: 0 auto`
+   centred nothing and every page's slack piled up on the right — and because
+   the prose measure is a fixed 64ch, the proportion of the screen actually
+   carrying content FELL as the monitor got wider (76% at 1280, 50% at 1920,
+   37% at 2560). Capping holds it constant and makes the leftover symmetric. */
+:root {
+  --content-max: 1600px;
+  /* The prose measure, as a plain custom property. Two rules referenced
+     var(--measure, …) and it was never defined anywhere, so they were always
+     taking the fallback. 70ch sits inside the 65–75ch readable band; 64ch was
+     under it. Keep in step with --container-measure in tailwind.css, which
+     backs the max-w-measure utility. */
+  --measure: 70ch;
+}
 .mqcp ::selection { background: var(--selection-bg); }
 .mqcp ::-webkit-scrollbar { width: 10px; height: 10px; }
 .mqcp ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 2px solid var(--paper); }
@@ -48,12 +61,27 @@ html { font-size: 17px; }
   display: flex;
   align-items: center;
   gap: var(--space-5);
-  padding: var(--space-3) var(--space-6);
+  /* The bar spans the viewport (it carries the border and the blur) but its
+     CONTENTS sit on the same column as the page below, so the logo lines up
+     with the h1. The +space-6 accounts for .mq-page's own gutter. */
+  padding-block: var(--space-3);
+  padding-inline: max(var(--space-6), calc((100% - var(--content-max)) / 2 + var(--space-6)));
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(10px);
   background: color-mix(in srgb, var(--surface) 86%, transparent);
 }
 .mq-topbar__spacer { flex: 1; }
+
+/* The theme toggle reads as a 34px square (the documented control height) but
+   needs a bigger finger target. A pseudo-element grows the hit area to 44px
+   without changing a single visible pixel or breaking the button scale. */
+[data-theme-toggle] { position: relative; }
+[data-theme-toggle]::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+}
 
 /* Brand lockup: the {} mark + two-line wordmark. */
 .mq-logo { display: flex; align-items: center; gap: var(--space-3); cursor: pointer; text-decoration: none; }
@@ -69,7 +97,9 @@ html { font-size: 17px; }
   font-weight: 700;
   font-size: var(--text-label-lg);
 }
-.mq-logo__text { display: flex; flex-direction: column; line-height: 1.05; }
+/* line-height stays tight so each line sets solid; the gap separates the two
+   siblings instead, which is the relationship that actually needs the space. */
+.mq-logo__text { display: flex; flex-direction: column; gap: var(--space-1); line-height: 1.05; }
 .mq-logo__name {
   font-family: var(--font-display);
   font-weight: 600;
@@ -78,6 +108,10 @@ html { font-size: 17px; }
   color: var(--ink-strong);
   white-space: nowrap;
 }
+/* Two wordmarks, one shown at a time. `display:none` drops the hidden one from
+   the accessibility tree too, so a screen reader never hears the name twice.
+   The short form is the same one already used in every page <title>. */
+.mq-logo__name--short { display: none; }
 .mq-logo__sub {
   font-family: var(--font-label);
   font-size: var(--text-label);
@@ -95,21 +129,27 @@ html { font-size: 17px; }
 .mq-nav__inner {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-5);
   width: 100%;
-  max-width: var(--content-max);
+  /* The content column, not the shell: --content-max includes the gutters that
+     .mq-nav already applies as padding. */
+  max-width: calc(var(--content-max) - var(--space-6) * 2);
 }
 
 /* Nav link + its active/hover underline indicator (from the design comp). */
+/* Horizontal padding exists for the tap target, not the look: the link text
+   alone is a ~50x20px hit area on a phone. The gap shrinks by the same amount
+   so the visual rhythm is unchanged. */
 .mq-navlink {
   position: relative;
-  padding: var(--space-3) 0;
+  padding: var(--space-3) var(--space-2);
   font-family: var(--font-label);
   font-size: var(--text-label-lg);
   letter-spacing: 0.02em;
   color: var(--ink);
   text-decoration: none;
   cursor: pointer;
+  white-space: nowrap;
   transition: color 0.16s ease;
 }
 /* Active/hovered link text picks up the accent, matching the underline. */
@@ -173,6 +213,17 @@ html { font-size: 17px; }
 
 /* <main> wrapper (most pages: space-7 top padding). */
 .mq-page {
+  /* border-box so --content-max means the outer shell, gutters included — the
+     same figure the topbar and footer align against. Preflight is off, so this
+     has to be stated; nothing sets it globally. */
+  box-sizing: border-box;
+  /* width:100% is load-bearing. <body> is a column flex container (for the
+     sticky footer), so .mq-page is a flex item whose cross axis is horizontal.
+     `align-self: stretch` does NOT apply to an item with an auto inline margin,
+     so `margin: 0 auto` alone made this shrink-to-fit its widest child — every
+     page ended up a different width (709px on /resources, 1235px on /tools at
+     a 1920 viewport) and max-width never bound. */
+  width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--space-7) var(--space-6) var(--space-8);
@@ -212,16 +263,855 @@ html { font-size: 17px; }
 .mq-heading--mt8 { margin: var(--space-8) 0 var(--space-4); }
 .mq-heading--mb4 { margin-bottom: var(--space-4); }
 
-/* Repeated card/section grids. */
+/* Repeated card/section grids.
+   auto-fill + a minimum track, not a fixed column count: the same rule then
+   serves a phone (one column) and a wide monitor.
+
+   auto-FIT, not auto-fill: auto-fill keeps empty tracks alive, so three cards
+   in a 1532px row still reserved five slots and left ~610px of holes. auto-fit
+   collapses the empty ones so the items divide the row. Where a section can
+   hold a single item, cap the container instead (see .mq-vgrid) — otherwise
+   one card stretches across the whole page. */
 .mq-grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: var(--space-4);
 }
 .mq-grid-2 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
   gap: var(--space-4);
+}
+
+/* ===== Reference notebook code blocks (resources.astro) =====
+   `.mqcp-code` was referenced in the markup with no rule anywhere, so these
+   blocks fell back to whatever Shiki inlined. Shiki now emits --shiki-light /
+   --shiki-dark per token (see astro.config.mjs) and the surface comes from the
+   design tokens, so the block themes with the rest of the site instead of
+   importing GitHub's. */
+.mqcp-code,
+.mq-nb__body pre.astro-code {
+  /* Sized to the longest line, not to the page — a 60-character snippet was
+     being stretched across 1532px of surface. Still scrolls internally when a
+     line is genuinely longer than the column. */
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper-sunk);
+  overflow: hidden;
+}
+.mqcp-code pre,
+.mq-nb__body pre.astro-code {
+  margin: 0 0 var(--space-4); /* preflight is off, so <pre> keeps its 1em UA margin */
+  padding: var(--space-4);
+  overflow-x: auto;
+  background: var(--paper-sunk) !important;
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  line-height: 1.6;
+}
+.mqcp-code .astro-code,
+.mqcp-code .astro-code span,
+.mq-nb__body .astro-code,
+.mq-nb__body .astro-code span { color: var(--shiki-light); }
+[data-theme='indigo'] .mq-nb__body .astro-code,
+[data-theme='indigo'] .mq-nb__body .astro-code span { color: var(--shiki-dark); }
+[data-theme='indigo'] .mqcp-code .astro-code,
+[data-theme='indigo'] .mqcp-code .astro-code span { color: var(--shiki-dark); }
+
+/* ===== Tool rows (tools.astro) ===== */
+.mq-tools { list-style: none; margin: var(--space-6) 0 0; padding: 0; }
+.mq-tool {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+/* No identity stripe here, unlike topic and event cards. DESIGN.md's stripe
+   encodes *which thing this is* — a topic's hue, an event's status. A tool list
+   has no categories, so a stripe would distinguish nothing from nothing; the
+   primary button already carries the accent. */
+.mq-tool + .mq-tool { margin-top: var(--space-4); }
+.mq-tool__text { flex: 1 1 22rem; }
+.mq-tool__name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-strong);
+}
+.mq-tool__blurb {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink);
+  /* No measure cap: this is a one-line description in a flex row, not a reading
+     column, and capping it left a gap between the text and the button. */
+}
+
+/* ===== Reference notebook =====
+   A section index of cards, a page per section, and one page that prints the
+   lot. The printed copy is the artefact — a team is allowed a paper reference
+   at a contest, so the screen layout has to fold down to something readable in
+   black and white. */
+.mq-cats { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4);
+           grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+/* The li stretches (grid default) and the card fills it via flex. `height:100%`
+   on the card resolved against an auto-height parent and overflowed its own
+   grid cell, so the content below it was overlapped. */
+.mq-cats > li { display: flex; }
+.mq-cat {
+  display: flex; flex-direction: column; gap: var(--space-3); flex: 1;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--cat, var(--accent));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  transition: box-shadow var(--dur-mid) var(--ease-out),
+              border-color var(--dur-mid) var(--ease-out),
+              transform var(--dur-mid) var(--ease-out);
+}
+.mq-cat:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.mq-cat__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.mq-cat__name {
+  font-family: var(--font-display); font-size: var(--text-lg);
+  font-weight: var(--weight-semibold); color: var(--ink-strong); line-height: var(--leading-tight);
+}
+.mq-cat__n { font-size: var(--text-label); color: var(--ink-muted); white-space: nowrap; }
+.mq-cat__blurb { font-size: var(--text-sm); color: var(--ink); flex: 1; }
+.mq-cat__foot { display: flex; align-items: center; gap: var(--space-3); }
+.mq-cat__lang {
+  font-size: var(--text-label); color: var(--ink);
+  padding: 2px var(--space-3); border-radius: var(--radius-pill);
+  background: var(--paper-sunk); border: 1px solid var(--line);
+}
+.mq-cat__go { margin-left: auto; font-size: var(--text-label); color: var(--accent-text); }
+
+.mq-nb__head { margin-top: var(--space-5); }
+.mq-nb__stamp { font-size: var(--text-label); color: var(--ink-muted); margin: var(--space-2) 0 0; }
+.mq-nb__section { margin-top: var(--space-8); }
+.mq-nb__section-title {
+  margin: 0 0 var(--space-5);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--cat, var(--line-strong));
+  font-family: var(--font-display); font-size: var(--text-xl);
+  font-weight: var(--weight-semibold); color: var(--ink-strong);
+}
+/* Two columns on a wide screen: these entries are short and stacking them
+   single-file wastes the width and lengthens the printout. */
+.mq-nb { display: grid; gap: var(--space-6) var(--space-7); align-items: start;
+         grid-template-columns: repeat(auto-fit, minmax(min(34rem, 100%), 1fr)); }
+.mq-nb__entry { break-inside: avoid; page-break-inside: avoid; }
+.mq-nb__title {
+  display: flex; align-items: baseline; gap: var(--space-3);
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display); font-size: var(--text-md);
+  font-weight: var(--weight-semibold); color: var(--ink-strong);
+}
+.mq-nb__lang { font-size: var(--text-label); color: var(--ink-muted); font-weight: var(--weight-regular); }
+.mq-nb__blurb { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--ink-muted); }
+.mq-nb__body > :first-child { margin-top: 0; }
+.mq-nb__body > :last-child { margin-bottom: 0; }
+.mq-nb__body p { font-size: var(--text-sm); max-width: var(--measure); }
+.mq-nb__body ul { font-size: var(--text-sm); padding-left: var(--space-5); }
+.mq-nb__body code:not(pre code) {
+  font-family: var(--font-label); font-size: 0.92em;
+  background: var(--paper-sunk); border-radius: var(--radius-sm); padding: 1px 4px;
+}
+.mq-toc__print { margin-top: var(--space-4); margin-left: var(--space-4); }
+
+.mq-links { border-left: 2px solid var(--group, var(--line-strong)); padding-left: var(--space-4); }
+.mq-links + .mq-links { margin-top: var(--space-4); }
+.mq-links__cat {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  color: var(--ink-strong);
+  margin-bottom: var(--space-2);
+}
+.mq-links__link {
+  display: block;
+  font-size: var(--text-label);
+  color: var(--accent-text);
+  text-decoration: none;
+  padding: var(--space-1) 0;
+}
+.mq-links__link:hover { text-decoration: underline; }
+
+/* ===== Print =====
+   ICPC teams are allowed a printed reference, so printing this site means
+   printing the notebook — not the nav, not the curated links, and not a dark
+   theme's worth of toner. Forcing the light roles here covers both themes. */
+@media print {
+  :root,
+  [data-theme='indigo'] {
+    --paper: #ffffff;
+    --paper-sunk: #ffffff;
+    --surface: #ffffff;
+    --ink-strong: #000000;
+    --ink: #1a1a1a;
+    --ink-muted: #444444;
+    --line: #cccccc;
+    --line-strong: #999999;
+    --accent-text: #000000;
+  }
+  .mq-topbar,
+  .mq-nav,
+  .mq-footer,
+  .mq-noprint { display: none !important; }
+
+  .mq-page { padding: 0; max-width: 100%; }
+  .mqcp-code,
+  .mq-nb__body pre.astro-code {
+    border-color: var(--line-strong);
+    background: #fff !important;
+    page-break-inside: avoid; break-inside: avoid;
+  }
+  .mqcp-code .astro-code,
+  .mqcp-code .astro-code span,
+  .mq-nb__body .astro-code,
+  .mq-nb__body .astro-code span { color: var(--shiki-light) !important; }
+  h1, h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
+
+  /* The printed notebook: tighter than the screen so a section fits fewer
+     pages, and two columns because these entries are short. */
+  .mq-nb { grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+  .mq-nb__entry { break-inside: avoid; page-break-inside: avoid; }
+  .mq-nb__section { margin-top: var(--space-6); break-before: page; page-break-before: always; }
+  .mq-nb__section:first-of-type { break-before: auto; page-break-before: auto; }
+  /* Points, not pixels: this is a physical page, and the screen type ramp
+     does not govern how many lines fit on A4. */
+  .mq-nb__body pre.astro-code { font-size: 7.5pt; line-height: 1.45; padding: var(--space-3); }
+  .mq-topic__rule, .mq-split .mq-aside { display: none; }
+}
+
+/* ===== Two-column page composition =====
+   The site was full-bleed with every prose block capped at ~64ch, so on a wide
+   monitor the text was a narrow ribbon against a field of empty paper. A measure
+   cap is right for reading; what was missing is something occupying the rest of
+   the width. This is that: main column plus a sticky companion, collapsing to a
+   single column (main, then aside) below the breakpoint — which also puts the
+   "next topic" link at the natural place on a phone.
+
+   --sticky-top clears the sticky topbar (~3.5rem tall) plus breathing room. */
+:root { --sticky-top: 5rem; }
+
+.mq-split {
+  display: grid;
+  /* minmax(0,1fr), not the implicit `auto`: a grid item's min-width defaults to
+     auto, so a wide child (the code block) pushed the single stacked column
+     past the viewport and the whole page scrolled sideways on a phone. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+@media (min-width: 1080px) {
+  .mq-split {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    gap: var(--space-7);
+  }
+  /* Reading variant: the content column is the measure itself, so the prose
+     fills it and the rail sits right beside the text instead of being pushed
+     to the far edge with a void between them. The band is then left-aligned
+     and deliberately narrower than the full-width grid and table below it —
+     a reading band next to work bands. */
+  .mq-split--reading {
+    grid-template-columns: minmax(0, var(--measure)) 19rem;
+    justify-content: start;
+  }
+  /* The identity stripe belongs to the reading band, so it ends where the band
+     ends rather than running on past the rail into empty paper. */
+  .mq-topic__rule { max-width: calc(var(--measure) + 19rem + var(--space-7)); }
+  /* Scoped to the split: an aside outside one has no travel to stick through. */
+  .mq-split > .mq-aside { position: sticky; top: var(--sticky-top); }
+}
+
+.mq-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.mq-panel__rule { height: 1px; background: var(--line); }
+.mq-panel__title {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+/* Key/value rows: label left, figure right, baselines aligned. */
+.mq-stat { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); }
+.mq-stat__k { font-family: var(--font-label); font-size: var(--text-label); color: var(--ink-muted); }
+.mq-stat__v {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-strong);
+}
+.mq-stat__v[data-done='1'] { color: var(--success); }
+
+/* The cap belongs to the STACKED state only. A panel inside a split is already
+   bounded by the 19rem sidebar; a standalone panel should use the width it has,
+   and capping it universally was squeezing /resources and /contribute to
+   442px. Below the split breakpoint the aside goes full-bleed and .mq-stat's
+   space-between would otherwise throw key and value ~900px apart. */
+@media (max-width: 1079px) {
+  .mq-split .mq-panel { max-width: 26rem; }
+}
+
+/* Groups inside a panel: one column in a sidebar, several when the panel is
+   standing on its own at full width. Same markup either way. */
+.mq-panel__groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: var(--space-5);
+}
+
+/* ===== Empty state =====
+   A page with nothing in it was rendering as a couple of 544px lines adrift in
+   a 1532px field, which reads as broken rather than as "nothing here yet".
+   Given a surface and the full width, emptiness looks deliberate. */
+.mq-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.mq-empty__text { margin: 0; max-width: 56ch; color: var(--ink); }
+
+/* Field glossary in a companion panel. Preflight is off, so <dl> keeps its UA
+   margin and <dd> its 40px indent unless reset. */
+/* Grid, not a single column: in a sidebar this is one column, but in a
+   full-width panel a stacked list left ~900px of the box empty. */
+.mq-fields {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-4) var(--space-5);
+}
+.mq-fields dt { font-size: var(--text-label); color: var(--accent-text); }
+.mq-fields dd { margin: 2px 0 0; font-size: var(--text-sm); color: var(--ink); }
+
+/* ===== Footer (components/Footer.astro) =====
+   Sits on the sunk paper so it reads as the end of the page rather than another
+   surface. Pushed to the bottom of short pages by the flex column on <body>. */
+.mq-footer {
+  /* Was --space-8, which combined with .mq-page's --space-8 bottom padding to
+     make 136px — the largest interval on the site was the emptiest one, and it
+     out-shouted every real section break. */
+  margin-top: var(--space-7);
+  border-top: 1px solid var(--line);
+  background: var(--paper-sunk);
+}
+.mq-footer__inner {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+.mq-footer__brand { display: flex; align-items: center; gap: var(--space-3); }
+.mq-footer__name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-label-lg);
+  color: var(--ink-strong);
+}
+.mq-footer__sub { font-size: var(--text-label); color: var(--ink-muted); }
+.mq-footer__nav {
+  display: flex;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  flex: 1;
+}
+.mq-footer__link {
+  font-size: var(--text-label);
+  color: var(--ink);
+  text-decoration: none;
+  padding: var(--space-1) 0;
+}
+.mq-footer__link:hover { color: var(--accent-text); }
+.mq-footer__meta { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.mq-footer__meet { font-family: var(--font-label); font-size: var(--text-label); color: var(--ink); }
+
+/* Keep the footer at the bottom of the viewport on short pages. */
+body.ps-page { min-height: 100dvh; display: flex; flex-direction: column; }
+body.ps-page > main { flex: 1; }
+
+@media (max-width: 720px) {
+  .mq-footer__inner { padding: var(--space-5) var(--space-4); gap: var(--space-4); }
+}
+
+/* ===== Roadmap spine (learn.astro) =====
+   /learn used to be three fixed-width card grids, which meant the Intermediate
+   and Advanced bands each showed one card stranded in a 3-wide track. The page
+   holds an ordered curriculum, so it is drawn as one: a continuous thread with
+   a numbered node per topic. */
+.mq-level { margin-top: var(--space-7); }
+.mq-level__head { margin: 0 0 var(--space-4); }
+.mq-level__title {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0;
+}
+.mq-level__note {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  max-width: 34ch;
+}
+.mq-spine { list-style: none; margin: 0; padding: 0; }
+.mq-spine__item {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: var(--space-4);
+  position: relative;
+  padding-bottom: var(--space-5);
+}
+/* The thread. Drawn from the node down to the next item; the last item in a
+   level stops short so the line does not dangle. */
+.mq-spine__item::before {
+  content: '';
+  position: absolute;
+  left: calc(2.25rem / 2 - 1px);
+  top: 2.25rem;
+  bottom: 0;
+  width: 2px;
+  background: var(--line-strong);
+}
+.mq-spine__item:last-child::before { display: none; }
+.mq-spine__node {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-label);
+  font-weight: var(--weight-medium);
+  color: var(--surface);
+  flex: none;
+}
+.mq-spine__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--dur-mid) var(--ease-out),
+              border-color var(--dur-mid) var(--ease-out),
+              transform var(--dur-mid) var(--ease-out);
+}
+.mq-spine__body:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+.mq-spine__name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-strong);
+  line-height: var(--leading-tight);
+}
+/* An optional topic keeps its place in the list but not a number — a hollow
+   node in the topic's own hue, so the sequence still reads 01, 02, 03. */
+.mq-spine__node--optional {
+  background: transparent;
+  border: 2px solid var(--line-strong);
+}
+.mq-spine__opt { align-self: center; }
+.mq-spine__blurb { font-size: var(--text-sm); color: var(--ink); }
+.mq-spine__meta {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+}
+/* Turns accent once every problem in the topic is ticked off. */
+.mq-spine__count[data-done='1'] { color: var(--success); }
+
+/* Housekeeping line under the roadmap. */
+.mq-learn__note {
+  margin: var(--space-7) 0 0;
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+}
+.mq-learn__reset {
+  border: 0;
+  background: none;
+  padding: 0;
+  margin-left: var(--space-2);
+  font: inherit;
+  color: var(--accent-text);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.mq-learn__reset:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 720px) {
+  .mq-spine__item { grid-template-columns: 1.75rem 1fr; gap: var(--space-3); }
+  .mq-spine__item::before { left: calc(1.75rem / 2 - 1px); top: 1.75rem; }
+  .mq-spine__node { width: 1.75rem; height: 1.75rem; }
+  .mq-spine__body { padding: var(--space-4); }
+}
+
+/* Wide screens: the level label moves out to a left rail instead of sitting
+   above the group, and each topic row spreads into name/blurb + right-aligned
+   figures. The thread stays a single sequential column — running the spine
+   two-up would put topic 3 under topic 1, which contradicts the reading order
+   the page exists to communicate. */
+@media (min-width: 1080px) {
+  .mq-level {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+    margin-top: var(--space-6);
+  }
+  .mq-level__head { margin: 0.55rem 0 0; text-align: right; }
+  .mq-level__note { margin-left: auto; }
+  .mq-spine__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-6);
+    align-items: center;
+    padding: var(--space-5);
+  }
+  .mq-spine__name,
+  .mq-spine__blurb { grid-column: 1; }
+  .mq-spine__meta {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-1);
+    text-align: right;
+  }
+}
+
+/* ===== Next-topic link =====
+   The roadmap claimed an order and then dead-ended at the bottom of every
+   topic. This is the continuation. */
+/* ===== Topic contents rail =====
+   Not a bordered panel: this is navigation sitting in margin space, and giving
+   it a surface would make it compete with the title it sits beside. A hairline
+   on the left is enough to read it as a separate column. */
+.mq-topic__rule { height: 0; }
+.mq-toc { border-left: 1px solid var(--line-strong); padding-left: var(--space-4); }
+.mq-toc__title {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-3);
+}
+.mq-toc__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.mq-toc__link {
+  font-size: var(--text-sm);
+  color: var(--ink);
+  text-decoration: none;
+  display: block;
+}
+.mq-toc__link:hover { color: var(--accent-text); }
+.mq-toc__stat {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding-left: var(--space-4);
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+}
+.mq-toc__count { color: var(--ink-strong); }
+.mq-toc__count[data-done='1'] { color: var(--success); }
+.mq-toc__next {
+  display: block;
+  margin-top: var(--space-4);
+  padding-left: var(--space-4);
+  font-size: var(--text-label);
+  color: var(--accent-text);
+  text-decoration: none;
+}
+.mq-toc__next:hover { text-decoration: underline; }
+
+/* Topic meta line: the counts, as text under the title, instead of a panel. */
+.mq-topic__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: var(--text-label);
+  color: var(--ink-muted);
+}
+.mq-topic__meta > * + *::before {
+  content: '·';
+  margin-right: var(--space-3);
+  color: var(--line-strong);
+}
+
+.mq-next {
+  /* Full-width now that it sits below the content rather than in the sidebar,
+     so it reads as a bar: label left, destination right. */
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-8);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out);
+}
+.mq-next:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+/* A `w-full` utility cannot do this: .ps-btn is unlayered and Tailwind
+   utilities live in the `utilities` layer, so the component always wins
+   (CLAUDE.md gotcha 1). Widening the CTA has to be plain CSS. */
+.mq-aside .ps-btn { width: 100%; }
+.mq-next__name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-strong);
+}
+
+/* ===== Progress checkbox =====
+   A real <button aria-pressed>, not a checkbox input: nothing is submitted and
+   the state is local. Sized to the 1.75rem track, with a hit area padded out
+   past its visible box. */
+.mq-check {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: transparent;
+  font-size: var(--text-label);
+  line-height: 1;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+.mq-check::after {
+  content: '';
+  position: absolute;
+  inset: -0.6rem;
+}
+.mq-check:hover { border-color: var(--ink-muted); }
+.mq-check[data-done='1'] {
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--surface);
+}
+.mq-check:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* The row dims once solved so an eye scanning the table lands on what is left. */
+.mq-prob:has(.mq-check[data-done='1']) .mq-prob__title { color: var(--ink-muted); }
+
+/* ===== Problem list (topics/[slug].astro) =====
+   One accordion replaces the old split of a video grid plus a problem table.
+   The problem is the unit: its walkthrough, notes and judge link were never
+   separate things, and presenting them as two lists made students look in two
+   places for one task. */
+.mq-filters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); }
+.mq-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-label); font-size: var(--text-label);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-pill);
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.mq-chip::before {
+  content: ''; width: 8px; height: 8px; border-radius: var(--radius-pill);
+  background: var(--tag, var(--ink-muted));
+}
+.mq-chip__n { color: var(--ink-muted); }
+.mq-chip.is-on { background: var(--ink-strong); color: var(--paper); border-color: var(--ink-strong); }
+.mq-chip.is-on .mq-chip__n { color: var(--paper); }
+.mq-chip:focus-visible { outline: var(--border-thick) solid var(--focus-ring); outline-offset: 2px; }
+
+.mq-plist {
+  list-style: none; margin: 0; padding: 0;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface); overflow: hidden;
+}
+.mq-prob {
+  display: grid; grid-template-columns: 1.75rem 1fr; gap: var(--space-3);
+  align-items: start; padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+.mq-prob:last-child { border-bottom: 0; }
+.mq-prob[hidden] { display: none; }
+.mq-prob__d { min-width: 0; }
+
+/* Title and tag stay together and bounded; difficulty and the walkthrough
+   marker stay right-aligned as a column you scan vertically. */
+.mq-prob__sum {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 24rem) max-content 1fr max-content;
+  gap: var(--space-3); align-items: center;
+  cursor: pointer; list-style: none;
+}
+.mq-prob__sum::-webkit-details-marker { display: none; }
+.mq-prob__sum:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring); outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.mq-prob__num { font-size: var(--text-label); color: var(--ink-muted); }
+.mq-prob__title { color: var(--ink-strong); }
+.mq-prob__tag {
+  font-size: var(--text-label); color: var(--ink);
+  padding: 2px var(--space-3); border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--tag) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag) 45%, transparent);
+  white-space: nowrap;
+}
+.mq-prob__meta { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-label); }
+.mq-prob__has { color: var(--accent-text); }
+
+/* Action row spans both columns; below it the walkthrough sits left and the
+   notes right, tops aligned. */
+.mq-prob__body {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, var(--measure));
+  justify-content: start;
+  gap: var(--space-4) var(--space-5);
+  align-items: start;
+  padding: var(--space-4) 0 var(--space-4) 2.75rem;
+}
+.mq-prob__body--novideo { grid-template-columns: minmax(0, var(--measure)); }
+.mq-prob__actions { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+/* The id is near-redundant with the title while browsing and essential while
+   submitting, so it sits with the action rather than in the list. */
+.mq-prob__id {
+  font-size: var(--text-label); color: var(--ink-strong);
+  background: var(--paper-sunk); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill); padding: 4px var(--space-3);
+  user-select: all; cursor: text;
+}
+.mq-prob__notes { min-width: 0; font-size: var(--text-sm); color: var(--ink); }
+.mq-prob__notes > :first-child { margin-top: 0; }
+.mq-prob__notes > :last-child { margin-bottom: 0; }
+.mq-prob__empty { color: var(--ink-muted); margin: 0; }
+
+/* ===== Video card =====
+   Used both inside a problem and in a topic's concept-video grid. The play
+   target and runtime chip are the conventions that say "video" rather than
+   "picture". */
+.mq-vgrid { list-style: none; margin: 0; padding: 0; max-width: calc(var(--cols, 99) * 23rem); }
+.mq-vcard {
+  display: block; text-decoration: none; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.mq-vcard:hover { border-color: var(--accent); }
+.mq-vcard__frame { display: block; position: relative; aspect-ratio: 16/9; background: var(--paper-sunk); }
+.mq-vcard__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mq-vcard__play {
+  position: absolute; inset: 0; margin: auto;
+  width: 44px; height: 44px; border-radius: var(--radius-pill);
+  display: grid; place-items: center; padding-left: 3px;
+  background: color-mix(in srgb, var(--ink-strong) 72%, transparent);
+  color: #fff; font-size: 15px;
+}
+.mq-vcard:hover .mq-vcard__play { background: var(--accent); }
+.mq-vcard__dur {
+  position: absolute; right: 6px; bottom: 6px;
+  padding: 1px 6px; border-radius: var(--radius-sm);
+  font-size: var(--text-label); color: #fff;
+  background: color-mix(in srgb, var(--ink-strong) 80%, transparent);
+}
+.mq-vcard__meta { display: block; padding: var(--space-2) var(--space-3); }
+.mq-vcard__label { display: block; font-size: var(--text-label); color: var(--accent-text); letter-spacing: var(--tracking-wide); }
+.mq-vcard__title { display: block; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--ink-strong); line-height: 1.25; }
+
+@media (max-width: 900px) {
+  .mq-prob__body,
+  .mq-prob__body--novideo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .mq-prob__sum { grid-template-columns: 1.75rem minmax(0, 1fr) max-content; row-gap: var(--space-2); }
+  .mq-prob__tag { grid-column: 2 / -1; justify-self: start; }
+  .mq-prob__spacer { display: none; }
+  .mq-prob__body { padding-left: 0; }
+}
+
+/* ===== Narrow viewports =====
+   The site had exactly one width breakpoint (the hero split) before this block;
+   everything else was desktop-fixed. The card grids above now reflow on their
+   own via auto-fill, so what is left here is the chrome: the sticky header, the
+   nav row, and the page gutters. */
+@media (max-width: 720px) {
+  /* Trade the full wordmark for the short form rather than wrapping it — the
+     lockup is already two lines and a third makes the sticky header tall
+     enough to eat the viewport. */
+  .mq-logo__name--full  { display: none; }
+  .mq-logo__name--short { display: inline; }
+
+  /* padding-inline only, so the shorthand does not clobber the alignment calc. */
+  .mq-topbar { gap: var(--space-3); padding-block: var(--space-3); padding-inline: var(--space-4); }
+
+  /* Six links do not fit; let them scroll horizontally instead of overflowing
+     the page. Left-aligned while scrolling so the first item is never clipped. */
+  .mq-nav { justify-content: flex-start; padding: 0 var(--space-4); }
+  .mq-nav__inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mq-nav__inner::-webkit-scrollbar { display: none; }
+
+  .mq-page { padding: var(--space-6) var(--space-4) var(--space-7); }
+  .mq-page--tight { padding-top: var(--space-5); }
 }
 
 /* ===== Dark INDIGO theme override (palette #191970 → neon accents) ===== */

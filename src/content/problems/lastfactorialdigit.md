@@ -1,8 +1,14 @@
 ---
-topic: java-basics
+topic: getting-started
 title: "Last Factorial Digit"
 difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/lastfactorialdigit
-order: 1
+order: 2
+tags: ["input/output"]
+videos:
+  - title: "Input / Output"
+    youtubeId: "gii5Nn5oWU8"
+    channel: Daniel Sutantyo
+    duration: "9:13"
 ---

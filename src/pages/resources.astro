@@ -1,56 +1,93 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 const linkGroups = (await getCollection('resources')).sort((a, b) => a.data.order - b.data.order);
-// Stable identity colour per category: same category name → same Color Crush hue.
-const catColor = (name: string) => `c${([...name].reduce((n, ch) => n + ch.charCodeAt(0), 0) % 6) + 1}`;
-const snippets = (await getCollection('reference')).sort((a, b) => a.data.order - b.data.order);
-const byCategory = new Map<string, typeof snippets>();
-for (const s of snippets) {
-  const arr = byCategory.get(s.data.category) ?? [];
-  arr.push(s);
-  byCategory.set(s.data.category, arr);
-}
-const rendered = await Promise.all(snippets.map(async (s) => ({ slug: s.id, Content: (await render(s)).Content })));
-const contentBySlug = new Map(rendered.map((r) => [r.slug, r.Content]));
+const hueFor = (i: number) => `c${(i % 6) + 1}`;
+
+const cats = (await getCollection('refcategories')).sort((a, b) => a.data.order - b.data.order);
+const snippets = await getCollection('reference');
+const countFor = (id: string) => snippets.filter((s) => s.data.category.id === id).length;
+const langsFor = (id: string) =>
+  [...new Set(snippets.filter((s) => s.data.category.id === id).map((s) => s.data.lang))];
 ---
-<Base title="Resources — MQ CP Club">
+<Base
+  title="Resources — MQ CP Club"
+  description="The club's team reference notebook — algorithms written in Java, ready to print for a contest — plus curated competitive-programming links."
+>
   <Header />
   <main class="mq-page">
     <div class="mono mq-eyebrow">// RESOURCES</div>
-    <h1 class="ps-h1 mq-h1-gap">Resources &amp; team reference</h1>
+    <h1 class="ps-h1 mq-h1-gap">Team reference</h1>
+    <p class="text-ink max-w-measure mt-3">
+      A notebook the club builds once and keeps. Most published references are C++; ours is
+      written in <b>Java</b>, because that is what most of us actually take into a contest.
+    </p>
 
-    <h2 class="ps-h2 mq-heading mq-heading--mt6">Curated links</h2>
-    <div class="mq-grid-2">
-      {linkGroups.map((g) => (
-        <div class={`ps-card ps-card--${catColor(g.data.category)}`}>
-          <div class="ps-card__title">{g.data.category}</div>
-          {g.data.links.map((l) => (
-            <a href={l.url} target="_blank" rel="noopener" class="mono mq-link block">{l.label} →</a>
+    <div class="mq-split mt-6">
+      <div>
+        <h2 class="ps-h2 mq-heading">Notebook</h2>
+        <p class="text-ink max-w-measure mt-3 mb-5">
+          Each section is a page you can read on its own, or print as part of one document to
+          bring to a contest — ICPC lets you carry a printed reference, and this is it.
+        </p>
+
+        <ul class="mq-cats">
+          {cats.map((c, i) => (
+            <li>
+              <a class="mq-cat" href={`/resources/${c.id}`} style={`--cat:var(--cat-${c.data.color.slice(1)});`}>
+                <span class="mq-cat__head">
+                  <span class="mq-cat__name">{c.data.name}</span>
+                  <span class="mono mq-cat__n">
+                    {countFor(c.id)} {countFor(c.id) === 1 ? 'entry' : 'entries'}
+                  </span>
+                </span>
+                <span class="mq-cat__blurb">{c.data.blurb}</span>
+                <span class="mq-cat__foot">
+                  {langsFor(c.id).map((l) => <span class="mono mq-cat__lang">{l}</span>)}
+                  <span class="mono mq-cat__go">open →</span>
+                </span>
+              </a>
+            </li>
           ))}
-        </div>
-      ))}
-    </div>
+        </ul>
 
-    <div class="mq-heading--mt7 flex items-baseline justify-between">
-      <h2 class="ps-h2 mq-heading">Team reference notebook</h2>
-      <button class="ps-btn ps-btn--sm" onclick="window.print()">⎙ Print / PDF</button>
+        {cats.length > 0 && (
+          <div class="flex items-center gap-4 flex-wrap mt-5">
+            <a class="ps-btn ps-btn--primary" href="/resources/notebook">
+              <span aria-hidden="true">⎙</span> The whole notebook, to print
+            </a>
+            <span class="mono text-label text-ink-muted">
+              {snippets.length} entries across {cats.length} sections
+            </span>
+          </div>
+        )}
+
+        <p class="text-ink max-w-measure mt-6">
+          Missing something you keep rewriting? Sections are Markdown files in the club repo —
+          <a class="mono text-accent-text no-underline" href="/contribute"> how to contribute →</a>
+        </p>
+      </div>
+
+      <aside class="mq-aside">
+        <div class="mq-panel">
+          <div class="mq-panel__title">Curated links</div>
+          {linkGroups.length === 0 && <p class="text-sm text-ink m-0">Nothing here yet.</p>}
+          <div class="mq-panel__groups">
+            {linkGroups.map((g, i) => (
+              <div class="mq-links" style={`--group:var(--cat-${hueFor(i).slice(1)});`}>
+                <div class="mq-links__cat">{g.data.category}</div>
+                {g.data.links.map((l) => (
+                  <a href={l.url} target="_blank" rel="noopener" class="mono mq-links__link">
+                    {l.label} →
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
     </div>
-    {[...byCategory.entries()].map(([cat, items]) => (
-      <section class="mb-6">
-        <div class="mono text-label text-ink-muted uppercase mb-3">{cat}</div>
-        {items.map((s) => {
-          const C = contentBySlug.get(s.id)!;
-          return (
-            <div class="mb-4">
-              <div class="mono text-label text-ink-strong mb-[6px]">{s.data.title} · {s.data.category}</div>
-              <div class="mqcp-code"><C /></div>
-            </div>
-          );
-        })}
-      </section>
-    ))}
   </main>
 </Base>

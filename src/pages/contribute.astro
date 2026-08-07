@@ -32,12 +32,23 @@ git push -u origin add-me-to-board
       the site itself. Both happen the same way — a pull request on the club repo.
     </p>
 
-    <h2 class="ps-h2 mq-heading mq-heading--mt7">Find a team</h2>
+    <h2 class="ps-h2 mq-heading mq-heading--mt7">Add yourself to the team board</h2>
+    {/* Steps stay a single linear column (they are a sequence and reading order
+        matters); the field glossary is reference you consult *while* doing them,
+        so it earns the companion column. The button does NOT: step 1 names it,
+        and below 1080px the aside stacks after the whole step list, putting the
+        action ~800px below the instruction that points at it. */}
+    <div class="mq-split">
+      <div>
     <p class="text-ink max-w-measure">
       The team board is just a JSON file in the club repo — no logins, no server. You add
-      yourself with a pull request, and once a committee member merges it you'll show up on the
+      yourself with a pull request, and once a committee member merges it you'll show up on the{' '}
       <a class="mono text-accent-text no-underline" href="/events">Events</a> page.
     </p>
+
+    <a class="ps-btn ps-btn--primary mt-4" href={editUrl} target="_blank" rel="noopener">
+      Edit the team board →
+    </a>
 
     <h3 class="ps-h3 mq-heading mq-heading--mt5">Before you start</h3>
     <ul class="text-ink max-w-measure leading-loose pl-5">
@@ -45,25 +56,15 @@ git push -u origin add-me-to-board
       <li>Access to the club's <span class="mono">mq-cpc</span> GitHub org. The repo is private, so if the links below give you a 404, ask a committee member to add you first.</li>
     </ul>
 
-    <h3 class="ps-h3 mq-heading mq-heading--mt6">Add yourself, step by step</h3>
+    <h3 class="ps-h3 mq-heading mq-heading--mt6">Step by step</h3>
     <ol class="text-ink max-w-measure leading-loose pl-5 flex flex-col gap-3">
-      <li>Click <b>Edit the team board</b> (below). It opens <span class="mono">src/data/team-board.json</span> in GitHub's web editor on a new branch.</li>
+      <li>Click <b>Edit the team board</b>. It opens <span class="mono">src/data/team-board.json</span> in GitHub's web editor on a new branch.</li>
       <li>Add your entry to the <span class="mono">entries</span> list — copy this shape and change the values:
         <pre class="mono mt-3 mb-0 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{example}</pre>
       </li>
       <li>Scroll to <b>Commit changes…</b>, keep <b>Create a new branch and start a pull request</b> selected, then click <b>Propose changes</b>.</li>
       <li>On the next screen, click <b>Create pull request</b>. Done — a committee member reviews and merges it, and you appear on the Events page.</li>
     </ol>
-
-    <a class="ps-btn ps-btn--primary mt-5" href={editUrl} target="_blank" rel="noopener">Edit the team board →</a>
-
-    <h3 class="ps-h3 mq-heading mq-heading--mt6">What the fields mean</h3>
-    <ul class="text-ink max-w-measure leading-loose pl-5">
-      <li><span class="mono">handle</span> — your GitHub handle (or any short name).</li>
-      <li><span class="mono">name</span> — your display name (optional).</li>
-      <li><span class="mono">looking</span> — what you're after, e.g. 1 more, intermediate.</li>
-      <li><span class="mono">contact</span> — how teammates reach you (Discord, email, …).</li>
-    </ul>
 
     <details class="mt-7 max-w-measure border border-line rounded-md py-4 px-5 bg-surface">
       <summary class="mono cursor-pointer text-accent-text text-label">Prefer the command line?</summary>
@@ -72,19 +73,62 @@ git push -u origin add-me-to-board
       </p>
       <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{cliSnippet}</pre>
     </details>
+      </div>
+
+      <aside class="mq-aside">
+        <div class="mq-panel">
+          <div class="mq-panel__title">What the fields mean</div>
+          <dl class="mq-fields">
+            <dt class="mono">handle</dt><dd>your GitHub handle (or any short name)</dd>
+            <dt class="mono">name</dt><dd>your display name (optional)</dd>
+            <dt class="mono">looking</dt><dd>what you're after, e.g. 1 more, intermediate</dd>
+            <dt class="mono">contact</dt><dd>how teammates reach you (Discord, email, …)</dd>
+          </dl>
+        </div>
+      </aside>
+    </div>
 
     <h2 class="ps-h2 mq-heading mq-heading--mt8">Improve the website</h2>
-    <p class="text-ink max-w-measure">
-      This site is built with <b>Astro</b>, a static-site generator: the content — topics,
-      problems, events, resources — lives as Markdown and JSON files in the same repo, and Astro
-      compiles it all to plain HTML, so there's no server to run. Changing the site works just
-      like the team board: edit the relevant file, open a pull request, and a committee member
-      reviews and merges it.
-    </p>
-    <p class="text-ink max-w-measure mt-3">
-      Not sure which file does what? The
-      <a class="mono text-accent-text no-underline" href="/contribute/website">site guide</a>
-      explains how the pieces fit together and what to edit for each page.
-    </p>
+    {/* Single column, unlike the section above: the file map is the ANSWER to
+        these paragraphs, not a companion consulted alongside them. Two stacked
+        asides also produced two disconnected panels at different offsets down
+        the right edge — a broken rail rather than a column. */}
+    <div>
+        <p class="text-ink max-w-measure">
+          This site is built with <b>Astro</b>, a static-site generator: the content — topics,
+          problems, events, resources — lives as Markdown and JSON files in the same repo, and Astro
+          compiles it all to plain HTML, so there's no server to run. Changing the site works just
+          like the team board: edit the relevant file, open a pull request, and a committee member
+          reviews and merges it.
+        </p>
+        <p class="text-ink max-w-measure mt-3">
+          Most useful changes are content, not code. Adding a problem is a new Markdown file with
+          five lines of front matter; adding notes to an existing problem is a sentence under the
+          front matter of the file that already exists. Neither needs you to run the site locally.
+        </p>
+        <p class="text-ink max-w-measure mt-3">
+          If you do want to run it: clone the repo, <span class="mono">npm install</span>, then{' '}
+          <span class="mono">npm run dev</span>. Deeper detail is in the{' '}
+          <a class="mono text-accent-text no-underline" href="/contribute/website">site guide</a>,
+          which is still being written.
+        </p>
+      </div>
+
+      {/* Derived from the repo layout rather than prose, because "which file do
+          I edit" is the question that actually blocks a first contribution. */}
+      <div class="mt-5">
+        <div class="mq-panel">
+          <div class="mq-panel__title">Where things live</div>
+          <dl class="mq-fields">
+            <dt class="mono">src/content/topics/</dt><dd>roadmap topics, their videos and blurbs</dd>
+            <dt class="mono">src/content/problems/</dt><dd>one file per problem; notes go in the body</dd>
+            <dt class="mono">src/content/events/</dt><dd>practice sessions and contests</dd>
+            <dt class="mono">src/content/reference/</dt><dd>team reference notebook snippets</dd>
+            <dt class="mono">src/content/resources/</dt><dd>curated link groups</dd>
+            <dt class="mono">src/data/team-board.json</dt><dd>the looking-for-a-team board</dd>
+            <dt class="mono">src/data/site.json</dt><dd>club contact and meeting details</dd>
+          </dl>
+        </div>
+      </div>
   </main>
 </Base>
