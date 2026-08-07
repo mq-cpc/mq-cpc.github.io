@@ -156,8 +156,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
     ) : (
       <>
         <p class="text-ink max-w-measure mb-4">
-          Each row is one problem with its walkthrough and notes. Tick them off as you solve them —
-          that is kept in this browser only.
+          You can tick off the problems as you solve them to keep track of your progress
+          (stored in this browser only).
           {/* Only offer the Kattis primer where there is actually a Kattis
               problem — this topic may send you to CodingBat or elsewhere. */}
           {topic.id !== 'getting-started' && rows.some((r) => r.data.judge === 'Kattis') && (
