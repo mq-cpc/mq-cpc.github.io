@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/base';
 // Graph Visualiser — a full-screen whiteboard tool.
 // Rendered as its own document (not the site chrome) because it takes over
 // the viewport, but it imports the SITE's design system (single source of
@@ -52,7 +53,7 @@ import '../../styles/graph-tool.css';
       {/* One identity across the site: the same {} mark and ◐ toggle as the
           main header, and the brand is a link home. The tool used to be a
           one-way trip with no route back. */}
-      <a class="brand" href="/" aria-label="MQ CP Club home">
+      <a class="brand" href={withBase("/")} aria-label="MQ CP Club home">
         <div class="brand__mark" aria-hidden="true">{'{}'}</div>
         <div>
           <div class="brand__name">Graph</div>
@@ -89,7 +90,7 @@ import '../../styles/graph-tool.css';
 
     <!-- d3 as a global UMD build, then the app as an ES module; both are
          static assets in public/, loaded verbatim (is:inline) by absolute path. -->
-    <script is:inline src="/tools/graph/vendor/d3.v7.min.js"></script>
-    <script type="module" is:inline src="/tools/graph/src/main.js"></script>
+    <script is:inline src={withBase("/tools/graph/vendor/d3.v7.min.js")}></script>
+    <script type="module" is:inline src={withBase("/tools/graph/src/main.js")}></script>
   </body>
 </html>

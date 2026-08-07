@@ -2,13 +2,17 @@
 
 Static marketing/content site for the Macquarie University CP club. **Astro 7, static output** (`output: 'static'`), no server or backend. Content lives in the repo as Markdown/JSON and compiles to plain HTML.
 
+> **Authoritative context lives in two sibling docs:** `DESIGN.md` (the design system — tokens, both themes, named rules, component specs) and `PRODUCT.md` (product truth — what the club is, audience, goals). This file covers repo/build conventions and CSS gotchas; read those two for design and product decisions.
+>
+> **Recently expanded** (an "impeccable" design + content pass, ~Aug 2026): topic pages restructured to a **problem-first accordion** (videos attach to problems, not the topic); a print **reference notebook** (`resources/notebook`, `resources/[category]`, `reference/*` + `refcategories/*`); client-side **progress tracking** (`src/scripts/progress.ts`); and a Footer + 404 page. Verify structure against the current files, not older assumptions.
+
 ## Commands
 
 ```bash
 npm run dev       # astro dev — local dev server
-npm run build     # astro build — outputs to dist/ (13 pages)
+npm run build     # astro build — outputs to dist/ (~17 pages)
 npm run preview   # serve the built dist/
-npm test          # vitest run (currently 2 files / 6 tests)
+npm test          # vitest run (2 files / ~23 tests)
 ```
 
 Node **≥ 22.12** required (Astro 7); dev is pinned to **26** via `.nvmrc`.
@@ -47,8 +51,9 @@ Layered system; the interactions are the main source of foot-guns.
 - Branch off `main`; commit only when asked. End commit messages with a `Co-Authored-By:` trailer.
 - The user often edits pages manually — **re-read a file from disk before editing** rather than trusting a cached view.
 
-## Known follow-ups (not done)
+## Known follow-ups
 
-- **Launch-content cleanup** ("no false information") is only partial: the home stats line (`127 members · running since 2021`) and some "Explore the club" card copy are still aspirational/placeholder.
+- **Launch-content cleanup is DONE** — the fabricated stats (`127 members`, `running since 2021`), aspirational "Explore the club" copy, and the fake team-board entry were all removed. Don't reintroduce unverifiable claims (this is a "no false information" project).
+- **ICPC regional** — the Getting Started explainer still says "regional qualifiers" generically; the exact regional (South Pacific / whichever Macquarie competes in) is pending confirmation.
 - **Deploy is not wired.** `astro.config.mjs` `site:` is a placeholder; the host (GitHub Pages vs Cloudflare) is undecided.
 - Preflight stays off by design.
