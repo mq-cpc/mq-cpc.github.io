@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import EventCard from '../components/EventCard.astro';
@@ -30,7 +31,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
         <p class="mq-empty__text">
           Nothing scheduled right now — new sessions are posted here as they're set.
         </p>
-        <a class="mono mq-link" href="/learn">Work the roadmap in the meantime →</a>
+        <a class="mono mq-link" href={withBase("/learn")}>Work the roadmap in the meantime →</a>
       </div>
     ) : (
       <div class="mq-grid-3">
@@ -88,7 +89,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     )}
     <div class="flex items-center gap-4 flex-wrap mt-4">
       <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener">Add yourself with a pull request →</a>
-      <a class="mono mq-link" href="/contribute">New here? How to add yourself →</a>
+      <a class="mono mq-link" href={withBase("/contribute")}>New here? How to add yourself →</a>
     </div>
   </main>
 </Base>

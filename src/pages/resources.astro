@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import { getCollection } from 'astro:content';
@@ -36,7 +37,7 @@ const langsFor = (id: string) =>
         <ul class="mq-cats">
           {cats.map((c, i) => (
             <li>
-              <a class="mq-cat" href={`/resources/${c.id}`} style={`--cat:var(--cat-${c.data.color.slice(1)});`}>
+              <a class="mq-cat" href={withBase(`/resources/${c.id}`)} style={`--cat:var(--cat-${c.data.color.slice(1)});`}>
                 <span class="mq-cat__head">
                   <span class="mq-cat__name">{c.data.name}</span>
                   <span class="mono mq-cat__n">
@@ -55,7 +56,7 @@ const langsFor = (id: string) =>
 
         {cats.length > 0 && (
           <div class="flex items-center gap-4 flex-wrap mt-5">
-            <a class="ps-btn ps-btn--primary" href="/resources/notebook">
+            <a class="ps-btn ps-btn--primary" href={withBase("/resources/notebook")}>
               <span aria-hidden="true">⎙</span> The whole notebook, to print
             </a>
             <span class="mono text-label text-ink-muted">
@@ -66,7 +67,7 @@ const langsFor = (id: string) =>
 
         <p class="text-ink max-w-measure mt-6">
           Missing something you keep rewriting? Sections are Markdown files in the club repo —
-          <a class="mono text-accent-text no-underline" href="/contribute"> how to contribute →</a>
+          <a class="mono text-accent-text no-underline" href={withBase("/contribute")}> how to contribute →</a>
         </p>
       </div>
 

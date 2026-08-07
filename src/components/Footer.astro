@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 // The site had no footer at all, which meant a visitor convinced by the home
 // page had nowhere to find out how to actually reach the club.
 //
@@ -31,7 +32,7 @@ const repoUrl = 'https://github.com/mq-cpc/web-app';
     </div>
 
     <nav class="mq-footer__nav" aria-label="Footer">
-      {nav.map((l) => <a class="mono mq-footer__link" href={l.href}>{l.label}</a>)}
+      {nav.map((l) => <a class="mono mq-footer__link" href={withBase(l.href)}>{l.label}</a>)}
       <a
         class="mono mq-footer__link"
         href={repoUrl}

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import { getCollection } from 'astro:content';
@@ -64,7 +65,7 @@ const problemsOf = (slug: string) => problems.filter((p) => p.data.topic.id === 
                     aria-hidden="true"
                   ></span>
                 )}
-                <a class="mq-spine__body" href={`/topics/${t.slug}`}>
+                <a class="mq-spine__body" href={withBase(`/topics/${t.slug}`)}>
                   <span class="mq-spine__name">
                     {t.name}
                     {isOptional(t) && <span class="ps-pill mq-spine__opt">optional</span>}

@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/base';
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
@@ -27,7 +28,7 @@ const rendered = await Promise.all(
 <Base title={`${cat.data.name} — MQ CP Club`} description={cat.data.blurb}>
   <Header />
   <main class="mq-page mq-page--tight">
-    <a class="mono text-label text-ink-muted no-underline mq-noprint" href="/resources">← Team reference</a>
+    <a class="mono text-label text-ink-muted no-underline mq-noprint" href={withBase("/resources")}>← Team reference</a>
 
     <div class="mq-topic__rule mt-5" style={`border-top:3px solid ${stroke};`}></div>
     <div class="mq-split mq-split--reading">
