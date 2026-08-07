@@ -4,8 +4,8 @@ name: Deploy to GitHub Pages
 # Prerequisites (one-time, in the repo's Settings):
 #   1. The repo must be PUBLIC (Pages on a private repo needs a paid plan).
 #   2. Settings → Pages → Build and deployment → Source = "GitHub Actions".
-# The site is served at https://mq-cpc.github.io/web-app/ (base '/web-app' in
-# astro.config.mjs must match the repo name).
+# The site is the org's root Pages site: https://mq-cpc.github.io/ (repo named
+# mq-cpc.github.io, no base).
 
 on:
   push:
