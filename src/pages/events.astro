@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import EventCard from '../components/EventCard.astro';
 import { getCollection, render } from 'astro:content';
+import { dedent } from '../lib/dedent';
 import { parseTeamBoard } from '../lib/team-board';
 import boardRaw from '../data/team-board.json';
 
@@ -62,7 +63,7 @@ const repoUrl = 'https://github.com/mq-cpc/mq-cpc.github.io';
       </>
     )}
 
-    <h2 class="ps-h2 mq-heading mq-heading--mt7">Looking for a team</h2>
+    <h2 id="looking-for-a-team" class="ps-h2 mq-heading mq-heading--mt7">Looking for a team</h2>
     {team.length === 0 ? (
       <div class="mq-empty">
         <p class="mq-empty__text">
@@ -71,25 +72,80 @@ const repoUrl = 'https://github.com/mq-cpc/mq-cpc.github.io';
         </p>
       </div>
     ) : (
-      <>
-        <p class="text-ink max-w-measure">
-          The board is just a JSON file in the club repo — no logins, no server. Add an entry,
-          open a pull request, and you appear here once a committee member merges it.
-        </p>
-        <div class="mq-grid-2 mt-4">
-          {team.map((t) => (
-            <div class="ps-card ps-card--accent">
-              <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-label text-ink-muted">@{t.handle}</span></div>
-              <div class="text-ink text-sm">{t.looking}</div>
-              <div class="mono mq-eyebrow">{t.contact}</div>
-            </div>
-          ))}
-        </div>
-      </>
+      <div class="mq-grid-2">
+        {team.map((t) => (
+          <div class="ps-card ps-card--accent">
+            <div class="ps-card__title">{t.name ?? t.handle} <span class="mono text-label text-ink-muted">@{t.handle}</span></div>
+            <div class="text-ink text-sm">{t.looking}</div>
+            <div class="mono mq-eyebrow">{t.contact}</div>
+          </div>
+        ))}
+      </div>
     )}
-    <div class="flex items-center gap-4 flex-wrap mt-4">
-      <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener">Add yourself with a pull request →</a>
-      <a class="mono mq-link" href={withBase("/contribute")}>New here? How to add yourself →</a>
+    {/* Outside the empty/filled branch on purpose: an empty board is exactly
+        when someone needs to be told how to put themselves on it. */}
+    <div class="mq-split mt-5">
+      <div>
+        <p class="text-ink max-w-measure">
+          The board is just a JSON file in the club repo — no logins, no server. Add an entry to{' '}
+          <span class="mono">src/data/team-board.json</span>, open a pull request, and you appear
+          here once a committee member merges it.
+        </p>
+        <div class="flex items-center gap-4 flex-wrap mt-4">
+          <a class="ps-btn ps-btn--primary" href={`${repoUrl}/edit/main/src/data/team-board.json`} target="_blank" rel="noopener">Add yourself with a pull request →</a>
+          <a class="mono mq-link" href={withBase("/contribute#pull-request")}>New to pull requests? How they work →</a>
+        </div>
+      </div>
+      <aside class="mq-aside">
+        <div class="mq-panel">
+          <div class="mq-panel__title">What the fields mean</div>
+          <dl class="mq-fields">
+            <div><dt class="mono">handle</dt><dd>your GitHub handle (or any short name)</dd></div>
+            <div><dt class="mono">name</dt><dd>your display name (optional)</dd></div>
+            <div><dt class="mono">looking</dt><dd>what you're after, e.g. 1 more, intermediate</dd></div>
+            <div><dt class="mono">contact</dt><dd>how teammates reach you (Discord, email, …)</dd></div>
+          </dl>
+        </div>
+      </aside>
+    </div>
+
+    <h2 id="post-an-event" class="ps-h2 mq-heading mq-heading--mt8">Post an event</h2>
+    <div class="mq-split">
+      <div>
+        <p class="text-ink max-w-measure">
+          An event is one Markdown file in <span class="mono">src/content/events/</span>. The front
+          matter is the logistics; anything you write below it is the "who is this for" line that
+          shows on the card. It appears under <b>Upcoming</b> until its date passes, then moves
+          itself to <b>Past</b>.
+        </p>
+        <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{dedent(`
+          ---
+          title: Weekly practice session
+          date: 2026-08-20
+          location: Room and building
+          type: workshop
+          tag: all levels
+          ---
+          One sentence on who this is for — it shows under
+          the title on the card.
+        `)}</pre>
+        <div class="flex items-center gap-4 flex-wrap mt-4">
+          <a class="ps-btn ps-btn--primary" href={`${repoUrl}/new/main?filename=src/content/events/new-event.md`} target="_blank" rel="noopener">Add an event with a pull request →</a>
+          <a class="mono mq-link" href={withBase("/contribute#pull-request")}>New to pull requests? How they work →</a>
+        </div>
+      </div>
+      <aside class="mq-aside">
+        <div class="mq-panel">
+          <div class="mq-panel__title">What the fields mean</div>
+          <dl class="mq-fields">
+            <div><dt class="mono">title</dt><dd>what the session is called</dd></div>
+            <div><dt class="mono">date</dt><dd>YYYY-MM-DD; decides upcoming vs past</dd></div>
+            <div><dt class="mono">location</dt><dd>optional; where to turn up</dd></div>
+            <div><dt class="mono">type</dt><dd>contest, workshop, social or other</dd></div>
+            <div><dt class="mono">tag</dt><dd>optional; the small label on the card</dd></div>
+          </dl>
+        </div>
+      </aside>
     </div>
   </main>
 </Base>

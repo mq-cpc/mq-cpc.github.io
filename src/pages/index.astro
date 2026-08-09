@@ -121,11 +121,14 @@ const bodies = new Map(
           <div class="ps-card__body">Curated links, plus a copy-paste algorithm notebook you can print before a contest.</div>
           <span class="mono mq-link mq-link--card">open resources →</span>
         </a>
-        <a class="ps-card ps-card--c2" href={withBase("/events")}>
+        {/* Not a second Events link: what's on is already listed directly above
+            this grid, so the slot goes to the thing that has no other entry
+            point — the board. */}
+        <a class="ps-card ps-card--c2" href={withBase("/events#looking-for-a-team")}>
           <span class="mono text-[22px]">▟</span>
-          <div class="ps-card__title">Events</div>
-          <div class="ps-card__body">Practice contests and meetups — see what's coming up, and find a team.</div>
-          <span class="mono mq-link mq-link--card">open events →</span>
+          <div class="ps-card__title">Looking for a team</div>
+          <div class="ps-card__body">ICPC teams are three people. Put your name on the board and say what you're after.</div>
+          <span class="mono mq-link mq-link--card">open the board →</span>
         </a>
       </div>
     </section>
