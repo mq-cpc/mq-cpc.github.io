@@ -27,9 +27,9 @@ Permanence and addressability. Any club can run a Discord; this is the artifact 
 ## Operating Context
 
 - **Content is edited by pull request.** No admin UI, no database. Contributors edit Markdown/JSON in the repo; a committee member reviews and merges.
-- The GitHub repo is currently **private to the `mq-cpc` org**, so contribute links 404 for anyone a committee member has not added. (Current state, not a stated permanent commitment.)
-- Auto-deploys to **Cloudflare Pages** on push to `main`; pull requests receive preview URLs. See `docs/DEPLOY.md`.
-- Two remotes: `org` = `mq-cpc/web-app` (canonical, PRs target its `main`), `origin` = personal fork.
+- The repo is **public** (`mq-cpc/mq-cpc.github.io`, renamed from `web-app`), which GitHub Pages requires on a free plan. Anyone can fork it and open a pull request; merging it needs org membership.
+- **Live at https://mq-cpc.github.io/**, deployed by GitHub Actions on every push to `main` (`.github/workflows/deploy.yml`). No preview deployments and no staging — a merge publishes. See `docs/DEPLOY.md`.
+- One remote: `origin` = `mq-cpc/mq-cpc.github.io`; pull requests target its `main`.
 - Students practise on **Kattis** as the online judge. The contest the club trains for is the **ICPC** — teams of three sharing one machine for five hours, running from regional qualifiers to World Finals.
 - Team formation happens through the board on the Events page, also by pull request.
 
@@ -53,7 +53,7 @@ These two sit in tension and future work should treat it as a known seam, not an
 **Explicitly undecided — do not invent an answer:**
 
 - No accessibility standard has been established for this project. The light theme currently fails WCAG AA on several text tokens (see the 2026-08-02 audit); until a standard is set, those are quality problems, not compliance obligations.
-- `astro.config.mjs` `site:` is still the placeholder `https://web-app.pages.dev`, pending the real Cloudflare Pages project URL.
+- Whether the site keeps a `/contribute` entry in the main nav now that contributing is a niche path and the board lives on Events. Left as-is at handover.
 
 ## Brand Commitments
 
@@ -66,9 +66,10 @@ These two sit in tension and future work should treat it as a known seam, not an
 **Real content that exists today:**
 
 - 5 roadmap topics (`src/content/topics/`): Getting Started, Java Basics, C++ Basics, Recursion & Backtracking, Dynamic Programming.
-- 22 Kattis problems (`src/content/problems/`), distributed 13 / 4 / 3 / 2 across Java Basics, C++, Dynamic Programming, Recursion. Getting Started has none by design.
-- **~25 tutorial videos, all recorded by Daniel Sutantyo**, embedded by YouTube ID across the topics. These are the club's own teaching material, not curated third-party links — the single most distinctive asset on the site.
-- 1 team-reference notebook snippet (Dijkstra), 1 tool (graph visualiser), 2 events.
+- 32 problems (`src/content/problems/`), nearly all Kattis, distributed 12 / 10 / 4 / 3 / 3 across Java Basics, Getting Started, C++, Recursion, Dynamic Programming. Each topic groups them under its own sections — see `sections` in the topic front matter.
+- **26 tutorial videos, all recorded by Daniel Sutantyo**, embedded by YouTube ID: 25 attached to the problem they walk through, 1 a concept video on Recursion & Backtracking. These are the club's own teaching material, not curated third-party links — the single most distinctive asset on the site.
+- 11 team-reference notebook snippets across 2 categories, 1 tool (graph visualiser).
+- **No events.** `src/content/events/` does not exist yet, so the Events page shows its empty state and the build logs a harmless warning.
 
 **Absences that future work must not fabricate:**
 

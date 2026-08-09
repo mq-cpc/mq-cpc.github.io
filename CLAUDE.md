@@ -4,15 +4,17 @@ Static marketing/content site for the Macquarie University CP club. **Astro 7, s
 
 > **Authoritative context lives in two sibling docs:** `DESIGN.md` (the design system — tokens, both themes, named rules, component specs) and `PRODUCT.md` (product truth — what the club is, audience, goals). This file covers repo/build conventions and CSS gotchas; read those two for design and product decisions.
 >
-> **Recently expanded** (an "impeccable" design + content pass, ~Aug 2026): topic pages restructured to a **problem-first accordion** (videos attach to problems, not the topic); a print **reference notebook** (`resources/notebook`, `resources/[category]`, `reference/*` + `refcategories/*`); client-side **progress tracking** (`src/scripts/progress.ts`); and a Footer + 404 page. Verify structure against the current files, not older assumptions.
+> **Live in production** at **https://mq-cpc.github.io/** since Aug 2026 — public repo, GitHub Actions → Pages on every push to `main`. Treat `main` as the running site, not a draft.
+>
+> **State at handover** (~Aug 2026): topic pages are a **problem-first accordion** (videos attach to problems, not the topic) grouped under **author-defined sections** declared per topic (`src/lib/topic-sections.ts`); a print **reference notebook** (`resources/notebook`, `resources/[category]`, `reference/*` + `refcategories/*`); client-side **progress tracking** (`src/scripts/progress.ts`); **Contribute** is the how-to-change-the-site guide while **Events** owns the team board and event-posting instructions; plus a Footer and 404 page. Verify structure against the current files, not older assumptions.
 
 ## Commands
 
 ```bash
 npm run dev       # astro dev — local dev server
-npm run build     # astro build — outputs to dist/ (~17 pages)
+npm run build     # astro build — outputs to dist/ (16 pages)
 npm run preview   # serve the built dist/
-npm test          # vitest run (2 files / ~23 tests)
+npm test          # vitest run (4 files / 44 tests)
 ```
 
 Node **≥ 22.12** required (Astro 7); dev is pinned to **26** via `.nvmrc`.
@@ -56,5 +58,6 @@ Layered system; the interactions are the main source of foot-guns.
 
 - **Launch-content cleanup is DONE** — the fabricated stats (`127 members`, `running since 2021`), aspirational "Explore the club" copy, and the fake team-board entry were all removed. Don't reintroduce unverifiable claims (this is a "no false information" project).
 - **ICPC regional** — the Getting Started explainer still says "regional qualifiers" generically; the exact regional (South Pacific / whichever Macquarie competes in) is pending confirmation.
-- **Deploy is GitHub Pages** (`.github/workflows/deploy.yml`, on push to `main`), served at the **host root** — `site: 'https://mq-cpc.github.io'`, **no `base`**. Hand-written links/asset srcs still go through `withBase()` (`src/lib/base.ts`) so a move back under a subpath is a one-line config change. See `docs/DEPLOY.md`.
+- **Deploy is GitHub Pages** (`.github/workflows/deploy.yml`, on push to `main`), served at the **host root** — `site: 'https://mq-cpc.github.io'`, **no `base`**. Hand-written links/asset srcs still go through `withBase()` (`src/lib/base.ts`) so a move back under a subpath is a one-line config change. See `docs/DEPLOY.md`. **A merge to `main` publishes** — there is no staging environment.
 - Preflight stays off by design.
+- **The events collection has no directory yet**, so every build logs `The collection "events" does not exist or is empty`. Harmless — the Events page renders its empty state — and it goes away when the first `src/content/events/*.md` lands.
