@@ -121,6 +121,32 @@ components:
     textColor: "{colors.accent-text}"
     rounded: "{rounded.pill}"
     padding: "0.25rem 0.75rem"
+  problem-list:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink-strong}"
+    rounded: "{rounded.lg}"
+  problem-row:
+    textColor: "{colors.ink-strong}"
+    padding: "0.75rem 1rem"
+  chip:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.pill}"
+    padding: "0.5rem 0.75rem"
+  chip-selected:
+    backgroundColor: "{colors.ink-strong}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.pill}"
+    padding: "0.5rem 0.75rem"
+  video-card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink-strong}"
+    rounded: "{rounded.md}"
+  checkbox-solved:
+    backgroundColor: "{colors.success}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.sm}"
+    size: "20px"
 ---
 
 # Design System: MQ Competitive Programming Club
@@ -191,7 +217,7 @@ Reserved for state, never for identity: **Success green** (`#4f8a5f`), **Warning
 
 ## Layout
 
-Content sits in a **capped, centred shell** (`--content-max: 1600px` — the outer width, gutters included) rather than spanning the window. The sticky header spans the viewport but aligns its contents to the same column via a `padding-inline` calc, so the wordmark lines up with the page's `h1`. Spacing is a **hand-tuned, non-linear scale** (`--space-0..8`: `0, .25, .5, .75, 1, 1.5, 2, 3, 4 rem`) — not a linear multiplier — so utilities like `gap-5` map to `1.5rem`, not `5×`. The standard page wrapper (`.mq-page`) is `box-sizing:border-box; max-width:var(--content-max); margin:0 auto; padding: 3rem 2rem 4rem` — `border-box` is stated explicitly because preflight is off and nothing sets it globally. Card and reference grids are content-driven, not fixed: `.mq-grid-2`/`-3` are `repeat(auto-fit, minmax(…, 1fr))` with a `1rem` gap, so the column count follows the item count and the viewport, and a section holding one item does not reserve empty tracks. Sections that can legitimately hold a single item cap their container instead. The home hero is a two-column split (`1fr 1.15fr`, text left / terminal right) that collapses to one column at **≤860px**. Video tutorials are a wrapping, numbered grid, not a carousel — a scroller hid most of a 13-video topic behind an edge with no count or cue. The problem table is capped at the width of its own columns (`58rem`) rather than stretched, so a row's title, difficulty and judge link stay within one fixation; the box-drawing result banner still scrolls inside its own container rather than breaking the page.
+Content sits in a **capped, centred shell** (`--content-max: 1600px` — the outer width, gutters included) rather than spanning the window. The sticky header spans the viewport but aligns its contents to the same column via a `padding-inline` calc, so the wordmark lines up with the page's `h1`. Spacing is a **hand-tuned, non-linear scale** (`--space-0..8`: `0, .25, .5, .75, 1, 1.5, 2, 3, 4 rem`) — not a linear multiplier — so utilities like `gap-5` map to `1.5rem`, not `5×`. The standard page wrapper (`.mq-page`) is `box-sizing:border-box; max-width:var(--content-max); margin:0 auto; padding: 3rem 2rem 4rem` — `border-box` is stated explicitly because preflight is off and nothing sets it globally. Card and reference grids are content-driven, not fixed: `.mq-grid-2`/`-3` are `repeat(auto-fit, minmax(…, 1fr))` with a `1rem` gap, so the column count follows the item count and the viewport, and a section holding one item does not reserve empty tracks. Sections that can legitimately hold a single item cap their container instead. The home hero is a two-column split (`1fr 1.15fr`, text left / terminal right) that collapses to one column at **≤860px**. A topic page is a **two-column split** — prose left, a contents rail in the margin right — over a single accordion list of problems, replacing the earlier video grid *beside* a problem table: a walkthrough belongs to the problem it teaches, and two lists made students look in two places for one task. A problem row is a five-track grid whose title and tags are **bounded** (`minmax(0, 24rem)`) while difficulty and the walkthrough marker stay right-aligned as a column you scan vertically; below **900px** the expanded body drops to one column, and below **720px** the row folds to three tracks with tags on their own line. The box-drawing result banner still scrolls inside its own container rather than breaking the page.
 
 ## Elevation & Depth
 
@@ -226,6 +252,28 @@ Softly rounded, never sharp, never pill-everything. Radius scale: **sm 4px** (in
 
 ### Navigation
 - A centered mono nav row under the sticky header. Links are `15px` JetBrains Mono; the **active/hovered** link takes `accent-text` *and* animates a 2px accent underline (`::after`, `scaleX`). The header carries the `{}` mark + two-line wordmark and a theme toggle (◐).
+
+### Problem List
+The topic pages' primary surface: one white `surface` card (`12px`, hairline `line` border, `overflow:hidden`) holding hairline-divided rows, each a native `<details>` accordion.
+- **Row:** a `1.75rem` gutter for the solved checkbox, then the disclosure. The summary is a five-track grid — index, title (bounded `24rem`), tags, spacer, meta — so difficulty and the ▶ walkthrough marker form a right-hand column you scan vertically. The index is mono `12px` `ink-muted`; it restarts at `01` in each section.
+- **Solved checkbox** (`.mq-check`): a `4px` square, `1.5px` `line-strong` border, transparent tick that turns `success` green when set, with an invisible `-0.6rem` inset pseudo-element growing the hit area past the visible 20px box. It is a **sibling** of `<summary>`, never inside it — an interactive control inside a disclosure gets swallowed by the toggle. A solved row dims its title to `ink-muted`, so the eye lands on what is left.
+- **Expanded body:** a two-column grid (`16rem` walkthrough / `measure` notes) that collapses to one below 900px, indented `2.75rem` to sit under the title. The judge link and problem id sit in an action row spanning both.
+- **Walkthrough marker** (`.mq-prob__has`): the accent ▶. It is always rendered and `visibility:hidden` when the problem has no video, never dropped — the glyph keeps its width, which is what holds the difficulty column aligned down the page.
+- **Filter chips** (`.mq-chip`): pill, white `surface`, hairline `line-strong` border, mono `12px`, each carrying an `8px` dot in the tag's own `--cat-N` hue. Selected inverts to `ink-strong` fill on `paper` text. One bar sits **above** the sections, never inside one, because filtering can empty a section and chips that hid themselves could not be undone.
+
+### Problem Sections
+A topic declares its own headings (Video Tutorials, Additional Problems, Arrays / ArrayList…) in front matter; each renders as a `.mq-psection` wrapping an `ps-h3 mq-heading` (the `>` prompt) at `--space-8` top margin, an optional intro, then its list.
+- **Intro** (`.mq-sec__intro`): authored markdown, capped at the prose `measure`, `--space-4` below. Links take `accent-text` — the same weight the copy carried when it was hard-coded in the template.
+- A section whose problems are all filtered out hides **whole**, heading and intro included, rather than standing there introducing nothing. Empty sections never render at all.
+
+### Video Card
+Used identically inside an expanded problem and in a topic's concept-video grid, so a walkthrough looks the same wherever it appears.
+- **Shape:** `8px`, white `surface`, hairline border, `overflow:hidden`. **Hover:** the border alone goes `accent` — no lift, no shadow.
+- **Frame:** a `16/9` YouTube thumbnail on `paper-sunk`, with a `44px` circular play target (`ink-strong` at 72%, going full `accent` on hover) and a runtime chip pinned bottom-right in mono `12px` on an 80% `ink-strong` wash.
+- **Meta:** an `accent-text` mono "Watch" label over the video title in `semibold` `ink-strong`. The play target and runtime chip are the conventions that say *video* rather than *picture* — keep both.
+
+### Contents Rail
+Page navigation living in margin space (`.mq-toc`), deliberately **not** a panel: a surface here would compete with the title it sits beside, so a single `line-strong` hairline on the left is the whole container. Uppercase mono `12px` title, `sm` links that take `accent-text` on hover, one entry per rendered problem section. Below it sit a solved counter (mono, turning `success` green at completion) and the next-topic link in `accent-text`.
 
 ### Signature — The Terminal Panel
 The home hero's macOS-style window: a `paper-sunk` title bar with three traffic-light dots and a `me@macquarie:~` label, over a mono body that plays a real Kattis session (`$ javac` / `$ java` / `$ kattis submit` → the box-drawing **Accepted** banner). Rendered in a system monospace (box-drawing glyphs need it), `line-height:1` for the table. This panel is the identity's clearest expression — keep its vernacular exact.

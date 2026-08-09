@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/styles/theme.css"
+        ],
+        "createdAt": "2026-08-09T00:26:54.301Z",
+        "reason": "Category-colour 3px top border on rounded cards is a system-wide identity device (ps-card--c1..c6, mq-topic__rule); user confirmed intentional"
+      }
+    ]
+  }
+}

@@ -21,8 +21,9 @@ Node **≥ 22.12** required (Astro 7); dev is pinned to **26** via `.nvmrc`.
 
 Most changes are **content, not code** — edit Markdown/JSON under `src/content/`:
 
-- `topics/*.md` — roadmap topics (Getting Started, Java Basics, C++, Recursion & Backtracking, Dynamic Programming). Front-matter drives the topic page; `videos[]` = tutorial cards, and problems link by `topic.id`.
-- `problems/*.md` — Kattis problems (title, url, judge, difficulty, `topic`, `order`). One file per problem.
+- `topics/*.md` — roadmap topics (Getting Started, Java Basics, C++, Recursion & Backtracking, Dynamic Programming). Front-matter drives the topic page; `videos[]` = concept-video cards, and problems link by `topic.id`.
+  - `sections[]` — the headings a topic's problems are grouped under (`id`, `title`, optional markdown `intro`). Omit it and the topic gets the default **Video Tutorials** / **Additional Problems** split. Empty sections never render. Rules live in `src/lib/topic-sections.ts`; all page copy is authored here, nothing is appended by the template.
+- `problems/*.md` — Kattis problems (title, url, judge, difficulty, `topic`, `order`). One file per problem. A problem with a video lands in its topic's **first** section and one without in its **last**; `section: <id>` overrides that, and an id the topic doesn't declare fails the build.
 - `events/*.md`, `resources/*.json`, `reference/*.md` — events list, curated links, team-reference notebook.
 - `src/data/team-board.json` — the "looking for a team" board (contributors add themselves via PR).
 
@@ -47,7 +48,7 @@ Layered system; the interactions are the main source of foot-guns.
 
 ## Git / PRs
 
-- Two remotes: **`org` = `mq-cpc/web-app`** (canonical; PRs target its `main`) and `origin` = personal fork.
+- One remote: **`origin` = `mq-cpc/mq-cpc.github.io`** (the org repo itself, not a fork; it was renamed from `web-app`, and the old URL still redirects). PRs target its `main`. An earlier setup had a separate `org` remote alongside a personal fork; that remote no longer exists — check `git remote -v` before assuming otherwise.
 - Branch off `main`; commit only when asked. End commit messages with a `Co-Authored-By:` trailer.
 - The user often edits pages manually — **re-read a file from disk before editing** rather than trusting a cached view.
 
@@ -55,5 +56,5 @@ Layered system; the interactions are the main source of foot-guns.
 
 - **Launch-content cleanup is DONE** — the fabricated stats (`127 members`, `running since 2021`), aspirational "Explore the club" copy, and the fake team-board entry were all removed. Don't reintroduce unverifiable claims (this is a "no false information" project).
 - **ICPC regional** — the Getting Started explainer still says "regional qualifiers" generically; the exact regional (South Pacific / whichever Macquarie competes in) is pending confirmation.
-- **Deploy is not wired.** `astro.config.mjs` `site:` is a placeholder; the host (GitHub Pages vs Cloudflare) is undecided.
+- **Deploy is GitHub Pages** (`.github/workflows/deploy.yml`, on push to `main`), served at the **host root** — `site: 'https://mq-cpc.github.io'`, **no `base`**. Hand-written links/asset srcs still go through `withBase()` (`src/lib/base.ts`) so a move back under a subpath is a one-line config change. See `docs/DEPLOY.md`.
 - Preflight stays off by design.

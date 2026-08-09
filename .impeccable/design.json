@@ -1,43 +1,238 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-02",
+  "generatedAt": "2026-08-09",
   "title": "Design System: MQ Competitive Programming Club",
   "extensions": {
     "colorMeta": {
-      "accent":     { "role": "primary", "displayName": "Warm Rose", "canonical": "#b8506f", "note": "Cool/dark theme swaps this role to Neon Orange #ff9440.", "tonalRamp": ["#2e1319", "#4d2029", "#6d2e3c", "#8c3c50", "#b8506f", "#cd7488", "#e0a3b0", "#f3dce1"] },
-      "paper":      { "role": "neutral", "displayName": "Warm Paper", "canonical": "#f3ede1", "note": "Cool/dark: deep indigo #0f1022.", "tonalRamp": ["#3a3222", "#574c34", "#756848", "#94875f", "#b3a67d", "#d0c6a4", "#e8dfce", "#f3ede1"] },
-      "surface":    { "role": "neutral", "displayName": "Surface White", "canonical": "#ffffff", "note": "Cool/dark: #181a30." },
-      "ink-strong": { "role": "neutral", "displayName": "Warm Charcoal Ink", "canonical": "#2e2a24", "note": "Cool/dark: #e7e8f4." },
-      "line":       { "role": "neutral", "displayName": "Hairline", "canonical": "#ece4d4", "note": "Cool/dark: #262943." },
-      "success":    { "role": "tertiary", "displayName": "Status Green", "canonical": "#4f8a5f" },
-      "warning":    { "role": "tertiary", "displayName": "Status Amber", "canonical": "#9a6e15" },
-      "danger":     { "role": "tertiary", "displayName": "Status Coral", "canonical": "#bb4a36" },
-      "cat-lilac":   { "role": "secondary", "displayName": "Lilac",   "canonical": "#9a64ad", "tonalRamp": ["#2c1d33", "#43304d", "#5b4368", "#785a89", "#9a64ad", "#b389c1", "#cdb2d6", "#f0d9ef"] },
-      "cat-pink":    { "role": "secondary", "displayName": "Pink",    "canonical": "#c65f7e", "tonalRamp": ["#361a24", "#512838", "#6d374c", "#8a4661", "#c65f7e", "#d68599", "#e6afbc", "#fcdce1"] },
-      "cat-butter":  { "role": "secondary", "displayName": "Butter",  "canonical": "#b07c1f", "tonalRamp": ["#33240a", "#4d3710", "#684a17", "#8a611f", "#b07c1f", "#c99f52", "#e0c48c", "#ffe6bb"] },
-      "cat-celadon": { "role": "secondary", "displayName": "Celadon", "canonical": "#87964a", "tonalRamp": ["#242a15", "#353d1f", "#48522a", "#657434", "#87964a", "#a6b473", "#c7d2a2", "#e9ecce"] },
-      "cat-mint":    { "role": "secondary", "displayName": "Mint",    "canonical": "#4f956f", "tonalRamp": ["#152a1f", "#1f3e2d", "#2a523c", "#3a744f", "#4f956f", "#79c496", "#a6dcbc", "#cde9dc"] },
-      "cat-sky":     { "role": "secondary", "displayName": "Sky",     "canonical": "#4f8da1", "tonalRamp": ["#152a30", "#1f3e47", "#2a525e", "#3a7484", "#4f8da1", "#79bdce", "#a6d6e0", "#c4dfe5"] }
+      "accent": {
+        "role": "primary",
+        "displayName": "Warm Rose",
+        "canonical": "#b8506f",
+        "note": "Cool/dark theme swaps this role to Neon Orange #ff9440.",
+        "tonalRamp": [
+          "#2e1319",
+          "#4d2029",
+          "#6d2e3c",
+          "#8c3c50",
+          "#b8506f",
+          "#cd7488",
+          "#e0a3b0",
+          "#f3dce1"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#f3ede1",
+        "note": "Cool/dark: deep indigo #0f1022.",
+        "tonalRamp": [
+          "#3a3222",
+          "#574c34",
+          "#756848",
+          "#94875f",
+          "#b3a67d",
+          "#d0c6a4",
+          "#e8dfce",
+          "#f3ede1"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface White",
+        "canonical": "#ffffff",
+        "note": "Cool/dark: #181a30."
+      },
+      "ink-strong": {
+        "role": "neutral",
+        "displayName": "Warm Charcoal Ink",
+        "canonical": "#2e2a24",
+        "note": "Cool/dark: #e7e8f4."
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#ece4d4",
+        "note": "Cool/dark: #262943."
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Status Green",
+        "canonical": "#4f8a5f"
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Status Amber",
+        "canonical": "#9a6e15"
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Status Coral",
+        "canonical": "#bb4a36"
+      },
+      "cat-lilac": {
+        "role": "secondary",
+        "displayName": "Lilac",
+        "canonical": "#9a64ad",
+        "tonalRamp": [
+          "#2c1d33",
+          "#43304d",
+          "#5b4368",
+          "#785a89",
+          "#9a64ad",
+          "#b389c1",
+          "#cdb2d6",
+          "#f0d9ef"
+        ]
+      },
+      "cat-pink": {
+        "role": "secondary",
+        "displayName": "Pink",
+        "canonical": "#c65f7e",
+        "tonalRamp": [
+          "#361a24",
+          "#512838",
+          "#6d374c",
+          "#8a4661",
+          "#c65f7e",
+          "#d68599",
+          "#e6afbc",
+          "#fcdce1"
+        ]
+      },
+      "cat-butter": {
+        "role": "secondary",
+        "displayName": "Butter",
+        "canonical": "#b07c1f",
+        "tonalRamp": [
+          "#33240a",
+          "#4d3710",
+          "#684a17",
+          "#8a611f",
+          "#b07c1f",
+          "#c99f52",
+          "#e0c48c",
+          "#ffe6bb"
+        ]
+      },
+      "cat-celadon": {
+        "role": "secondary",
+        "displayName": "Celadon",
+        "canonical": "#87964a",
+        "tonalRamp": [
+          "#242a15",
+          "#353d1f",
+          "#48522a",
+          "#657434",
+          "#87964a",
+          "#a6b473",
+          "#c7d2a2",
+          "#e9ecce"
+        ]
+      },
+      "cat-mint": {
+        "role": "secondary",
+        "displayName": "Mint",
+        "canonical": "#4f956f",
+        "tonalRamp": [
+          "#152a1f",
+          "#1f3e2d",
+          "#2a523c",
+          "#3a744f",
+          "#4f956f",
+          "#79c496",
+          "#a6dcbc",
+          "#cde9dc"
+        ]
+      },
+      "cat-sky": {
+        "role": "secondary",
+        "displayName": "Sky",
+        "canonical": "#4f8da1",
+        "tonalRamp": [
+          "#152a30",
+          "#1f3e47",
+          "#2a525e",
+          "#3a7484",
+          "#4f8da1",
+          "#79bdce",
+          "#a6d6e0",
+          "#c4dfe5"
+        ]
+      }
     },
     "typographyMeta": {
-      "display":  { "displayName": "Display", "purpose": "Home hero headline only." },
-      "headline": { "displayName": "Headline", "purpose": "Page titles (ps-h1 / ps-h2)." },
-      "title":    { "displayName": "Title", "purpose": "Card and panel headings (ps-h3 / ps-card__title)." },
-      "body":     { "displayName": "Body", "purpose": "Paragraphs and UI text; native system sans, ~64ch measure." },
-      "label":    { "displayName": "Label / Mono", "purpose": "The whole 'code' vernacular — eyebrows, tags, nav, captions, terminal. JetBrains Mono; two fixed sizes (12px, 15px)." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home hero headline only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles (ps-h1 / ps-h2)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card and panel headings (ps-h3 / ps-card__title)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs and UI text; native system sans, ~64ch measure."
+      },
+      "label": {
+        "displayName": "Label / Mono",
+        "purpose": "The whole 'code' vernacular — eyebrows, tags, nav, captions, terminal. JetBrains Mono; two fixed sizes (12px, 15px)."
+      }
     },
     "shadows": [
-      { "name": "shadow-sm", "value": "0 1px 2px hsl(var(--shadow-color) / 0.10)", "purpose": "Card resting state — barely there." },
-      { "name": "shadow-md", "value": "0 2px 4px hsl(var(--shadow-color) / 0.08), 0 4px 12px hsl(var(--shadow-color) / 0.10)", "purpose": "Card hover." },
-      { "name": "shadow-lg", "value": "0 8px 24px hsl(var(--shadow-color) / 0.14)", "purpose": "The hero terminal panel only. Note: --shadow-color is theme-tinted (warm 38 16% 32% light / cool 240 40% 2% dark)." }
+      {
+        "name": "shadow-sm",
+        "value": "0 1px 2px hsl(var(--shadow-color) / 0.10)",
+        "purpose": "Card resting state — barely there."
+      },
+      {
+        "name": "shadow-md",
+        "value": "0 2px 4px hsl(var(--shadow-color) / 0.08), 0 4px 12px hsl(var(--shadow-color) / 0.10)",
+        "purpose": "Card hover."
+      },
+      {
+        "name": "shadow-lg",
+        "value": "0 8px 24px hsl(var(--shadow-color) / 0.14)",
+        "purpose": "The hero terminal panel only. Note: --shadow-color is theme-tinted (warm 38 16% 32% light / cool 240 40% 2% dark)."
+      }
     ],
     "motion": [
-      { "name": "ease-out", "value": "cubic-bezier(0.22, 0.61, 0.36, 1)", "purpose": "Default easing for hover/state transitions." },
-      { "name": "dur-fast", "value": "90ms", "purpose": "Buttons, small state changes." },
-      { "name": "dur-mid", "value": "160ms", "purpose": "Card hover lift, nav underline." }
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 0.61, 0.36, 1)",
+        "purpose": "Default easing for hover/state transitions."
+      },
+      {
+        "name": "dur-fast",
+        "value": "90ms",
+        "purpose": "Buttons, small state changes."
+      },
+      {
+        "name": "dur-mid",
+        "value": "160ms",
+        "purpose": "Card hover lift, nav underline."
+      }
     ],
     "breakpoints": [
-      { "name": "hero-collapse", "value": "860px" }
+      {
+        "name": "hero-collapse",
+        "value": "860px"
+      },
+      {
+        "name": "split-rail",
+        "value": "1080px"
+      },
+      {
+        "name": "problem-body-collapse",
+        "value": "900px"
+      },
+      {
+        "name": "problem-row-fold",
+        "value": "720px"
+      }
     ]
   },
   "components": [
@@ -88,6 +283,38 @@
       "description": "The '>' prompt marker generated before every section heading — a signature of the terminal vernacular.",
       "html": "<h2 class=\"ds-heading\">Upcoming Events</h2>",
       "css": ".ds-heading { display: flex; align-items: center; gap: var(--space-3); margin: 0; font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 1.75rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-strong); } .ds-heading::before { content: '>'; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 400; font-size: 0.7em; line-height: 1; color: var(--accent-text); }"
+    },
+    {
+      "name": "Problem Row",
+      "kind": "custom",
+      "refersTo": "problem-row",
+      "description": "The unit of a topic page: a native <details> accordion carrying the problem, its walkthrough marker, difficulty and solved checkbox. The ▶ is always rendered and merely hidden without a video, so the difficulty column stays aligned.",
+      "html": "<ul class=\"ds-plist\"><li class=\"ds-prob\"><button class=\"ds-check\" aria-label=\"Mark as solved\">✓</button><details class=\"ds-prob-d\"><summary class=\"ds-prob-sum\"><span class=\"ds-prob-num\">01</span><span class=\"ds-prob-title\">Reversed Binary Numbers</span><span class=\"ds-prob-tag\">bit manipulation</span><span class=\"ds-prob-spacer\"></span><span class=\"ds-prob-meta\"><span class=\"ds-prob-diff\">easy</span><span class=\"ds-prob-has\">▶</span></span></summary><div class=\"ds-prob-body\"><code class=\"ds-prob-id\">reversebinary</code></div></details></li><li class=\"ds-prob\"><button class=\"ds-check ds-check-done\" aria-label=\"Solved\">✓</button><details class=\"ds-prob-d\"><summary class=\"ds-prob-sum\"><span class=\"ds-prob-num\">02</span><span class=\"ds-prob-title ds-prob-title-done\">Free Food</span><span class=\"ds-prob-tag\">arrays</span><span class=\"ds-prob-spacer\"></span><span class=\"ds-prob-meta\"><span class=\"ds-prob-diff\">easy</span><span class=\"ds-prob-has ds-prob-has-none\">▶</span></span></summary><div class=\"ds-prob-body\"><code class=\"ds-prob-id\">freefood</code></div></details></li></ul>",
+      "css": ".ds-plist { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }.ds-prob { display: grid; grid-template-columns: 1.75rem 1fr; gap: var(--space-3); align-items: start; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }.ds-prob:last-child { border-bottom: 0; }.ds-check { width: 20px; height: 20px; padding: 0; border: 1.5px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface); color: transparent; font-size: var(--text-label); line-height: 1; cursor: pointer; position: relative; transition: background 90ms cubic-bezier(0.22,0.61,0.36,1), border-color 90ms cubic-bezier(0.22,0.61,0.36,1); }.ds-check::after { content: \"\"; position: absolute; inset: -0.6rem; }.ds-check:hover { border-color: var(--ink-muted); }.ds-check:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }.ds-check-done { background: var(--success); border-color: var(--success); color: var(--surface); }.ds-prob-d { min-width: 0; }.ds-prob-sum { display: grid; grid-template-columns: 1.75rem minmax(0, 24rem) max-content 1fr max-content; gap: var(--space-3); align-items: center; cursor: pointer; list-style: none; }.ds-prob-sum::-webkit-details-marker { display: none; }.ds-prob-sum:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }.ds-prob-num { font-family: var(--font-label); font-size: var(--text-label); color: var(--ink-muted); }.ds-prob-title { color: var(--ink-strong); }.ds-prob-title-done { color: var(--ink-muted); }.ds-prob-tag { font-family: var(--font-label); font-size: var(--text-label); color: var(--ink); padding: 2px var(--space-3); border-radius: var(--radius-pill); background: color-mix(in srgb, var(--cat-1) 18%, transparent); border: 1px solid color-mix(in srgb, var(--cat-1) 45%, transparent); white-space: nowrap; }.ds-prob-meta { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-label); font-size: var(--text-label); }.ds-prob-diff { color: var(--success); }.ds-prob-has { color: var(--accent-text); }.ds-prob-has-none { visibility: hidden; }.ds-prob-body { padding: var(--space-4) 0 0 2.75rem; }.ds-prob-id { font-family: var(--font-label); font-size: var(--text-label); color: var(--ink-strong); background: var(--paper-sunk); border: 1px solid var(--line-strong); border-radius: var(--radius-pill); padding: 4px var(--space-3); }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Tag filter above a topic's problem sections. Each chip carries an 8px dot in the tag's own identity hue; the selected chip inverts to ink on paper.",
+      "html": "<div class=\"ds-filters\"><button class=\"ds-chip ds-chip-on\">All <span class=\"ds-chip-n\">12</span></button><button class=\"ds-chip ds-chip-c1\">strings <span class=\"ds-chip-n\">3</span></button><button class=\"ds-chip ds-chip-c5\">arrays <span class=\"ds-chip-n\">2</span></button></div>",
+      "css": ".ds-filters { display: flex; flex-wrap: wrap; gap: var(--space-2); }.ds-chip { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font-label); font-size: var(--text-label); padding: var(--space-2) var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius-pill); background: var(--surface); color: var(--ink); cursor: pointer; }.ds-chip::before { content: \"\"; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--ink-muted); }.ds-chip-c1::before { background: var(--cat-1); }.ds-chip-c5::before { background: var(--cat-5); }.ds-chip-n { color: var(--ink-muted); }.ds-chip:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }.ds-chip-on { background: var(--ink-strong); color: var(--paper); border-color: var(--ink-strong); }.ds-chip-on .ds-chip-n { color: var(--paper); }"
+    },
+    {
+      "name": "Video Card",
+      "kind": "card",
+      "refersTo": "video-card",
+      "description": "A walkthrough, identical inside an expanded problem and in a topic's concept-video grid. Hover moves the border to accent and the play target with it — no lift, no shadow.",
+      "html": "<a class=\"ds-vcard\" href=\"#\"><span class=\"ds-vcard-frame\"><span class=\"ds-vcard-play\" aria-hidden=\"true\">▶</span><span class=\"ds-vcard-dur\">16:36</span></span><span class=\"ds-vcard-meta\"><span class=\"ds-vcard-label\">Watch</span><span class=\"ds-vcard-title\">Input &amp; String Processing</span></span></a>",
+      "css": ".ds-vcard { display: block; width: 15rem; text-decoration: none; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; transition: border-color 90ms cubic-bezier(0.22,0.61,0.36,1); }.ds-vcard:hover { border-color: var(--accent); }.ds-vcard:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }.ds-vcard-frame { display: block; position: relative; aspect-ratio: 16/9; background: var(--paper-sunk); }.ds-vcard-play { position: absolute; inset: 0; margin: auto; width: 44px; height: 44px; border-radius: var(--radius-pill); display: grid; place-items: center; padding-left: 3px; background: color-mix(in srgb, var(--ink-strong) 72%, transparent); color: #fff; font-size: 15px; }.ds-vcard:hover .ds-vcard-play { background: var(--accent); }.ds-vcard-dur { position: absolute; right: 6px; bottom: 6px; padding: 1px 6px; border-radius: var(--radius-sm); font-family: var(--font-label); font-size: var(--text-label); color: #fff; background: color-mix(in srgb, var(--ink-strong) 80%, transparent); }.ds-vcard-meta { display: block; padding: var(--space-2) var(--space-3); }.ds-vcard-label { display: block; font-family: var(--font-label); font-size: var(--text-label); color: var(--accent-text); letter-spacing: var(--tracking-wide); }.ds-vcard-title { display: block; font-size: var(--text-sm); font-weight: 600; color: var(--ink-strong); line-height: 1.25; }"
+    },
+    {
+      "name": "Contents Rail",
+      "kind": "nav",
+      "refersTo": "toc",
+      "description": "In-page navigation in margin space beside a topic title: one entry per rendered problem section, then the solved counter and the next-topic link. A hairline on the left is the whole container — a panel here would compete with the title.",
+      "html": "<nav class=\"ds-toc-wrap\"><div class=\"ds-toc\"><div class=\"ds-toc-title\">On this page</div><ul class=\"ds-toc-list\"><li><a class=\"ds-toc-link\" href=\"#\">Video Tutorials</a></li><li><a class=\"ds-toc-link\" href=\"#\">Arrays / ArrayList</a></li></ul></div><div class=\"ds-toc-stat\"><span class=\"ds-toc-mono\">Solved</span><span class=\"ds-toc-count\">3/12</span></div><a class=\"ds-toc-next\" href=\"#\">Next: Recursion &amp; Backtracking →</a></nav>",
+      "css": ".ds-toc-wrap { width: 18rem; }.ds-toc { border-left: 1px solid var(--line-strong); padding-left: var(--space-4); }.ds-toc-title { font-family: var(--font-label); font-size: var(--text-label); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--ink-muted); margin-bottom: var(--space-3); }.ds-toc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }.ds-toc-link { font-size: var(--text-sm); color: var(--ink); text-decoration: none; display: block; }.ds-toc-link:hover { color: var(--accent-text); }.ds-toc-stat { display: flex; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-5); padding-left: var(--space-4); font-family: var(--font-label); font-size: var(--text-label); color: var(--ink-muted); }.ds-toc-count { color: var(--ink-strong); }.ds-toc-next { display: block; margin-top: var(--space-4); padding-left: var(--space-4); font-family: var(--font-label); font-size: var(--text-label); color: var(--accent-text); text-decoration: none; }.ds-toc-next:hover { text-decoration: underline; }"
     }
   ],
   "narrative": {
@@ -102,12 +329,36 @@
       "Restrained, precise, human; personality lives in the details, not decoration."
     ],
     "rules": [
-      { "name": "The Two-Temperature Rule", "body": "Every colour is a role token, never a hardcoded hex. Warm/light is default; the cool/indigo theme swaps every role including the accent hue (rose → neon orange) and the shadow tint. New UI that reads roles themes for free.", "section": "colors" },
-      { "name": "The Two-Language Rule", "body": "The six pastels mean identity (what a thing is); green/amber/red mean status/difficulty. Never colour a card stripe by difficulty, never use a pastel to signal state.", "section": "colors" },
-      { "name": "The Rare-Accent Rule", "body": "The accent marks actions and the current thing (buttons, active nav, the > prompt), not surfaces. A screen washed in accent is wrong.", "section": "colors" },
-      { "name": "The Two-Label-Sizes Rule", "body": "Mono/label text uses exactly two fixed-px sizes — 12px and 15px — not the rem body scale. Snap to one; don't add an 11/13/14px one-off.", "section": "typography" },
-      { "name": "The Mono-Vernacular Rule", "body": "The code voice — // eyebrows, the > heading prompt, $ terminal lines, the {} mark — is always JetBrains Mono. Chrome and labels only, not body copy.", "section": "typography" },
-      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest — borders and tone do the work. A shadow appears only as a response (hover) or for the single hero panel.", "section": "elevation" }
+      {
+        "name": "The Two-Temperature Rule",
+        "body": "Every colour is a role token, never a hardcoded hex. Warm/light is default; the cool/indigo theme swaps every role including the accent hue (rose → neon orange) and the shadow tint. New UI that reads roles themes for free.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Language Rule",
+        "body": "The six pastels mean identity (what a thing is); green/amber/red mean status/difficulty. Never colour a card stripe by difficulty, never use a pastel to signal state.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rare-Accent Rule",
+        "body": "The accent marks actions and the current thing (buttons, active nav, the > prompt), not surfaces. A screen washed in accent is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Label-Sizes Rule",
+        "body": "Mono/label text uses exactly two fixed-px sizes — 12px and 15px — not the rem body scale. Snap to one; don't add an 11/13/14px one-off.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono-Vernacular Rule",
+        "body": "The code voice — // eyebrows, the > heading prompt, $ terminal lines, the {} mark — is always JetBrains Mono. Chrome and labels only, not body copy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest — borders and tone do the work. A shadow appears only as a response (hover) or for the single hero panel.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do read colours from role tokens (var(--accent), var(--ink), var(--cat-N)) so new UI themes in both temperatures for free.",
