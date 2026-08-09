@@ -5,6 +5,18 @@ order: 0
 color: c5
 blurb: New here? What competitive programming is, and how to begin.
 videos: []
+sections:
+  - id: tutorials
+    title: Video Tutorials
+    intro: >
+      Hint: you can tick off the problems as you solve them to keep track of your
+      progress (stored in this browser only).
+  - id: problems
+    title: Problems
+    intro: >
+      Once you are comfortable with input and output, give these beginner problems
+      a try. 
+      You should be able to do them with just basic loops and if statements. 
 ---
 Competitive programming is a mind sport where participants write code to solve 
 algorithmic puzzles under a time constraint. 

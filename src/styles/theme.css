@@ -602,12 +602,18 @@ html { font-size: 17px; }
    margin and <dd> its 40px indent unless reset. */
 /* Grid, not a single column: in a sidebar this is one column, but in a
    full-width panel a stacked list left ~900px of the box empty. */
+/* Each term+description pair is wrapped in a <div> (valid inside a <dl>) so the
+   PAIR is the grid item. With dt and dd as loose children the track count and
+   the pair count fought each other: fine at one or two columns, and scrambled
+   at full width, where a term landed in the last column and its description
+   wrapped to the start of the next row. */
 .mq-fields {
   margin: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: var(--space-4) var(--space-5);
 }
+.mq-fields > div { min-width: 0; }
 .mq-fields dt { font-size: var(--text-label); color: var(--accent-text); }
 .mq-fields dd { margin: 2px 0 0; font-size: var(--text-sm); color: var(--ink); }
 
@@ -1008,6 +1014,9 @@ body.ps-page > main { flex: 1; }
 }
 .mq-prob__num { font-size: var(--text-label); color: var(--ink-muted); }
 .mq-prob__title { color: var(--ink-strong); }
+/* Holds however many tags a problem has — zero, one, or several — as ONE grid
+   item, so the summary's track count never depends on the content. */
+.mq-prob__tags { display: flex; flex-wrap: wrap; gap: var(--space-2); min-width: 0; }
 .mq-prob__tag {
   font-size: var(--text-label); color: var(--ink);
   padding: 2px var(--space-3); border-radius: var(--radius-pill);
@@ -1017,6 +1026,9 @@ body.ps-page > main { flex: 1; }
 }
 .mq-prob__meta { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-label); }
 .mq-prob__has { color: var(--accent-text); }
+/* visibility, not display: the glyph still occupies its width, which is what
+   keeps the difficulty column aligned across problems with and without one. */
+.mq-prob__has--none { visibility: hidden; }
 
 /* Action row spans both columns; below it the walkthrough sits left and the
    notes right, tops aligned. */
@@ -1041,7 +1053,15 @@ body.ps-page > main { flex: 1; }
 .mq-prob__notes { min-width: 0; font-size: var(--text-sm); color: var(--ink); }
 .mq-prob__notes > :first-child { margin-top: 0; }
 .mq-prob__notes > :last-child { margin-bottom: 0; }
-.mq-prob__empty { color: var(--ink-muted); margin: 0; }
+
+/* A problem section: a heading, an authored intro, and the list under it. */
+.mq-psection[hidden] { display: none; }
+/* The intro is markdown from topic front-matter, so style what marked emits.
+   Links take the accent the hand-written intro link used to carry. */
+.mq-sec__intro { max-width: var(--measure); color: var(--ink); margin-bottom: var(--space-4); }
+.mq-sec__intro > :first-child { margin-top: 0; }
+.mq-sec__intro > :last-child { margin-bottom: 0; }
+.mq-sec__intro a { color: var(--accent-text); }
 
 /* ===== Video card =====
    Used both inside a problem and in a topic's concept-video grid. The play
@@ -1080,7 +1100,7 @@ body.ps-page > main { flex: 1; }
 }
 @media (max-width: 720px) {
   .mq-prob__sum { grid-template-columns: 1.75rem minmax(0, 1fr) max-content; row-gap: var(--space-2); }
-  .mq-prob__tag { grid-column: 2 / -1; justify-self: start; }
+  .mq-prob__tags { grid-column: 2 / -1; justify-self: start; }
   .mq-prob__spacer { display: none; }
   .mq-prob__body { padding-left: 0; }
 }

@@ -5,7 +5,7 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/t9spelling
 order: 4
-tags: ["collections"]
+tags: ["map"]
 videos:
   - title: "HashMap"
     youtubeId: "f6hagLrbvkY"

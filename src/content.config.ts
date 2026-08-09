@@ -17,6 +17,17 @@ const VIDEO = z.object({
   duration: z.string().optional(),
 });
 
+// A heading on a topic page with its own problems under it. Authored per topic;
+// `id` is both the anchor and what a problem's `section:` points at. Leave the
+// list off and the topic gets the default Video Tutorials / Additional Problems
+// split (src/lib/topic-sections.ts).
+const SECTION = z.object({
+  id: z.string(),
+  title: z.string(),
+  // Markdown — links and inline code work.
+  intro: z.string().optional(),
+});
+
 const topics = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: 'src/content/topics' }),
   schema: z.object({
@@ -28,6 +39,7 @@ const topics = defineCollection({
     // Concept videos only: anything that walks through a specific problem
     // belongs on that problem instead.
     videos: z.array(VIDEO).default([]),
+    sections: z.array(SECTION).default([]),
   }),
 });
 
@@ -47,6 +59,11 @@ const problems = defineCollection({
     // CodingBat's /prob/p145416 does not.
     problemId: z.string().optional(),
     order: z.number().int().nonnegative().default(0),
+    // Which of the topic's sections this sits under. Usually unset: a problem
+    // with a video falls into the topic's first section and one without into
+    // its last. Set it to override that; an id the topic does not declare fails
+    // the build.
+    section: z.string().optional(),
     // Usually one walkthrough; Walrus Weights has two (top-down and bottom-up),
     // which is why this is an array.
     videos: z.array(VIDEO).default([]),

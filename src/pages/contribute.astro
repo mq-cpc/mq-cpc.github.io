@@ -2,134 +2,159 @@
 import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
+// dedent() is used to so that <pre> renders with correct indentation
+import { dedent } from '../lib/dedent';
 
 const repoUrl = 'https://github.com/mq-cpc/mq-cpc.github.io';
-const editUrl = `${repoUrl}/edit/main/src/data/team-board.json`;
-
-const example = `{
-  "handle": "your-gh-handle",
-  "name": "Your Name",
-  "looking": "1 more, intermediate",
-  "contact": "Discord: you#1234"
-}`;
-
-const cliSnippet = `git clone ${repoUrl}.git mq-cpc-webapp
-# the last word is just the folder name on your computer —
-# leave it off to use "web-app", or call it whatever you like
-cd mq-cpc-webapp
-git switch -c add-me-to-board
-# edit src/data/team-board.json, then add your entry
-git commit -am "Add me to the team board"
-git push -u origin add-me-to-board
-# then open the pull-request link GitHub prints`;
 ---
-<Base title="Contribute — MQ CP Club" description="How to add yourself to the MQ CP Club team board.">
+<Base title="Contribute — MQ CP Club" description="How to change the MQ CP Club website: the content lives as Markdown in the repo, and every change is a pull request.">
   <Header />
   <main class="mq-page">
     <div class="mono mq-eyebrow">// CONTRIBUTE</div>
-    <h1 class="ps-h1 mq-h1-gap">Contribute</h1>
+    <h1 class="ps-h1 mq-h1-gap">How to contribute</h1>
     <p class="text-ink max-w-measure mt-3">
-      Two ways to pitch in: add yourself to the team board to find teammates, or help improve
-      the site itself. Both happen the same way — a pull request on the club repo.
+      This site is built with <b>Astro</b>, a static-site generator: the content — topics, problems, events, resources — 
+      lives as Markdown and JSON files, and Astro
+      compiles it all to plain HTML. 
+      Every change, from fixing a typo to adding a problem, 
+      is a <a class="text-accent-text no-underline" href="https://docs.github.com/en/pull-requests/reference/pull-requests">pull request</a> that 
+      an admin reviews and merges. 
+      The references on how to change the website are shown below.
+    </p>
+    <p class="text-ink max-w-measure mt-3">
+      You need to request access to the repo from one of the admins.
     </p>
 
-    <h2 class="ps-h2 mq-heading mq-heading--mt7">Add yourself to the team board</h2>
-    {/* Steps stay a single linear column (they are a sequence and reading order
-        matters); the field glossary is reference you consult *while* doing them,
-        so it earns the companion column. The button does NOT: step 1 names it,
-        and below 1080px the aside stacks after the whole step list, putting the
-        action ~800px below the instruction that points at it. */}
-    <div class="mq-split">
-      <div>
-    <p class="text-ink max-w-measure">
-      The team board is just a JSON file in the club repo — no logins, no server. You add
-      yourself with a pull request, and once a committee member merges it you'll show up on the{' '}
-      <a class="mono text-accent-text no-underline" href={withBase("/events")}>Events</a> page.
-    </p>
-
-    <a class="ps-btn ps-btn--primary mt-4" href={editUrl} target="_blank" rel="noopener">
-      Edit the team board →
+    <a class="ps-btn ps-btn--primary mt-4" href={repoUrl} target="_blank" rel="noopener">
+      Open the club repo →
     </a>
 
-    <h3 class="ps-h3 mq-heading mq-heading--mt5">Before you start</h3>
-    <ul class="text-ink max-w-measure leading-loose pl-5">
-      <li>A free <a class="mono text-accent-text no-underline" href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a>.</li>
-      <li>Access to the club's <span class="mono">mq-cpc</span> GitHub org. The repo is private, so if the links below give you a 404, ask a committee member to add you first.</li>
-    </ul>
-
-    <h3 class="ps-h3 mq-heading mq-heading--mt6">Step by step</h3>
+    {/* Anchor target: the Events page links here from both its "New to pull
+        requests?" links, since this is the how-a-PR-works content. */}
+    <h3 id="pull-request" class="ps-h3 mq-heading mq-heading--mt6">Step by step</h3>
     <ol class="text-ink max-w-measure leading-loose pl-5 flex flex-col gap-3">
-      <li>Click <b>Edit the team board</b>. It opens <span class="mono">src/data/team-board.json</span> in GitHub's web editor on a new branch.</li>
-      <li>Add your entry to the <span class="mono">entries</span> list — copy this shape and change the values:
-        <pre class="mono mt-3 mb-0 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{example}</pre>
+      <li>Use 
+       the <b>where things live</b> card below to work out which file you need to modify or where to add a new file.
       </li>
+      <li>Click the pencil (<b>Edit this file</b>) and make your change.</li>
       <li>Scroll to <b>Commit changes…</b>, keep <b>Create a new branch and start a pull request</b> selected, then click <b>Propose changes</b>.</li>
-      <li>On the next screen, click <b>Create pull request</b>. Done — a committee member reviews and merges it, and you appear on the Events page.</li>
+      <li>On the next screen, click <b>Create pull request</b>. Done — a committee member reviews and merges it, and the site rebuilds itself.</li>
     </ol>
 
-    <details class="mt-7 max-w-measure border border-line rounded-md py-4 px-5 bg-surface">
-      <summary class="mono cursor-pointer text-accent-text text-label">Prefer the command line?</summary>
-      <p class="text-ink text-sm mt-3 leading-normal">
-        Clone the repo, branch, edit <span class="mono">src/data/team-board.json</span>, commit, push, and open a pull request:
-      </p>
-      <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{cliSnippet}</pre>
-    </details>
+
+    <div class="mt-7">
+      <div class="mq-panel">
+        <div class="mq-panel__title">Where things live</div>
+        <dl class="mq-fields">
+          <div><dt class="mono">src/content/topics/</dt><dd>roadmap topics: blurb, concept videos, and the sections problems are grouped under</dd></div>
+          <div><dt class="mono">src/content/problems/</dt><dd>one file per problem; notes go in the body</dd></div>
+          <div><dt class="mono">src/content/events/</dt><dd>practice sessions and contests</dd></div>
+          <div><dt class="mono">src/content/reference/</dt><dd>team reference notebook snippets</dd></div>
+          <div><dt class="mono">src/content/resources/</dt><dd>curated link groups</dd></div>
+          <div><dt class="mono">src/data/team-board.json</dt><dd>the looking-for-a-team board</dd></div>
+          <div><dt class="mono">src/data/site.json</dt><dd>club contact and meeting details</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <h2 id="add-a-problem" class="ps-h2 mq-heading mq-heading--mt8">Add a problem</h2>
+    {/* The steps are a sequence you read top to bottom; the field glossary is
+        reference you consult while writing the file, so it earns the companion
+        column. */}
+    <div class="mq-split">
+      <div>
+        <p class="text-ink max-w-measure">
+          To add a problem, create a Markdown file in{' '}
+          <span class="mono">src/content/problems/</span>, named
+          after the problem's id at the judge — <span class="mono">freefood.md</span> for{' '}
+          <span class="mono">open.kattis.com/problems/freefood</span>. Everything the topic page
+          shows comes from its front matter:
+        </p>
+        <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{dedent(`
+          ---
+          topic: java-basics
+          title: "Free Food"
+          difficulty: easy
+          judge: Kattis
+          url: https://open.kattis.com/problems/freefood
+          order: 11
+          tags: ["arrays"]
+          ---
+          Anything you write below the front matter shows up as
+          notes when the problem is expanded. Leave it empty
+          if you have none.
+        `)}</pre>
+
+        <h3 class="ps-h3 mq-heading mq-heading--mt6">Which section it lands under</h3>
+        <p class="text-ink max-w-measure">
+          A topic page groups its problems under headings the topic itself declares — Getting
+          Started has <b>Video Tutorials</b> and <b>Problems</b>.
+        </p>
+        <ul class="text-ink max-w-measure leading-loose pl-5 mt-3">
+          <li>Give it a <span class="mono">videos:</span> walkthrough and it joins the <b>first</b> section — the video one.</li>
+          <li>Give it none and it joins the <b>last</b> section, where the problems you solve unaided live.</li>
+          <li>Add <span class="mono">section: arrays</span> to put it somewhere specific, whether or not it has a video.</li>
+        </ul>
+        <p class="text-ink max-w-measure mt-3">
+          The ids you can use are listed in the topic's own file, under{' '}
+          <span class="mono">sections:</span> — open it and read them off:
+        </p>
+        <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{dedent(`
+          # src/content/topics/java-basics.md
+          sections:
+            - id: tutorials
+              title: Video Tutorials
+            - id: arrays
+              title: Arrays / ArrayList
+            - id: extra
+              title: Additional Problems
+        `)}</pre>
+        <p class="text-ink max-w-measure mt-3">
+          Naming an id the topic doesn't declare fails the build with an error saying so, rather
+          than quietly dropping your problem off the page. A section with no problems in it isn't
+          rendered at all, so it's fine for a topic to declare one it doesn't use yet.
+        </p>
+
+        <h3 class="ps-h3 mq-heading mq-heading--mt6">Adding a new section</h3>
+        <p class="text-ink max-w-measure">
+          Add an entry to <span class="mono">sections:</span> in the topic file: an{' '}
+          <span class="mono">id</span> (letters and dashes, used as the link anchor), a{' '}
+          <span class="mono">title</span> shown as the heading, and an optional{' '}
+          <span class="mono">intro</span> paragraph. The intro is Markdown, so links and{' '}
+          <span class="mono">code</span> work in it. Sections render in the order you list them, and
+          a topic that declares none falls back to <b>Video Tutorials</b> then{' '}
+          <b>Additional Problems</b>.
+        </p>
       </div>
 
       <aside class="mq-aside">
         <div class="mq-panel">
           <div class="mq-panel__title">What the fields mean</div>
           <dl class="mq-fields">
-            <dt class="mono">handle</dt><dd>your GitHub handle (or any short name)</dd>
-            <dt class="mono">name</dt><dd>your display name (optional)</dd>
-            <dt class="mono">looking</dt><dd>what you're after, e.g. 1 more, intermediate</dd>
-            <dt class="mono">contact</dt><dd>how teammates reach you (Discord, email, …)</dd>
+            <div><dt class="mono">topic</dt><dd>the topic file's name, e.g. java-basics</dd></div>
+            <div><dt class="mono">title</dt><dd>the problem's title at the judge, copied exactly</dd></div>
+            <div><dt class="mono">difficulty</dt><dd>easy, medium or hard</dd></div>
+            <div><dt class="mono">judge</dt><dd>Kattis, CodingBat, …</dd></div>
+            <div><dt class="mono">url</dt><dd>link to the problem</dd></div>
+            <div><dt class="mono">order</dt><dd>sorts the problem within its section</dd></div>
+            <div><dt class="mono">tags</dt><dd>optional; become the filter chips on the topic page</dd></div>
+            <div><dt class="mono">section</dt><dd>optional; the section id, overriding the video rule</dd></div>
+            <div><dt class="mono">videos</dt><dd>optional; walkthroughs, shown when the problem is expanded</dd></div>
           </dl>
         </div>
       </aside>
     </div>
 
-    <h2 class="ps-h2 mq-heading mq-heading--mt8">Improve the website</h2>
-    {/* Single column, unlike the section above: the file map is the ANSWER to
-        these paragraphs, not a companion consulted alongside them. Two stacked
-        asides also produced two disconnected panels at different offsets down
-        the right edge — a broken rail rather than a column. */}
-    <div>
-        <p class="text-ink max-w-measure">
-          This site is built with <b>Astro</b>, a static-site generator: the content — topics,
-          problems, events, resources — lives as Markdown and JSON files in the same repo, and Astro
-          compiles it all to plain HTML, so there's no server to run. Changing the site works just
-          like the team board: edit the relevant file, open a pull request, and a committee member
-          reviews and merges it.
-        </p>
-        <p class="text-ink max-w-measure mt-3">
-          Most useful changes are content, not code. Adding a problem is a new Markdown file with
-          five lines of front matter; adding notes to an existing problem is a sentence under the
-          front matter of the file that already exists. Neither needs you to run the site locally.
-        </p>
-        <p class="text-ink max-w-measure mt-3">
-          If you do want to run it: clone the repo, <span class="mono">npm install</span>, then{' '}
-          <span class="mono">npm run dev</span>. Deeper detail is in the{' '}
-          <a class="mono text-accent-text no-underline" href={withBase("/contribute/website")}>site guide</a>,
-          which is still being written.
-        </p>
-      </div>
-
-      {/* Derived from the repo layout rather than prose, because "which file do
-          I edit" is the question that actually blocks a first contribution. */}
-      <div class="mt-5">
-        <div class="mq-panel">
-          <div class="mq-panel__title">Where things live</div>
-          <dl class="mq-fields">
-            <dt class="mono">src/content/topics/</dt><dd>roadmap topics, their videos and blurbs</dd>
-            <dt class="mono">src/content/problems/</dt><dd>one file per problem; notes go in the body</dd>
-            <dt class="mono">src/content/events/</dt><dd>practice sessions and contests</dd>
-            <dt class="mono">src/content/reference/</dt><dd>team reference notebook snippets</dd>
-            <dt class="mono">src/content/resources/</dt><dd>curated link groups</dd>
-            <dt class="mono">src/data/team-board.json</dt><dd>the looking-for-a-team board</dd>
-            <dt class="mono">src/data/site.json</dt><dd>club contact and meeting details</dd>
-          </dl>
-        </div>
-      </div>
+    <h2 class="ps-h2 mq-heading mq-heading--mt8">Running it locally</h2>
+    <p class="text-ink max-w-measure">
+      Only worth it if you're changing the code rather than the content. Clone the repo,{' '}
+      <span class="mono">npm install</span>, then <span class="mono">npm run dev</span>.{' '}
+      <span class="mono">README.md</span> and <span class="mono">CLAUDE.md</span> in the repo are
+      the accurate map of how the site is laid out.
+    </p>
+    <p class="text-ink max-w-measure mt-3">
+      Looking for teammates or posting a session? Both live on the{' '}
+      <a class="mono text-accent-text no-underline" href={withBase("/events")}>Events</a> page.
+    </p>
   </main>
 </Base>

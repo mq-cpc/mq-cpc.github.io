@@ -5,6 +5,14 @@ order: 1
 color: c2
 blurb: From recursion to memoised top-down and bottom-up DP, on classic contest problems.
 videos: []
+sections:
+  - id: tutorials
+    title: Video Tutorials
+    intro: >
+      New to Kattis? [Start with the primer on Getting
+      Started →](../getting-started/#kattis-and-java)
+  - id: extra
+    title: Additional Problems
 ---
 Dynamic programming is recursion that stops repeating itself. Once you can see
 the subproblem structure from

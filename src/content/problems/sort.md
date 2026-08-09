@@ -5,7 +5,7 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/sort
 order: 9
-tags: ["collections"]
+tags: ["map", "sorting"]
 videos:
   - title: "Map.Entry and var"
     youtubeId: "28Esy94bXzk"
