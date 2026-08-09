@@ -5,6 +5,14 @@ order: 1
 color: c1
 blurb: Supplementary C++ features you can use straight away, without learning the whole language.
 videos: []
+sections:
+  - id: tutorials
+    title: Video Tutorials
+    intro: >
+      New to Kattis? [Start with the primer on Getting
+      Started →](../getting-started/#kattis-and-java)
+  - id: extra
+    title: Additional Problems
 ---
 Supplementary, and not a step on the roadmap. These are C++ features worth
 reaching for in a contest — things you can pick up and use straight away,

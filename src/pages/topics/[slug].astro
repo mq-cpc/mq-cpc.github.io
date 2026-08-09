@@ -3,7 +3,9 @@ import { withBase } from '../../lib/base';
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { marked } from 'marked';
 import { nextTopic, totalDuration, isOptional, type RoadmapTopic } from '../../lib/roadmap';
+import { sectionsFor, groupProblems } from '../../lib/topic-sections';
 
 export async function getStaticPaths() {
   const topics = await getCollection('topics');
@@ -41,8 +43,10 @@ const runtime = totalDuration(allVideos.map((v) => v.duration));
 
 const rows = await Promise.all(
   problems.map(async (p) => ({
-    slug: p.id,
+    id: p.id,
     data: p.data,
+    section: p.data.section,
+    hasVideo: p.data.videos.length > 0,
     // Explicit when the judge's URL does not carry the id (CodingBat's
     // /prob/p145416 is not the problem name), otherwise the last URL segment,
     // which is what Kattis uses and what kattis-cli takes.
@@ -57,10 +61,22 @@ const pageTags = [...new Set(rows.flatMap((r) => r.data.tags))];
 const hueOf = (tag: string) => `var(--cat-${(pageTags.indexOf(tag) % 6) + 1})`;
 const counts = pageTags.map((t) => ({ tag: t, n: rows.filter((r) => r.data.tags.includes(t)).length }));
 
+// Sections are authored per topic; a topic that declares none gets the default
+// Video Tutorials / Additional Problems split. Empty ones never render, so a
+// topic where every problem has a walkthrough shows one heading, not two.
+const groups = groupProblems(sectionsFor(topic.data.sections), rows, topic.id);
+const intros = new Map(
+  groups
+    .filter((g) => g.section.intro)
+    .map((g) => [g.section.id, marked.parse(g.section.intro!, { async: false }) as string]),
+);
+
 const contents = [
   ...headings.filter((h) => h.depth === 2).map((h) => ({ id: h.slug, text: h.text })),
   ...(conceptVideos.length > 0 ? [{ id: 'concepts', text: 'Concept videos' }] : []),
-  { id: 'problems', text: 'Problems' },
+  ...(groups.length > 0
+    ? groups.map((g) => ({ id: g.section.id, text: g.section.title }))
+    : [{ id: 'problems', text: 'Problems' }]),
 ];
 
 const diffColor: Record<string, string> = { easy: 'var(--success)', medium: 'var(--warning)', hard: 'var(--danger)' };
@@ -111,7 +127,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
               class="mono mq-toc__count"
               data-progress-count="problem"
               data-progress-format="short"
-              data-progress-ids={rows.map((r) => r.slug).join(',')}
+              data-progress-ids={rows.map((r) => r.id).join(',')}
             >0/{problems.length}</span>
           </div>
         )}
@@ -148,31 +164,21 @@ const pad = (n: number) => String(n).padStart(2, '0');
       </>
     )}
 
-    <h2 id="problems" class="ps-h3 mq-heading mq-heading--mt8">Problems</h2>
-    {problems.length === 0 ? (
-      <p class="text-ink max-w-measure">
-        No problems for this topic yet — pick another from the
-        <a class="mono text-accent-text no-underline" href={withBase("/learn")}> roadmap</a>.
-      </p>
+    {groups.length === 0 ? (
+      <>
+        <h2 id="problems" class="ps-h3 mq-heading mq-heading--mt8">Problems</h2>
+        <p class="text-ink max-w-measure">
+          No problems for this topic yet — pick another from the
+          <a class="mono text-accent-text no-underline" href={withBase("/learn")}> roadmap</a>.
+        </p>
+      </>
     ) : (
       <>
-        <p class="text-ink max-w-measure mb-4">
-          You can tick off the problems as you solve them to keep track of your progress
-          (stored in this browser only).
-          {/* Only offer the Kattis primer where there is actually a Kattis
-              problem — this topic may send you to CodingBat or elsewhere. */}
-          {topic.id !== 'getting-started' && rows.some((r) => r.data.judge === 'Kattis') && (
-            <>
-              {' '}New to Kattis?{' '}
-              <a class="text-accent-text" href={withBase("/topics/getting-started#your-first-submission")}>
-                What happens when you submit →
-              </a>
-            </>
-          )}
-        </p>
-
+        {/* One bar for the whole page, and deliberately outside the sections:
+            filtering to a tag that only occurs in a later section hides the
+            earlier ones, and chips that hid themselves could not be undone. */}
         {counts.length > 1 && (
-          <div class="mq-filters" role="group" aria-label="Filter by concept">
+          <div class="mq-filters mt-7" role="group" aria-label="Filter by concept">
             <button class="mq-chip is-on" data-filter="*" aria-pressed="true">
               All <span class="mq-chip__n">{rows.length}</span>
             </button>
@@ -184,13 +190,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
           </div>
         )}
 
+        {groups.map((g) => (
+        <section class="mq-psection">
+        <h2 id={g.section.id} class="ps-h3 mq-heading mq-heading--mt8">{g.section.title}</h2>
+        {intros.has(g.section.id) && <div class="mq-sec__intro" set:html={intros.get(g.section.id)} />}
         <ul class="mq-plist">
-          {rows.map((r, i) => (
+          {g.items.map((r, i) => (
             <li class="mq-prob" data-tags={r.data.tags.join('|')}>
               <button
                 class="mq-check"
                 data-progress-kind="problem"
-                data-progress-id={r.slug}
+                data-progress-id={r.id}
                 aria-pressed="false"
                 aria-label={`Mark "${r.data.title}" as solved`}
               >✓</button>
@@ -201,15 +211,25 @@ const pad = (n: number) => String(n).padStart(2, '0');
                 <summary class="mq-prob__sum">
                   <span class="mq-prob__num mono">{pad(i + 1)}</span>
                   <span class="mq-prob__title">{r.data.title}</span>
-                  {r.data.tags.map((t) => (
-                    <span class="mq-prob__tag mono" style={`--tag:${hueOf(t)};`}>{t}</span>
-                  ))}
+                  {/* One wrapper, always present: the summary is a five-track
+                      grid, so tags must be a single item. Loose spans made the
+                      item count follow the tag count — no tags shifted
+                      difficulty into the tag column, two tags wrapped the row. */}
+                  <span class="mq-prob__tags">
+                    {r.data.tags.map((t) => (
+                      <span class="mq-prob__tag mono" style={`--tag:${hueOf(t)};`}>{t}</span>
+                    ))}
+                  </span>
                   <span class="mq-prob__spacer"></span>
                   <span class="mq-prob__meta">
                     <span class="mono" style={`color:${diffColor[r.data.difficulty]};`}>{r.data.difficulty}</span>
-                    {r.data.videos.length > 0 && (
-                      <span class="mq-prob__has mono" title="Has a walkthrough">▶</span>
-                    )}
+                    {/* Always rendered, hidden rather than dropped when there
+                        is no walkthrough: the glyph keeps its width, so the
+                        difficulty labels line up down the whole page. */}
+                    <span
+                      class={`mq-prob__has mono${r.hasVideo ? '' : ' mq-prob__has--none'}`}
+                      title={r.hasVideo ? 'Has a walkthrough' : undefined}
+                    >▶</span>
                   </span>
                 </summary>
 
@@ -235,14 +255,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
                     </a>
                   ))}
 
-                  <div class="mq-prob__notes">
-                    {r.Body ? <r.Body /> : <p class="mq-prob__empty">No notes yet.</p>}
-                  </div>
+                  {/* No notes is not worth saying — the block is simply absent. */}
+                  {r.Body && (
+                    <div class="mq-prob__notes"><r.Body /></div>
+                  )}
                 </div>
               </details>
             </li>
           ))}
         </ul>
+        </section>
+        ))}
       </>
     )}
 
@@ -267,6 +290,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
     const chips = document.querySelectorAll<HTMLButtonElement>('.mq-chip');
     const items = document.querySelectorAll<HTMLElement>('.mq-prob');
+    const sections = document.querySelectorAll<HTMLElement>('.mq-psection');
     chips.forEach((chip) => {
       chip.addEventListener('click', () => {
         const want = chip.dataset.filter!;
@@ -277,6 +301,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
         });
         items.forEach((li) => {
           li.hidden = want !== '*' && !(li.dataset.tags ?? '').split('|').includes(want);
+        });
+        // A section whose problems all filtered out takes its heading and
+        // intro with it, rather than standing there introducing nothing.
+        sections.forEach((s) => {
+          s.hidden = [...s.querySelectorAll<HTMLElement>('.mq-prob')].every((li) => li.hidden);
         });
       });
     });

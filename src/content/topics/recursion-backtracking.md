@@ -9,6 +9,14 @@ videos:
     youtubeId: "snBcanv7m04"
     channel: Daniel Sutantyo
     duration: "18:57"
+sections:
+  - id: tutorials
+    title: Video Tutorials
+    intro: >
+      New to Kattis? [Start with the primer on Getting
+      Started →](../getting-started/#kattis-and-java)
+  - id: extra
+    title: Additional Problems
 ---
 Recursion is how you turn a problem you can't see the answer to into a smaller
 version of itself. The hard part is rarely the code — it's learning to see the
