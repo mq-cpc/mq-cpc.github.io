@@ -5,7 +5,7 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/everywhere
 order: 3
-tags: ["collections"]
+tags: ["set"]
 videos:
   - title: "HashSet"
     youtubeId: "3oExWCR2SEA"

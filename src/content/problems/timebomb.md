@@ -5,7 +5,7 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/timebomb
 order: 3
-tags: ["strings"]
+tags: []
 videos:
   - title: "Input & String Processing"
     youtubeId: "B3DH1m2LWQ8"

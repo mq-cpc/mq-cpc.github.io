@@ -5,7 +5,7 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/lastfactorialdigit
 order: 2
-tags: ["input/output"]
+tags: []
 videos:
   - title: "Input / Output"
     youtubeId: "gii5Nn5oWU8"

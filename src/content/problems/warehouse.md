@@ -5,7 +5,7 @@ difficulty: easy
 judge: Kattis
 url: https://open.kattis.com/problems/warehouse
 order: 8
-tags: ["collections"]
+tags: ["map"]
 videos:
   - title: "Traversing a Map"
     youtubeId: "3GkNUWuVxPs"
