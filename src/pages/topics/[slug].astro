@@ -52,6 +52,8 @@ const rows = await Promise.all(
     // which is what Kattis uses and what kattis-cli takes.
     kid: p.data.problemId ?? p.data.url.replace(/\/+$/, '').split('/').pop(),
     Body: p.body && p.body.trim() ? (await render(p)).Content : null,
+    // Markdown, same treatment as a section intro.
+    hints: p.data.hints.map((h) => marked.parse(h, { async: false }) as string),
   })),
 );
 
@@ -241,6 +243,26 @@ const pad = (n: number) => String(n).padStart(2, '0');
                     </a>
                   </div>
 
+                  {/* Between the judge link and the walkthrough on purpose:
+                      reading down this panel is climbing the spoiler ladder —
+                      go solve it, then a nudge, then the whole answer. Native
+                      <details> per hint, so with JavaScript off all of them
+                      open independently; the script below only gates them. */}
+                  {r.hints.length > 0 && (
+                    <div class="mq-hints" data-hints>
+                      {r.hints.map((html, k) => (
+                        <details class="mq-hint">
+                          <summary class="mq-hint__toggle mono">
+                            <span class="mq-hint__shut">Show hint {k + 1}</span>
+                            <span class="mq-hint__open">Hint {k + 1}</span>
+                          </summary>
+                          <div class="mq-hint__body" set:html={html} />
+                        </details>
+                      ))}
+                      <p class="mq-hint__rest mono" data-hint-rest hidden></p>
+                    </div>
+                  )}
+
                   {r.data.videos.map((v) => (
                     <a class="mq-vcard" href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noopener">
                       <span class="mq-vcard__frame">
@@ -287,6 +309,33 @@ const pad = (n: number) => String(n).padStart(2, '0');
   <script>
     import { initProgress } from '../../scripts/progress.ts';
     initProgress();
+
+    // Hint gate. The page ships every hint open-able; this narrows it to one at
+    // a time, so the escalation the author wrote is the escalation you get.
+    // Without this script all hints stay independently available — a worse
+    // experience, never a broken one.
+    document.querySelectorAll<HTMLElement>('[data-hints]').forEach((box) => {
+      const hints = [...box.querySelectorAll<HTMLDetailsElement>('.mq-hint')];
+      const rest = box.querySelector<HTMLElement>('[data-hint-rest]');
+      if (hints.length < 2 || !rest) return;
+
+      // High-water mark, never recomputed downwards: collapsing a hint you have
+      // already read must not snatch back the ones it unlocked.
+      let reached = 0;
+      const gate = () => {
+        let frontier = 0;
+        while (frontier < hints.length && hints[frontier].open) frontier++;
+        reached = Math.max(reached, frontier);
+        hints.forEach((h, i) => { h.hidden = i > reached; });
+        const locked = hints.length - Math.min(reached + 1, hints.length);
+        rest.hidden = locked === 0;
+        rest.textContent = locked === 1 ? '1 more hint after this' : `${locked} more hints after this`;
+      };
+
+      box.dataset.gate = 'on';
+      hints.forEach((h) => h.addEventListener('toggle', gate));
+      gate();
+    });
 
     const chips = document.querySelectorAll<HTMLButtonElement>('.mq-chip');
     const items = document.querySelectorAll<HTMLElement>('.mq-prob');

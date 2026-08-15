@@ -1050,6 +1050,67 @@ body.ps-page > main { flex: 1; }
   border-radius: var(--radius-pill); padding: 4px var(--space-3);
   user-select: all; cursor: text;
 }
+/* ===== Hints =====
+   A pill is the offer, a quiet label is the state: the control is only loud
+   while it is still an action. Flat throughout — the revealed hint is a sunk
+   well, not a raised card, so it reads as part of the panel rather than a
+   notification on top of it. */
+.mq-hints {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--measure);
+  min-width: 0;
+}
+/* Preflight is off, and the gate script toggles [hidden] — be explicit. */
+.mq-hint[hidden] { display: none; }
+.mq-hint__toggle {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  font-size: var(--text-label);
+  color: var(--accent-text);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  cursor: pointer;
+  list-style: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.mq-hint__toggle::-webkit-details-marker { display: none; }
+.mq-hint__toggle:hover { border-color: var(--accent); }
+.mq-hint__toggle:focus-visible {
+  outline: var(--border-thick) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.mq-hint__open { display: none; }
+/* Once opened it stops being an offer: drop the pill, keep the label. */
+.mq-hint[open] .mq-hint__shut { display: none; }
+.mq-hint[open] .mq-hint__open { display: inline; }
+.mq-hint[open] .mq-hint__toggle {
+  color: var(--ink-muted);
+  background: transparent;
+  border-color: transparent;
+  padding-left: 0;
+  padding-bottom: var(--space-1);
+  cursor: default;
+}
+.mq-hint__body {
+  font-size: var(--text-sm);
+  color: var(--ink);
+  background: var(--paper-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+.mq-hint__body > :first-child { margin-top: 0; }
+.mq-hint__body > :last-child { margin-bottom: 0; }
+.mq-hint__body a { color: var(--accent-text); }
+.mq-hint__rest { margin: 0; font-size: var(--text-label); color: var(--ink-muted); }
+.mq-hint__rest[hidden] { display: none; }
+
 .mq-prob__notes { min-width: 0; font-size: var(--text-sm); color: var(--ink); }
 .mq-prob__notes > :first-child { margin-top: 0; }
 .mq-prob__notes > :last-child { margin-bottom: 0; }
