@@ -1,6 +1,6 @@
 ---
 name: add-problem
-description: Use when adding a Kattis problem to this site, or when filling in the title, difficulty, order or tags of a file in src/content/problems/. Triggers on a bare Kattis problem id plus a topic ("add freefood to java-basics", "add sottkvi and barcelona to getting-started under problems").
+description: Use when adding a Kattis problem to this site, or when filling in the title, difficulty, order, tags or hints of a file in src/content/problems/. Triggers on a bare Kattis problem id plus a topic ("add freefood to java-basics", "add sottkvi and barcelona to getting-started under problems", "write hints for warehouse").
 ---
 
 # Add a Kattis problem
@@ -69,7 +69,24 @@ Show the proposal with the topic's existing tags and get a yes before writing.
 grep -l '^topic: <topic>' src/content/problems/*.md | xargs grep -h '^tags:' | sort -u
 ```
 
-**7. Write the file**, named after the Kattis id, fields in this order. Body
+**7. Hints — only when asked.** Default to none. A problem may carry up to three
+markdown `hints`, revealed one at a time on the topic page, and **a hint that
+gives too much away costs a student the problem permanently** — which is why
+this step is opt-in rather than part of the normal run.
+
+When the user does ask, read the statement **and its Input section** first: the
+constraints are what let a hint be concrete ("a day is a number from 1 to 365"
+is a hint; "think about the limits" is not). Then draft exactly three as an
+escalation and show them for a yes before writing:
+
+1. **Observation** — name what the reader missed, usually visible in the worked example.
+2. **Technique** — the idea that cracks it, without applying it.
+3. **Shape of the answer** — the data structure and the loop, stopping short of code.
+
+A fourth fails the build. Hint text ships in the page source, so hints are
+deliberate friction, not secrecy — never write one that only works if unseen.
+
+**8. Write the file**, named after the Kattis id, fields in this order. Body
 empty — notes are written by hand later, and `videos:` is added only when a
 walkthrough exists.
 
@@ -86,16 +103,27 @@ tags: ["arrays"]
 ---
 ```
 
-Omit `section:` when the automatic placement is what you want.
+Omit `section:` when the automatic placement is what you want. Add `hints:` only
+if step 7 produced any:
 
-**8. Verify, then stop.** `npm run build` is what proves the section id resolves;
+```yaml
+hints:
+  - >
+    You are counting days, not events — look at the worked
+    example again.
+  - >
+    A day is a number from 1 to 365, so the whole calendar
+    fits in one small array.
+```
+
+**9. Verify, then stop.** `npm run build` is what proves the section id resolves;
 `npm test` guards the placement rules.
 
 ```bash
 npm run build && npm test
 ```
 
-Report title, difficulty, topic § section, order, tags and path. **Do not commit,
+Report title, difficulty, topic § section, order, tags, any hints, and the path. **Do not commit,
 branch or push** — that is the user's call.
 
 ## Quick reference
@@ -108,6 +136,7 @@ branch or push** — that is the user's call.
 | `order` | max in topic + 1 |
 | `section` | user, or omitted for automatic placement |
 | `tags` | proposed from the topic's existing tags, confirmed |
+| `hints` | none by default; up to 3, written as an escalation and confirmed |
 | body, `videos` | left empty |
 
 ## Common mistakes
@@ -120,6 +149,8 @@ branch or push** — that is the user's call.
 | Writing before checking the section id | Build fails; the page is broken until fixed |
 | Overwriting an existing file | Stop instead — an id already in `src/content/problems/` means it's already listed |
 | Assuming a non-Kattis judge works | CodingBat and friends fit the schema but not this skill; those need `problemId:` set by hand |
+| Writing hints from the statement alone | Without the Input section a hint stays vague; the constraints are what make it concrete |
+| Adding hints because the field exists | Most problems have none. A hint that gives it away is worse than no hint |
 
-Kattis's band is authoritative here even when it disagrees with an older file:
-`walrusweights` is recorded `easy` but Kattis calls it `medium`.
+Kattis's band is authoritative even when it disagrees with a file set by hand
+before this skill existed — at least one had already drifted that way.
