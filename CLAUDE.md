@@ -19,6 +19,8 @@ npm test          # vitest run (4 files / 44 tests)
 
 Node **≥ 22.12** required (Astro 7); dev is pinned to **26** via `.nvmrc`.
 
+**Project skill:** `/add-problem <kattis-id> [topic] [section]` (`.claude/skills/add-problem/`) creates a problem file with the title and difficulty read from Kattis rather than guessed, proposes tags from the topic's existing vocabulary, and runs build + tests. It stops before git. Kattis serves **403 to WebFetch** — the skill uses `curl` with a browser User-Agent, and the difficulty band is a CSS class (`difficulty_easy|medium|hard`), never the numeric rating. `.gitignore` ignores `.claude/*` but re-admits `!.claude/skills/`, so skills ship with the repo while local settings don't.
+
 ## Editing content (the common case)
 
 Most changes are **content, not code** — edit Markdown/JSON under `src/content/`:

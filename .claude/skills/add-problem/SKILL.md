@@ -1,0 +1,156 @@
+---
+name: add-problem
+description: Use when adding a Kattis problem to this site, or when filling in the title, difficulty, order, tags or hints of a file in src/content/problems/. Triggers on a bare Kattis problem id plus a topic ("add freefood to java-basics", "add sottkvi and barcelona to getting-started under problems", "write hints for warehouse").
+---
+
+# Add a Kattis problem
+
+Creates one `src/content/problems/<kattis-id>.md` per problem, with the title and
+difficulty read from Kattis rather than guessed. **This is a "no false
+information" project: never invent a title or a difficulty. If the fetch fails,
+stop and say so.**
+
+## Input
+
+`<kattis-id> [topic] [section]`, one or more ids. The id is the last segment of
+the problem URL — `open.kattis.com/problems/freefood` → `freefood`.
+
+- **topic** — a file name in `src/content/topics/` (`java-basics`, not "Java Basics"). Ask if not given.
+- **section** — optional. Omitted, the problem places itself: with a video into the topic's **first** section, without one into its **last**. Say which one it landed in.
+
+## Steps
+
+**1. Fetch the problem page.** WebFetch gets **403** from Kattis; curl with a
+browser User-Agent gets 200. A wrong id 404s — stop, do not write a file.
+
+```bash
+UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+html=$(curl -s -A "$UA" "https://open.kattis.com/problems/$id")
+```
+
+**2. Title** — from the `<h1>`, entities decoded, copied exactly:
+
+```bash
+printf '%s' "$html" | grep -o '<h1[^>]*>[^<]*</h1>' | head -1 | sed 's|<[^>]*>||g' \
+  | sed 's/&amp;/\&/g; s/&ndash;/–/g; s/&#8217;/’/g; s/&quot;/"/g'
+```
+
+**3. Difficulty** — Kattis's own band, as a CSS class. Match the band words
+only: a bare `difficulty_[a-z]*` hits `difficulty_number` first. The numeric
+rating is not in the served HTML, so it cannot be recorded.
+
+```bash
+printf '%s' "$html" | grep -o 'difficulty_\(easy\|medium\|hard\)' | head -1 | sed 's/difficulty_//'
+```
+
+**4. Validate the placement.** The topic file must exist. Read its section ids;
+a section that the topic does not declare **fails the build**, so check first and
+stop with the valid ids listed rather than writing a file that breaks `main`.
+
+```bash
+grep -A1 '^\s*- id:' src/content/topics/<topic>.md   # declared sections
+```
+
+A topic declaring no `sections:` gets the default `tutorials` / `extra` split.
+
+**5. `order`** — one past the highest in that topic (it sorts within a section):
+
+```bash
+grep -l '^topic: <topic>' src/content/problems/*.md | xargs grep -h '^order:' \
+  | sed 's/order: *//' | sort -n | tail -1
+```
+
+**6. Tags** — ours, not Kattis's; they become the filter chips. Read the
+statement, propose one or two, and **prefer vocabulary already used on that
+topic** so the chip row doesn't sprout near-duplicates (`arrays` vs `array`).
+Show the proposal with the topic's existing tags and get a yes before writing.
+
+```bash
+grep -l '^topic: <topic>' src/content/problems/*.md | xargs grep -h '^tags:' | sort -u
+```
+
+**7. Hints — only when asked.** Default to none. A problem may carry up to three
+markdown `hints`, revealed one at a time on the topic page, and **a hint that
+gives too much away costs a student the problem permanently** — which is why
+this step is opt-in rather than part of the normal run.
+
+When the user does ask, read the statement **and its Input section** first: the
+constraints are what let a hint be concrete ("a day is a number from 1 to 365"
+is a hint; "think about the limits" is not). Then draft exactly three as an
+escalation and show them for a yes before writing:
+
+1. **Observation** — name what the reader missed, usually visible in the worked example.
+2. **Technique** — the idea that cracks it, without applying it.
+3. **Shape of the answer** — the data structure and the loop, stopping short of code.
+
+A fourth fails the build. Hint text ships in the page source, so hints are
+deliberate friction, not secrecy — never write one that only works if unseen.
+
+**8. Write the file**, named after the Kattis id, fields in this order. Body
+empty — notes are written by hand later, and `videos:` is added only when a
+walkthrough exists.
+
+```markdown
+---
+topic: java-basics
+title: "Free Food"
+difficulty: easy
+judge: Kattis
+url: https://open.kattis.com/problems/freefood
+section: arrays
+order: 11
+tags: ["arrays"]
+---
+```
+
+Omit `section:` when the automatic placement is what you want. Add `hints:` only
+if step 7 produced any:
+
+```yaml
+hints:
+  - >
+    You are counting days, not events — look at the worked
+    example again.
+  - >
+    A day is a number from 1 to 365, so the whole calendar
+    fits in one small array.
+```
+
+**9. Verify, then stop.** `npm run build` is what proves the section id resolves;
+`npm test` guards the placement rules.
+
+```bash
+npm run build && npm test
+```
+
+Report title, difficulty, topic § section, order, tags, any hints, and the path. **Do not commit,
+branch or push** — that is the user's call.
+
+## Quick reference
+
+| Field | Source |
+|---|---|
+| `title` | Kattis `<h1>`, exact |
+| `difficulty` | Kattis `difficulty_easy\|medium\|hard` class |
+| `judge`, `url` | `Kattis`, the problem URL |
+| `order` | max in topic + 1 |
+| `section` | user, or omitted for automatic placement |
+| `tags` | proposed from the topic's existing tags, confirmed |
+| `hints` | none by default; up to 3, written as an escalation and confirmed |
+| body, `videos` | left empty |
+
+## Common mistakes
+
+| Mistake | Consequence |
+|---|---|
+| Using WebFetch on Kattis | 403; use curl with a User-Agent |
+| Guessing a title from the id | Wrong titles ship — `1dfroggereasy` is "1-D Frogger (Easy)" |
+| `grep -o 'difficulty_[a-z]*'` | Matches `difficulty_number`, not the band |
+| Writing before checking the section id | Build fails; the page is broken until fixed |
+| Overwriting an existing file | Stop instead — an id already in `src/content/problems/` means it's already listed |
+| Assuming a non-Kattis judge works | CodingBat and friends fit the schema but not this skill; those need `problemId:` set by hand |
+| Writing hints from the statement alone | Without the Input section a hint stays vague; the constraints are what make it concrete |
+| Adding hints because the field exists | Most problems have none. A hint that gives it away is worse than no hint |
+
+Kattis's band is authoritative even when it disagrees with a file set by hand
+before this skill existed — at least one had already drifted that way.

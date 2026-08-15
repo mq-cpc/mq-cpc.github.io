@@ -13,6 +13,10 @@ build/
 .env
 .env.local
 
-# Local tooling (not part of the project)
-.claude/
+# Local tooling (not part of the project) — except .claude/skills/, which holds
+# repo workflows meant to ship with the repo. Git cannot re-include a path whose
+# parent directory is excluded, so this ignores the CONTENTS of .claude/ rather
+# than the directory itself.
+.claude/*
+!.claude/skills/
 .superpowers/
