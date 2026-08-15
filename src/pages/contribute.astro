@@ -115,6 +115,31 @@ const repoUrl = 'https://github.com/mq-cpc/mq-cpc.github.io';
           rendered at all, so it's fine for a topic to declare one it doesn't use yet.
         </p>
 
+        <h3 class="ps-h3 mq-heading mq-heading--mt6">Writing hints</h3>
+        <p class="text-ink max-w-measure">
+          A problem can carry up to three <span class="mono">hints</span>, shown one at a time —
+          the second only appears once the first has been opened. Write them as an escalation, or
+          the gate means nothing: an <b>observation</b> that points at what the reader missed, then
+          the <b>technique</b> that cracks it, then the <b>shape of the answer</b>. Stop short of
+          code. They're markdown, so <span class="mono">code</span> and emphasis work.
+        </p>
+        <pre class="mono mt-3 p-4 bg-paper-sunk border border-line rounded-md text-label overflow-x-auto">{dedent(`
+          hints:
+            - >
+              You are counting days, not events — look at the
+              worked example again.
+            - >
+              A day is a number from 1 to 365, so the whole
+              calendar fits in one small array.
+            - >
+              Mark every day of every event in a \`boolean[366]\`,
+              then count what is marked.
+        `)}</pre>
+        <p class="text-ink max-w-measure mt-3">
+          A fourth hint fails the build. Most problems have none, and that's fine — a problem with
+          no hints shows no hint control at all.
+        </p>
+
         <h3 class="ps-h3 mq-heading mq-heading--mt6">Adding a new section</h3>
         <p class="text-ink max-w-measure">
           Add an entry to <span class="mono">sections:</span> in the topic file: an{' '}
@@ -139,6 +164,7 @@ const repoUrl = 'https://github.com/mq-cpc/mq-cpc.github.io';
             <div><dt class="mono">order</dt><dd>sorts the problem within its section</dd></div>
             <div><dt class="mono">tags</dt><dd>optional; become the filter chips on the topic page</dd></div>
             <div><dt class="mono">section</dt><dd>optional; the section id, overriding the video rule</dd></div>
+            <div><dt class="mono">hints</dt><dd>optional; up to 3, revealed one at a time</dd></div>
             <div><dt class="mono">videos</dt><dd>optional; walkthroughs, shown when the problem is expanded</dd></div>
           </dl>
         </div>

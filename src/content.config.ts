@@ -67,6 +67,11 @@ const problems = defineCollection({
     // Usually one walkthrough; Walrus Weights has two (top-down and bottom-up),
     // which is why this is an array.
     videos: z.array(VIDEO).default([]),
+    // Up to three nudges, markdown, revealed one at a time on the topic page.
+    // Write them as an escalation — an observation, then a technique, then the
+    // shape of the answer — because that order is what the reveal enforces. The
+    // cap is deliberate: a fourth hint is a solution.
+    hints: z.array(z.string()).max(3).default([]),
   }),
 });
 
